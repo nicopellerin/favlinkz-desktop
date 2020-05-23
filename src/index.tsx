@@ -5,10 +5,10 @@ import LoginPage from "./containers/LoginPage"
 
 import useAuth from "./hooks/useAuth"
 
-const mainElement = document.createElement("div")
-mainElement.style.height = "100%"
-mainElement.style.width = "100%"
-document.body.appendChild(mainElement)
+const root = document.createElement("div")
+root.style.height = "100%"
+root.style.width = "100%"
+document.body.appendChild(root)
 
 const App = () => {
   const user = useAuth()
@@ -21,4 +21,4 @@ const App = () => {
   )
 }
 
-ReactDom.render(<App />, mainElement)
+ReactDom.render(<App />, root)

@@ -35,7 +35,7 @@ const Login = () => {
               Sign-in with Google
             </LoginButton>
           </LoginWrapper>
-          {authError.message && authError.message}
+          {authError.message && <ErrorMsg>{authError.message}</ErrorMsg>}
         </InsideContainer>
       </Container>
     </Wrapper>
@@ -63,6 +63,7 @@ const Container = styled(motion.div)`
   width: 40rem;
   background: rgba(255, 255, 255, 0.005);
   border-radius: 10px;
+  position: relative;
   /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.05); */
 `
 
@@ -103,4 +104,13 @@ const LoginButton = styled(motion.button)`
   align-items: center;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   outline: none;
+`
+
+const ErrorMsg = styled(motion.span)`
+  position: absolute;
+  bottom: -30px;
+  font-size: 1.4rem;
+  max-width: 75%;
+  margin: 0 auto;
+  text-align: center;
 `

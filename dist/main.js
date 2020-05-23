@@ -108,9 +108,10 @@ var mainWindow;
 
 function createWindow() {
   mainWindow = new electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"]({
-    width: 800,
-    height: 600,
+    width: 450,
+    height: 650,
     title: "favlinkz",
+    resizable: false,
     webPreferences: {
       nodeIntegration: true,
       nativeWindowOpen: true

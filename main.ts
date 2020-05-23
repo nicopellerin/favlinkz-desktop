@@ -1,22 +1,23 @@
-import { app, BrowserWindow } from "electron";
-import * as path from "path";
-import * as url from "url";
+import { app, BrowserWindow } from "electron"
+import * as path from "path"
+import * as url from "url"
 
-let mainWindow: Electron.BrowserWindow | null;
+let mainWindow: Electron.BrowserWindow | null
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 450,
+    height: 650,
     title: "favlinkz",
+    resizable: false,
     webPreferences: {
       nodeIntegration: true,
       nativeWindowOpen: true,
     },
-  });
+  })
 
   if (process.env.NODE_ENV === "development") {
-    mainWindow.loadURL(`http://localhost:4000`);
+    mainWindow.loadURL(`http://localhost:4000`)
   } else {
     mainWindow.loadURL(
       url.format({
@@ -24,13 +25,13 @@ function createWindow() {
         protocol: "file:",
         slashes: true,
       })
-    );
+    )
   }
 
   mainWindow.on("closed", () => {
-    mainWindow = null;
-  });
+    mainWindow = null
+  })
 }
 
-app.on("ready", createWindow);
-app.allowRendererProcessReuse = true;
+app.on("ready", createWindow)
+app.allowRendererProcessReuse = true

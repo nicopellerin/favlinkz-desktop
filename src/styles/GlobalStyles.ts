@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from "styled-components"
 
 export const GlobalStyles = createGlobalStyle`
   :root {
@@ -23,9 +23,9 @@ export const GlobalStyles = createGlobalStyle`
     margin: 0;
     padding: 0;
 
-    @media (max-width: 500px) {
+    /* @media (max-width: 500px) {
       font-size: 57.5%;
-    }
+    } */
   }
 
   body {
@@ -120,4 +120,4 @@ export const GlobalStyles = createGlobalStyle`
     background: var(--pink);
     color: #333; 
 }
-`;
+`
