@@ -1,8 +1,11 @@
-const path = require("path");
+const path = require("path")
 
 module.exports = {
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
+  },
+  node: {
+    __dirname: false,
   },
   devtool: "source-map",
   entry: "./main.ts",
@@ -26,4 +29,4 @@ module.exports = {
     path: path.resolve(__dirname, "./dist"),
     filename: "[name].js",
   },
-};
+}

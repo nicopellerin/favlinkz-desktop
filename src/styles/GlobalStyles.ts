@@ -35,6 +35,7 @@ export const GlobalStyles = createGlobalStyle`
     padding: 0;
     font-family: var(--systemFont);
     color: var(--textColor);
+    overflow: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -66,7 +67,6 @@ export const GlobalStyles = createGlobalStyle`
 
   p {
     font-size: 1.6rem;
-    font-family: 'Lora', serif;
     line-height: 1.6em;
   }
 
@@ -74,35 +74,6 @@ export const GlobalStyles = createGlobalStyle`
     color: var(--menuColor);
     text-decoration: none;
   }
-
-  .language-jsx{
-  background-color: #112!important;
-  display: block;
-  font-size: 2rem!important;
-  margin: 2rem 0;
-  margin-right: -1em;
-  margin-left: -1em;
-  padding: 1.5em 0;
-  padding-right: 1em;
-  padding-left: 2em;
-  border-left: 0.25em solid #f99;
-
-  @media (max-width: 500px) {
-  max-width: 100%;
-  margin: 0;
-  overflow: auto;
-  padding-top: 6rem;
-  }
-}
-
-.language-jsx2{
-  background-color: #080808!important;
-  display: block;
-  font-size: 1.9rem!important;
-  margin: 2rem 0;
-  padding: 0.5em 0;
-  width: 100%;
-}
 
 [data-reach-listbox-popover] {
     background: none;

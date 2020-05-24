@@ -5,8 +5,9 @@
   "description": "",
   "main": "./dist/main.js",
   "scripts": {
-    "dev:electron": "NODE_ENV=development webpack --config webpack.electron.config.js --mode development && electron .",
-    "dev:react": "NODE_ENV=development webpack-dev-server --config webpack.react.config.js --mode development"
+    "prod:electron": "cross-env NODE_ENV=production webpack --mode production --config webpack.electron.config.js && electron --noDevServer .",
+    "dev:electron": "cross-env NODE_ENV=development webpack --config webpack.electron.config.js --mode development && electron .",
+    "dev:react": "cross-env NODE_ENV=development webpack-dev-server --config webpack.react.config.js --mode development"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,7 @@
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
     "babel-loader": "^8.1.0",
+    "cross-env": "^7.0.2",
     "electron": "^9.0.0",
     "file-loader": "^6.0.0",
     "html-webpack-plugin": "^4.3.0",
@@ -27,6 +29,7 @@
   "dependencies": {
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
+    "@types/react-router-dom": "^5.1.5",
     "@types/styled-components": "^5.1.0",
     "firebase": "^7.14.5",
     "framer-motion": "^1.11.0",

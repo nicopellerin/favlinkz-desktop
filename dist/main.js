@@ -105,16 +105,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var mainWindow;
+var userLoggedIn = false;
 
 function createWindow() {
   mainWindow = new electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"]({
     width: 450,
     height: 650,
     title: "favlinkz",
-    resizable: false,
+    resizable: userLoggedIn ? true : false,
     webPreferences: {
       nodeIntegration: true,
-      nativeWindowOpen: true
+      nativeWindowOpen: true // webSecurity: false,
+
     }
   });
 
@@ -127,6 +129,18 @@ function createWindow() {
   });
 }
 
+electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-in", e => {
+  mainWindow.setSize(1200, 800);
+  mainWindow.center();
+  mainWindow.setResizable(true);
+  userLoggedIn = true;
+});
+electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-out", e => {
+  mainWindow.setSize(450, 650);
+  mainWindow.center();
+  mainWindow.setResizable(false);
+  userLoggedIn = false;
+});
 electron__WEBPACK_IMPORTED_MODULE_0__["app"].on("ready", createWindow);
 electron__WEBPACK_IMPORTED_MODULE_0__["app"].allowRendererProcessReuse = true;
 

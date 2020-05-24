@@ -3,6 +3,7 @@ import { useState } from "react"
 import styled from "styled-components"
 import { FaGoogle } from "react-icons/fa"
 import { motion } from "framer-motion"
+import { Link } from "react-router-dom"
 
 import { firebase } from "../../services/firebase"
 
@@ -30,10 +31,16 @@ const Login = () => {
         <InsideContainer>
           <LogoStyled animate={{ y: [20, 0] }} src={Logo} alt="logo" />
           <LoginWrapper animate={{ y: [40, 0] }}>
-            <LoginButton onClick={() => handleSignIn()}>
-              <FaGoogle style={{ marginRight: 5 }} />
-              Sign-in with Google
-            </LoginButton>
+            <Link to="/profile">
+              <LoginButton
+                whileHover={{ y: 1 }}
+                whileTap={{ y: -1 }}
+                // onClick={() => handleSignIn()}
+              >
+                <FaGoogle style={{ marginRight: 5 }} />
+                Sign-in with Google
+              </LoginButton>
+            </Link>
           </LoginWrapper>
           {authError.message && <ErrorMsg>{authError.message}</ErrorMsg>}
         </InsideContainer>
