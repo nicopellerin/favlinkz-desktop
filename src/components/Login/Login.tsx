@@ -1,5 +1,6 @@
 import * as React from "react"
 import { useState } from "react"
+import { ipcRenderer } from "electron"
 import styled from "styled-components"
 import { FaGoogle } from "react-icons/fa"
 import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion"
@@ -31,7 +32,10 @@ const Login = () => {
     // }
     setTimeout(() => setIsSubmiting(false), 500)
     setTimeout(() => setIsLoggedIn(true), 500)
-    setTimeout(() => history.push("/profile"), 1750)
+    setTimeout(() => {
+      history.push("/profile")
+      ipcRenderer.send("user-logged-in")
+    }, 1750)
   }
 
   const connexionOptions = {

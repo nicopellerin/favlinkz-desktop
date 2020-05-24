@@ -17,7 +17,7 @@ const Sidebar = () => {
 
   return (
     <Wrapper>
-      <Logo src={logo} alt="logo" />
+      {/* <Logo src={logo} alt="logo" /> */}
       <Container>
         <NavLink
           exact
@@ -66,7 +66,7 @@ const Wrapper = styled.div`
 
 const Logo = styled.img`
   position: absolute;
-  top: 2rem;
+  top: 5rem;
   width: 32px;
 `
 

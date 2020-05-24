@@ -227,7 +227,7 @@ const Title = styled.h2`
   margin: 0;
   word-wrap: break-word;
   font-size: 2rem;
-  color: #333;
+  color: #555;
 `
 
 const CategorySelect = styled.select`

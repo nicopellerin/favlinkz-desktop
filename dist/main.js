@@ -113,6 +113,9 @@ function createWindow() {
     height: 650,
     title: "favlinkz",
     resizable: userLoggedIn ? true : false,
+    titleBarStyle: "hiddenInset",
+    show: false,
+    backgroundColor: "#5856d7",
     webPreferences: {
       nodeIntegration: true,
       nativeWindowOpen: true // webSecurity: false,
@@ -124,15 +127,20 @@ function createWindow() {
     mainWindow.loadURL("http://localhost:4000");
   } else {}
 
+  mainWindow.on("ready-to-show", function () {
+    mainWindow.show();
+    mainWindow.focus();
+  });
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
 }
 
 electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-in", e => {
-  mainWindow.setSize(1200, 800);
+  mainWindow.setSize(1200, 1000);
   mainWindow.center();
   mainWindow.setResizable(true);
+  mainWindow.setBackgroundColor("#ffa");
   userLoggedIn = true;
 });
 electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-out", e => {

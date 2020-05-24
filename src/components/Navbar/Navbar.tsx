@@ -5,6 +5,8 @@ import userImg from "../../assets/user.png"
 
 import SearchBar from "../SearchBar"
 
+import logo from "../../assets/favlinkz.svg"
+
 import { firebase } from "../../services/firebase"
 
 const Navbar: React.FC = () => {
@@ -32,9 +34,9 @@ const Navbar: React.FC = () => {
             <SearchBar />
           </div>
 
-          {/* <HeaderLogo>
-            <img src={Logo} style={{ width: 148 }} />
-          </HeaderLogo> */}
+          <HeaderLogo>
+            <img src={logo} style={{ width: 130 }} />
+          </HeaderLogo>
           <MenuCta>
             <ProfileGroup onClick={() => setProfileHover(!onProfileHover)}>
               <ProfileName>
@@ -67,17 +69,17 @@ const HeaderWrapper = styled.header`
 `
 
 const HeaderContainer = styled.div`
-  padding: 0rem 4rem;
+  padding: 2rem 4rem;
   margin: 0 auto;
   align-items: center;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   z-index: 3000;
   height: 75px;
 `
 
 const HeaderLogo = styled.div`
-  /* justify-self: center; */
+  justify-self: center;
   align-self: center;
 `
 

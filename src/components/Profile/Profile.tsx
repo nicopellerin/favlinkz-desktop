@@ -17,7 +17,7 @@ const Profile = () => {
         <Sidebar />
         <div>
           <Navbar />
-          <div style={{ marginTop: "4rem" }}>
+          <div style={{ marginTop: "3rem" }}>
             <Route
               render={({ location }) => (
                 // <AnimatePresence exitBeforeEnter>
@@ -47,6 +47,6 @@ const Wrapper = styled.div`
   width: 100%;
   background: #fbf8ff;
   display: grid;
-  grid-template-columns: 70px 1fr;
+  grid-template-columns: 80px 1fr;
   overflow: hidden;
 `

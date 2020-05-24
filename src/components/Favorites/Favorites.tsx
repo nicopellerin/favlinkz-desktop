@@ -4,6 +4,8 @@ import { motion } from "framer-motion"
 
 import Card from "../Card"
 
+import dots from "../../assets/dots.svg"
+
 const journalVariants = {
   hidden: {
     y: 10,
@@ -39,7 +41,10 @@ const Favorites = () => {
         flexDirection: "column",
       }}
     >
-      <Title>Favorites</Title>
+      {/* <Title>Favorites</Title> */}
+      <DotsWrapper>
+        <Dots src={dots} alt="dots" />
+      </DotsWrapper>
       <CardList
         variants={journalVariants}
         initial="hidden"
@@ -71,10 +76,9 @@ const Favorites = () => {
         />
         <Card
           link={{
-            url: "https://functionsnstuff.io",
-            title:
-              "functionsnstuff | Tutorials & tips for React, Go, Node.js, Gatsby and more!",
-            image: "https://functionsnstuff.io/og-image1.png",
+            url: "https://monjournaldebord.ca",
+            title: "monjournaldebord",
+            image: "https://monjournaldebord.ca/og-image-5.png",
           }}
           showHeart={true}
           category="latest"
@@ -83,9 +87,9 @@ const Favorites = () => {
         />
         <Card
           link={{
-            url: "https://nicopellerin.io",
-            title: "Nico Pellerin",
-            image: "https://nicopellerin.io/og-image1.png",
+            url: "https://virtualcanvas.app",
+            title: "Virtual Canvas | Bring your art to life",
+            image: "https://virtualcanvas.app/og4.png",
           }}
           showHeart={true}
           category="latest"
@@ -101,7 +105,7 @@ export default Favorites
 
 // Styles
 const CardList = styled(motion.div)`
-  padding: 5rem 6rem;
+  padding: 3rem 6rem;
   display: grid;
   grid-template-columns: repeat(3, minmax(300px, 350px));
   grid-gap: 4rem;
@@ -113,5 +117,16 @@ const CardList = styled(motion.div)`
 
 const Title = styled.h3`
   margin: 0;
-  color: var(--primaryColor);
+  font-size: 2.2rem;
+  color: #333;
+`
+
+const DotsWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`
+
+const Dots = styled.img`
+  margin: 1.5rem 0 1.5rem;
+  text-align: center;
 `
