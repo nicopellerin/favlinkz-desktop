@@ -89,8 +89,22 @@ const Card = ({ link, category, showHeart, user }: Props) => {
     // .then(() => setTimeout(() => , 1500))
   }
 
+  const itemVariants = {
+    hidden: {
+      y: 20,
+    },
+    show: {
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 10,
+        stiffness: 80,
+      },
+    },
+  }
+
   return (
-    <>
+    <motion.div variants={itemVariants}>
       <LinksCardItem key={link.url}>
         <ImageContainer
           // drag={isMobile && onFocus ? "y" : "y"}
@@ -139,9 +153,9 @@ const Card = ({ link, category, showHeart, user }: Props) => {
             />
           )}
         </ImageContainer>
-        <PullCard>
+        {/* <PullCard>
           <h4>Pull</h4>
-        </PullCard>
+        </PullCard> */}
         <div
           style={{
             padding: "1.5rem 1.5rem ",
@@ -178,7 +192,7 @@ const Card = ({ link, category, showHeart, user }: Props) => {
           Remove
         </RemoveButton>
       </LinksCardItem>
-    </>
+    </motion.div>
   )
 }
 

@@ -2,25 +2,45 @@ import * as React from "react"
 import { useState } from "react"
 import styled from "styled-components"
 import { FaGoogle } from "react-icons/fa"
-import { motion } from "framer-motion"
-import { Link } from "react-router-dom"
+import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion"
+import { useHistory } from "react-router-dom"
+import Lottie from "react-lottie"
+import { Circle } from "better-react-spinkit"
 
 import { firebase } from "../../services/firebase"
 
 import Logo from "../../assets/favlinkz-white.svg"
 // import BG from "../../assets/bg.png";
 
+import successAnimation from "../../assets/success.json"
+
 const Login = () => {
   const [authError, setAuthError] = useState({ message: "" })
+  const [isSubmiting, setIsSubmiting] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  const history = useHistory()
 
   const handleSignIn: () => void = async () => {
-    const provider = new firebase.auth.GoogleAuthProvider()
+    setIsSubmiting(true)
+    // const provider = new firebase.auth.GoogleAuthProvider()
+    // try {
+    //   await firebase.auth().signInWithPopup(provider)
+    // } catch (err) {
+    //   setAuthError(err)
+    // }
+    setTimeout(() => setIsSubmiting(false), 500)
+    setTimeout(() => setIsLoggedIn(true), 500)
+    setTimeout(() => history.push("/profile"), 1750)
+  }
 
-    try {
-      await firebase.auth().signInWithPopup(provider)
-    } catch (err) {
-      setAuthError(err)
-    }
+  const connexionOptions = {
+    loop: false,
+    autoplay: true,
+    animationData: successAnimation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
   }
 
   return (
@@ -29,20 +49,45 @@ const Login = () => {
     >
       <Container animate={{ y: [10, 0] }}>
         <InsideContainer>
-          <LogoStyled animate={{ y: [20, 0] }} src={Logo} alt="logo" />
-          <LoginWrapper animate={{ y: [40, 0] }}>
-            <Link to="/profile">
-              <LoginButton
-                whileHover={{ y: 1 }}
-                whileTap={{ y: -1 }}
-                // onClick={() => handleSignIn()}
-              >
-                <FaGoogle style={{ marginRight: 5 }} />
-                Sign-in with Google
-              </LoginButton>
-            </Link>
-          </LoginWrapper>
-          {authError.message && <ErrorMsg>{authError.message}</ErrorMsg>}
+          <AnimateSharedLayout>
+            <LogoStyled
+              layoutId="logo"
+              animate={{ y: [20, 0] }}
+              src={Logo}
+              alt="logo"
+            />
+            <LoginWrapper animate={{ y: [40, 0] }}>
+              <AnimatePresence>
+                {isLoggedIn ? (
+                  <motion.div animate={{ scale: [0.2, 1.5, 1] }}>
+                    <Lottie
+                      options={connexionOptions}
+                      height={100}
+                      width={100}
+                      isStopped={!isLoggedIn}
+                    />
+                    {/* <LoggedInText>Successfully logged in!</LoggedInText> */}
+                  </motion.div>
+                ) : (
+                  <LoginButton
+                    whileHover={{ y: 1 }}
+                    whileTap={{ y: -1 }}
+                    onClick={() => handleSignIn()}
+                  >
+                    {isSubmiting ? (
+                      <Circle color="white" />
+                    ) : (
+                      <>
+                        <FaGoogle style={{ marginRight: 5 }} />
+                        Sign-in with Google
+                      </>
+                    )}
+                  </LoginButton>
+                )}
+              </AnimatePresence>
+            </LoginWrapper>
+            {authError.message && <ErrorMsg>{authError.message}</ErrorMsg>}
+          </AnimateSharedLayout>
         </InsideContainer>
       </Container>
     </Wrapper>
@@ -109,8 +154,11 @@ const LoginButton = styled(motion.button)`
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   outline: none;
+  width: 185px;
+  height: 45px;
 `
 
 const ErrorMsg = styled(motion.span)`
@@ -120,4 +168,9 @@ const ErrorMsg = styled(motion.span)`
   max-width: 75%;
   margin: 0 auto;
   text-align: center;
+`
+
+const LoggedInText = styled.h3`
+  font-size: 2rem;
+  margin: 0;
 `

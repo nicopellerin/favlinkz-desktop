@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useState } from "react"
 import styled from "styled-components"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { HashRouter as Router, Switch, Route } from "react-router-dom"
 
 import Navbar from "../Navbar/Navbar"
@@ -17,15 +17,21 @@ const Profile = () => {
         <Sidebar />
         <div>
           <Navbar />
-          <div style={{ marginTop: "2rem" }}>
-            <Switch>
-              <Route path="/profile" exact>
-                <Latest />
-              </Route>
-              <Route path="/profile/favorites">
-                <Favorites />
-              </Route>
-            </Switch>
+          <div style={{ marginTop: "4rem" }}>
+            <Route
+              render={({ location }) => (
+                // <AnimatePresence exitBeforeEnter>
+                <Switch location={location} key={location.pathname}>
+                  <Route path="/profile" exact>
+                    <Latest />
+                  </Route>
+                  <Route path="/profile/favorites">
+                    <Favorites />
+                  </Route>
+                </Switch>
+                // </AnimatePresence>
+              )}
+            />
           </div>
         </div>
       </Wrapper>

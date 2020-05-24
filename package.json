@@ -31,11 +31,13 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
     "@types/styled-components": "^5.1.0",
+    "better-react-spinkit": "^2.0.4",
     "firebase": "^7.14.5",
-    "framer-motion": "^1.11.0",
+    "framer-motion": "^2.0.0-beta.72",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-icons": "^3.10.0",
+    "react-lottie": "^1.2.3",
     "react-router-dom": "^5.2.0",
     "styled-components": "^5.1.0"
   }

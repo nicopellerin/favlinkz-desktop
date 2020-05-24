@@ -53,10 +53,10 @@ const SearchBarContainer = styled.div`
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     border: none;
-    font-size: 14px;
+    font-size: 15px;
     font-family: inherit;
-    padding: 8px 12px;
-    width: 160px;
+    padding: 10px 12px;
+    width: 180px;
     transition: all 300ms ease-in-out;
 
     &:focus {
