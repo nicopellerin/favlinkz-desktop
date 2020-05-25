@@ -91,10 +91,12 @@ const Card = ({ link, category, showHeart, user }: Props) => {
 
   const itemVariants = {
     hidden: {
-      y: 20,
+      x: -10,
+      opacity: 0.5,
     },
     show: {
-      y: 0,
+      x: 0,
+      opacity: 1,
       transition: {
         type: "spring",
         damping: 10,
@@ -107,7 +109,6 @@ const Card = ({ link, category, showHeart, user }: Props) => {
     <motion.div variants={itemVariants}>
       <LinksCardItem key={link.url}>
         <ImageContainer
-          // drag={isMobile && onFocus ? "y" : "y"}
           drag="y"
           dragConstraints={{ left: 0, bottom: 50, top: 0 }}
           dragElastic={0.2}

@@ -111,6 +111,7 @@ function createWindow() {
   mainWindow = new electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"]({
     width: 450,
     height: 650,
+    center: true,
     title: "favlinkz",
     resizable: userLoggedIn ? true : false,
     titleBarStyle: "hiddenInset",
@@ -137,10 +138,18 @@ function createWindow() {
 }
 
 electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-in", e => {
-  mainWindow.setSize(1200, 1000);
+  e.preventDefault();
+  var bounds = electron__WEBPACK_IMPORTED_MODULE_0__["screen"].getPrimaryDisplay().bounds;
+  var x = Math.ceil(bounds.x + (bounds.width - 1200) / 2);
+  var y = Math.ceil(bounds.y + (bounds.height - 1000) / 2);
+  mainWindow.setBounds({
+    x: x,
+    y: y,
+    width: 1200,
+    height: 1000
+  });
   mainWindow.center();
   mainWindow.setResizable(true);
-  mainWindow.setBackgroundColor("#ffa");
   userLoggedIn = true;
 });
 electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-out", e => {

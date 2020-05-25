@@ -31,10 +31,12 @@ const Login = () => {
     //   setAuthError(err)
     // }
     setTimeout(() => setIsSubmiting(false), 500)
-    setTimeout(() => setIsLoggedIn(true), 500)
     setTimeout(() => {
-      history.push("/profile")
+      setIsLoggedIn(true)
+    }, 500)
+    setTimeout(() => {
       ipcRenderer.send("user-logged-in")
+      history.push("/profile")
     }, 1750)
   }
 
@@ -49,7 +51,9 @@ const Login = () => {
 
   return (
     <Wrapper
-    // style={{ background: `url(${BG})` }}
+    // initial={{ opacity: 0 }}
+    // animate={{ opacity: 1 }}
+    // exit={{ opacity: 0 }}
     >
       <Container animate={{ y: [10, 0] }}>
         <InsideContainer>
@@ -61,7 +65,7 @@ const Login = () => {
               alt="logo"
             />
             <LoginWrapper animate={{ y: [40, 0] }}>
-              <AnimatePresence>
+              <AnimatePresence exitBeforeEnter>
                 {isLoggedIn ? (
                   <motion.div animate={{ scale: [0.2, 1.5, 1] }}>
                     <Lottie
@@ -101,13 +105,14 @@ const Login = () => {
 export default Login
 
 // Styles
-const Wrapper = styled.div`
+const Wrapper = styled(motion.div)`
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-size: 100%;
+  -webkit-app-region: drag;
 `
 
 const Container = styled(motion.div)`

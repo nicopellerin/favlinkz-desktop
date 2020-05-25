@@ -17,7 +17,6 @@ const Sidebar = () => {
 
   return (
     <Wrapper>
-      {/* <Logo src={logo} alt="logo" /> */}
       <Container>
         <NavLink
           exact
@@ -62,6 +61,7 @@ const Wrapper = styled.div`
   justify-content: center;
   height: 100%;
   border-right: 1px solid #e1e1e1;
+  -webkit-app-region: drag;
 `
 
 const Logo = styled.img`

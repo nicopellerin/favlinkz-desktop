@@ -8,10 +8,10 @@ import dots from "../../assets/dots.svg"
 
 const journalVariants = {
   hidden: {
-    y: 10,
+    x: -10,
   },
   show: {
-    y: 0,
+    x: 0,
     transition: {
       type: "spring",
       damping: 10,
@@ -21,7 +21,6 @@ const journalVariants = {
     },
   },
   exit: {
-    scale: 0.6,
     transition: {
       type: "tween",
       damping: 100,

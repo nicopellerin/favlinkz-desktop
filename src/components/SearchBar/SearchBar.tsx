@@ -38,6 +38,7 @@ export default SearchBar
 const SearchBarWrapper = styled.div`
   width: 100%;
   display: flex;
+  -webkit-app-region: no-drag;
 `
 
 const SearchBarContainer = styled.div`
@@ -58,6 +59,10 @@ const SearchBarContainer = styled.div`
     padding: 10px 12px;
     width: 180px;
     transition: all 300ms ease-in-out;
+
+    &:placeholder {
+      -webkit-user-select: none;
+    }
 
     &:focus {
       width: 275px;

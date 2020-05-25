@@ -1,12 +1,11 @@
 import * as React from "react"
 import { useState } from "react"
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { HashRouter as Router, Switch, Route } from "react-router-dom"
 
 import Navbar from "../Navbar/Navbar"
 import Sidebar from "../Sidebar"
-import Card from "../Card"
 import Latest from "../Latest"
 import Favorites from "../Favorites"
 
@@ -18,20 +17,14 @@ const Profile = () => {
         <div>
           <Navbar />
           <div style={{ marginTop: "3rem" }}>
-            <Route
-              render={({ location }) => (
-                // <AnimatePresence exitBeforeEnter>
-                <Switch location={location} key={location.pathname}>
-                  <Route path="/profile" exact>
-                    <Latest />
-                  </Route>
-                  <Route path="/profile/favorites">
-                    <Favorites />
-                  </Route>
-                </Switch>
-                // </AnimatePresence>
-              )}
-            />
+            <Switch>
+              <Route path="/profile" exact>
+                <Latest />
+              </Route>
+              <Route path="/profile/favorites">
+                <Favorites />
+              </Route>
+            </Switch>
           </div>
         </div>
       </Wrapper>
@@ -42,11 +35,22 @@ const Profile = () => {
 export default Profile
 
 // Styles
-const Wrapper = styled.div`
+const anim = keyframes`
+  from {
+    opacity: 0
+  }
+  to {
+    opacity: 1
+  }
+`
+
+const Wrapper = styled(motion.div)`
   min-height: 100%;
   width: 100%;
   background: #fbf8ff;
   display: grid;
   grid-template-columns: 80px 1fr;
   overflow: hidden;
+  animation: ${anim} 1s normal forwards ease-in-out;
+  animation-iteration-count: 1;
 `

@@ -8,6 +8,7 @@ import LoginPage from "./containers/LoginPage"
 import useAuth from "./hooks/useAuth"
 
 import { GlobalStyles } from "./styles/GlobalStyles"
+import { AnimatePresence, motion, AnimateSharedLayout } from "framer-motion"
 
 const root = document.createElement("div")
 root.style.height = "100%"
@@ -19,14 +20,18 @@ const App = () => {
 
   return (
     <Router>
-      <Switch>
-        <Route path="/profile">
-          <ProfilePage />
-        </Route>
-        <Route path="/" exact>
-          <LoginPage />
-        </Route>
-      </Switch>
+      <Route
+        render={({ location }) => (
+          <Switch>
+            <Route path="/profile">
+              <ProfilePage />
+            </Route>
+            <Route path="/" exact>
+              <LoginPage />
+            </Route>
+          </Switch>
+        )}
+      />
       <GlobalStyles />
     </Router>
   )

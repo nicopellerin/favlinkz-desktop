@@ -66,6 +66,7 @@ const HeaderWrapper = styled.header`
   z-index: 1001;
   top: 0;
   width: 100%;
+  -webkit-app-region: drag;
 `
 
 const HeaderContainer = styled.div`

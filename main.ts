@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron"
+import { app, BrowserWindow, ipcMain, screen } from "electron"
 import * as path from "path"
 import * as url from "url"
 
@@ -10,6 +10,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 450,
     height: 650,
+    center: true,
     title: "favlinkz",
     resizable: userLoggedIn ? true : false,
     titleBarStyle: "hiddenInset",
@@ -45,7 +46,17 @@ function createWindow() {
 }
 
 ipcMain.on("user-logged-in", (e) => {
-  mainWindow.setSize(1200, 1000)
+  e.preventDefault()
+  let bounds = screen.getPrimaryDisplay().bounds
+  let x = Math.ceil(bounds.x + (bounds.width - 1200) / 2)
+  let y = Math.ceil(bounds.y + (bounds.height - 1000) / 2)
+
+  mainWindow.setBounds({
+    x: x,
+    y: y,
+    width: 1200,
+    height: 1000,
+  })
   mainWindow.center()
   mainWindow.setResizable(true)
   userLoggedIn = true
