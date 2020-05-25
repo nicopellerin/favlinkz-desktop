@@ -91,12 +91,10 @@ const Card = ({ link, category, showHeart, user }: Props) => {
 
   const itemVariants = {
     hidden: {
-      x: -10,
-      opacity: 0.5,
+      y: 5,
     },
     show: {
-      x: 0,
-      opacity: 1,
+      y: 0,
       transition: {
         type: "spring",
         damping: 10,
