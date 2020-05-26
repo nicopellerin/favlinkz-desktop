@@ -201,7 +201,7 @@ export default Card
 const LinksCardItem = styled.div`
   min-width: 300px;
   height: 250px;
-  background: #f4f4f4;
+  background: ${(props) => props.theme.cardBackground};
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   transition: transform 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -211,22 +211,18 @@ const LinksCardItem = styled.div`
 
   img {
     width: 100%;
-    height: 150px;
+    height: 100%;
     object-fit: cover;
     display: block;
-    border-radius: 15px;
+    display: block;
   }
-
-  /* @media (max-width: 700px) {
-    max-width: 325px;
-  } */
 `
 
 const Title = styled.h2`
   margin: 0;
   word-wrap: break-word;
   font-size: 2rem;
-  color: #555;
+  color: ${(props) => props.theme.cardTitle};
 `
 
 const CategorySelect = styled.select`
@@ -278,7 +274,6 @@ const ImageContainer = styled(motion.div)`
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
   z-index: 201;
-  background: #f4f4f4;
   cursor: grab;
 `
 
@@ -288,8 +283,8 @@ const UrlAddr = styled.p`
   bottom: 0px;
   left: 0px;
   margin: 0;
-  background: #111;
-  border: 1px solid #222;
+  background: #0a0a0a;
+  /* border: 1px solid #222; */
   color: #f4f4f4;
   padding: 5px 10px;
   transform: translate3d(0, 0, 0);

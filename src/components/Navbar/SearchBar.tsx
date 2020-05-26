@@ -48,7 +48,8 @@ const SearchBarContainer = styled.div`
   display: grid;
 
   input {
-    background: #fff;
+    background: ${(props) => props.theme.searchBarInput};
+    color: ${(props) => props.theme.searchBarInputText};
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border-top-left-radius: 5px;

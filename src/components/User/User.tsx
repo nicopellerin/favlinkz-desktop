@@ -73,7 +73,7 @@ const UserImage = styled.img`
 `
 
 const Name = styled.h3`
-  color: #333;
+  color: ${(props) => props.theme.username};
   font-size: 3.2rem;
   margin-bottom: 2rem;
 `

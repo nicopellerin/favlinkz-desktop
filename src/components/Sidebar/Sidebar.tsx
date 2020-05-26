@@ -4,8 +4,6 @@ import styled from "styled-components"
 import { FaHome, FaHeart, FaSignOutAlt, FaUser } from "react-icons/fa"
 import { NavLink, Link } from "react-router-dom"
 
-import logo from "../../assets/logo-short.svg"
-
 const Sidebar = () => {
   const handleSignOut = (): void => {
     ipcRenderer.send("user-logged-out")
@@ -55,19 +53,14 @@ export default Sidebar
 
 // Styles
 const Wrapper = styled.div`
-  background: #fbf8ff;
+  background: ${(props) => props.theme.background};
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
-  border-right: 1px solid #e1e1e1;
+  border-right: 1px solid ${(props) => props.theme.sidebarBorder};
   -webkit-app-region: drag;
-`
-
-const Logo = styled.img`
-  position: absolute;
-  top: 5rem;
-  width: 32px;
+  transition: all 300ms ease-in-out;
 `
 
 const Container = styled.div`

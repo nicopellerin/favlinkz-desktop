@@ -51,10 +51,11 @@ const anim = keyframes`
 const Wrapper = styled(motion.div)`
   min-height: 100%;
   width: 100%;
-  background: #fbf8ff;
+  background: ${(props) => props.theme.background};
   display: grid;
   grid-template-columns: 80px 1fr;
   overflow: hidden;
   animation: ${anim} 1s normal forwards ease-in-out;
   animation-iteration-count: 1;
+  transition: all 300ms ease-in-out;
 `
