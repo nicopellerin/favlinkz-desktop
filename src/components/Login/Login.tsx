@@ -125,7 +125,6 @@ const Container = styled(motion.div)`
   background: rgba(255, 255, 255, 0.005);
   border-radius: 10px;
   position: relative;
-  /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.05); */
 `
 
 const InsideContainer = styled.div`

@@ -6,12 +6,12 @@ import Card from "../Card"
 
 import dots from "../../assets/dots.svg"
 
-const journalVariants = {
+const latestVariants = {
   hidden: {
-    x: -10,
+    y: 10,
   },
   show: {
-    x: 0,
+    y: 0,
     transition: {
       type: "spring",
       damping: 10,
@@ -38,6 +38,7 @@ const Latest = () => {
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
+        marginTop: "4rem",
       }}
     >
       {/* <Title>Latest</Title> */}
@@ -45,7 +46,7 @@ const Latest = () => {
         <Dots src={dots} alt="dots" />
       </DotsWrapper>
       <CardList
-        variants={journalVariants}
+        variants={latestVariants}
         initial="hidden"
         animate="show"
         exit="exit"
@@ -150,6 +151,6 @@ const DotsWrapper = styled.div`
 `
 
 const Dots = styled.img`
-  margin: 1.5rem 0 1.5rem;
+  margin: 1.5rem 0 3rem;
   text-align: center;
 `

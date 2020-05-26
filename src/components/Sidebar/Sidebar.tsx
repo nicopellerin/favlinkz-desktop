@@ -22,14 +22,14 @@ const Sidebar = () => {
           exact
           to="/profile"
           activeStyle={{
-            color: "#484554",
+            color: "var(--primaryColor)",
           }}
         >
           <FaHome size={22} />
         </NavLink>
         <NavLink
           activeStyle={{
-            color: "#484554",
+            color: "var(--primaryColor)",
           }}
           to="/profile/favorites"
         >
@@ -37,7 +37,7 @@ const Sidebar = () => {
         </NavLink>
         <NavLink
           activeStyle={{
-            color: "#484554",
+            color: "var(--primaryColor)",
           }}
           to="/profile/user"
         >
@@ -79,10 +79,14 @@ const Container = styled.div`
 
   a {
     color: #ada9bb;
+
+    &:hover {
+      color: #484554;
+    }
   }
 `
 
 const LinkStyled = styled(Link)`
   position: absolute;
-  bottom: 2rem;
+  bottom: 3rem;
 `

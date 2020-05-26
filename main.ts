@@ -43,6 +43,23 @@ function createWindow() {
   mainWindow.on("closed", () => {
     mainWindow = null
   })
+
+  mainWindow.webContents.on("new-window", function (
+    evt,
+    url,
+    frameName,
+    disposition,
+    options,
+    additionalFeatures
+  ) {
+    if (options.width == 800 && options.height == 600) {
+      //default size is 800x600
+      let { width, height } = screen.getPrimaryDisplay().workAreaSize
+      options.width = (width * 1) | 0
+      options.height = (height * 1) | 0
+      options.backgroundColor = "#fff"
+    }
+  })
 }
 
 ipcMain.on("user-logged-in", (e) => {

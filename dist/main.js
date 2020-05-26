@@ -135,6 +135,18 @@ function createWindow() {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
+  mainWindow.webContents.on("new-window", function (evt, url, frameName, disposition, options, additionalFeatures) {
+    if (options.width == 800 && options.height == 600) {
+      //default size is 800x600
+      var {
+        width,
+        height
+      } = electron__WEBPACK_IMPORTED_MODULE_0__["screen"].getPrimaryDisplay().workAreaSize;
+      options.width = width * 1 | 0;
+      options.height = height * 1 | 0;
+      options.backgroundColor = "#fff";
+    }
+  });
 }
 
 electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-in", e => {

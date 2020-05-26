@@ -1,11 +1,11 @@
 import React, { useContext, useState, memo } from "react"
 import styled from "styled-components"
 import { FaUserCog, FaSortDown } from "react-icons/fa"
-import userImg from "../../assets/user.png"
 
 import SearchBar from "../SearchBar"
 
 import logo from "../../assets/favlinkz.svg"
+import userImg from "../../assets/nico.jpg"
 
 import { firebase } from "../../services/firebase"
 
@@ -70,7 +70,7 @@ const HeaderWrapper = styled.header`
 `
 
 const HeaderContainer = styled.div`
-  padding: 2rem 4rem;
+  padding: 2.5rem 4rem;
   margin: 0 auto;
   align-items: center;
   display: grid;
@@ -98,7 +98,7 @@ const ProfileGroup = styled.div`
 `
 
 const ProfilePic = styled.img`
-  width: 42px;
+  width: 36px;
   border-radius: 50%;
   margin-bottom: 0;
   margin-left: 10px;
