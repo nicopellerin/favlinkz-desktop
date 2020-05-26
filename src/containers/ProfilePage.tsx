@@ -1,6 +1,7 @@
 import * as React from "react"
 import { useLayoutEffect } from "react"
 import { ipcRenderer } from "electron"
+import { RecoilRoot } from "recoil"
 
 import Profile from "../components/Profile"
 
@@ -11,9 +12,11 @@ const ProfilePage = () => {
     ipcRenderer.send("user-logged-in")
   }, [])
   return (
-    <ThemeProvider>
-      <Profile />
-    </ThemeProvider>
+    <RecoilRoot>
+      <ThemeProvider>
+        <Profile />
+      </ThemeProvider>
+    </RecoilRoot>
   )
 }
 

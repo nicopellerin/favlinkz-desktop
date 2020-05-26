@@ -1,17 +1,32 @@
 import React, { useContext, useCallback } from "react"
 import styled from "styled-components"
-import { FaSearch } from "react-icons/fa"
+import { FaSearch, FaTimesCircle } from "react-icons/fa"
+import { atom, useRecoilState, selector } from "recoil"
 
-// import { SearchContext } from "../../context/search-context"
+import { mockData } from "../../utils/mock"
 
-const SearchBar = ({ props }: any) => {
-  // const { searchCtx, setSearchCtx } = useContext(SearchContext)
+const searchTextState = atom({
+  key: "searchTextState",
+  default: "",
+})
 
-  const filterSearch = useCallback()
-  // (e) => {
-  //   setSearchCtx(e.target.value)
-  // },
-  // [searchCtx]
+export const searchResultsState = selector({
+  key: "searchResultsState",
+  get: ({ get }) => {
+    const searchText = get(searchTextState)
+
+    return mockData.filter((item) =>
+      item.title.toLowerCase().includes(searchText.toLowerCase())
+    )
+  },
+})
+
+const SearchBar = () => {
+  const [searchText, setSearchText] = useRecoilState(searchTextState)
+
+  const filterSearch = (e) => {
+    setSearchText(e.target.value)
+  }
 
   return (
     <>
@@ -20,12 +35,20 @@ const SearchBar = ({ props }: any) => {
           <SearchBarContainer>
             <input
               type="text"
-              // value={searchCtx}
+              value={searchText}
               placeholder="Search by title..."
               onChange={filterSearch}
             />
           </SearchBarContainer>
-          <FaSearchWrapper />
+          {searchText.length > 0 ? (
+            <FaTimesWrapper
+              onClick={(e) => {
+                setSearchText("")
+              }}
+            />
+          ) : (
+            <FaSearchWrapper />
+          )}
         </SearchIcon>
       </SearchBarWrapper>
     </>
@@ -94,8 +117,14 @@ const FaSearchWrapper = styled(FaSearch)`
   padding: 3px;
   position: absolute;
   right: 10px;
+`
 
-  /* ${SearchIcon}:hover & {
-    color: #4b36dc;
-  } */
+const FaTimesWrapper = styled(FaTimesCircle)`
+  font-size: 2rem;
+  transition: all 300ms ease;
+  height: 33px;
+  padding: 3px;
+  position: absolute;
+  right: 10px;
+  z-index: 20;
 `

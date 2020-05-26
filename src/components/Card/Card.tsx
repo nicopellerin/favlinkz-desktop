@@ -204,7 +204,7 @@ const LinksCardItem = styled.div`
   background: ${(props) => props.theme.cardBackground};
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  transition: transform 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: all 300ms ease-in-out;
   position: relative;
   user-select: none;
   -moz-user-select: none;
@@ -223,6 +223,7 @@ const Title = styled.h2`
   word-wrap: break-word;
   font-size: 2rem;
   color: ${(props) => props.theme.cardTitle};
+  transition: all 300ms ease-in-out;
 `
 
 const CategorySelect = styled.select`
@@ -284,7 +285,6 @@ const UrlAddr = styled.p`
   left: 0px;
   margin: 0;
   background: #0a0a0a;
-  /* border: 1px solid #222; */
   color: #f4f4f4;
   padding: 5px 10px;
   transform: translate3d(0, 0, 0);

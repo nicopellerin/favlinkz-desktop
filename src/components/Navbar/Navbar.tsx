@@ -51,7 +51,7 @@ const HeaderWrapper = styled.header`
 `
 
 const HeaderContainer = styled.div`
-  padding: 2.5rem 4rem;
+  padding: 3rem 4rem;
   margin: 0 auto;
   align-items: center;
   display: grid;

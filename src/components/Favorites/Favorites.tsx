@@ -1,10 +1,13 @@
 import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
+import { useRecoilValue } from "recoil"
 
 import Card from "../Card"
 
 import dots from "../../assets/dots.svg"
+
+import { searchResultsState } from "../Navbar/SearchBar"
 
 const favoritesVariants = {
   hidden: {
@@ -30,73 +33,56 @@ const favoritesVariants = {
   },
 }
 
+interface Results {
+  url: string
+  title: string
+  image: string
+}
+
 const Favorites = () => {
+  const results = useRecoilValue(searchResultsState)
+
   return (
     <motion.div
       style={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        // justifyContent: "center",
         flexDirection: "column",
         marginTop: "4rem",
+        height: "100%",
       }}
     >
-      {/* <Title>Favorites</Title> */}
       <DotsWrapper>
         <Dots src={dots} alt="dots" />
       </DotsWrapper>
-      <CardList
-        variants={favoritesVariants}
-        initial="hidden"
-        animate="show"
-        exit="exit"
-      >
-        <Card
-          link={{
-            url: "https://functionsnstuff.io",
-            title:
-              "functionsnstuff | Tutorials & tips for React, Go, Node.js, Gatsby and more!",
-            image: "https://functionsnstuff.io/og-image1.png",
-          }}
-          showHeart={true}
-          category="latest"
-          user={null}
-          likeAdded={null}
-        />
-        <Card
-          link={{
-            url: "https://nicopellerin.io",
-            title: "Nico Pellerin",
-            image: "https://nicopellerin.io/og-image1.png",
-          }}
-          showHeart={true}
-          category="latest"
-          user={null}
-          likeAdded={null}
-        />
-        <Card
-          link={{
-            url: "https://monjournaldebord.ca",
-            title: "monjournaldebord",
-            image: "https://monjournaldebord.ca/og-image-5.png",
-          }}
-          showHeart={true}
-          category="latest"
-          user={null}
-          likeAdded={null}
-        />
-        <Card
-          link={{
-            url: "https://virtualcanvas.app",
-            title: "Virtual Canvas | Bring your art to life",
-            image: "https://virtualcanvas.app/og4.png",
-          }}
-          showHeart={true}
-          category="latest"
-          user={null}
-          likeAdded={null}
-        />
-      </CardList>
+      {results.length > 0 ? (
+        <CardList
+          variants={favoritesVariants}
+          initial="hidden"
+          animate="show"
+          exit="exit"
+        >
+          {results.map(({ url, title, image }: Results) => (
+            <Card
+              key={url}
+              link={{
+                url,
+                title,
+                image,
+              }}
+              showHeart={false}
+              category="latest"
+              user={null}
+              likeAdded={null}
+            />
+          ))}
+        </CardList>
+      ) : (
+        <NoMatchingResults>
+          <h2>Found no matching results</h2>
+        </NoMatchingResults>
+      )}
     </motion.div>
   )
 }
@@ -115,18 +101,27 @@ const CardList = styled(motion.div)`
   margin: 0 auto;
 `
 
-const Title = styled.h3`
-  margin: 0;
-  font-size: 2.2rem;
-  color: #333;
-`
-
 const DotsWrapper = styled.div`
   display: flex;
   justify-content: center;
 `
 
+const Title = styled.h3`
+  margin: 0;
+  font-size: 1.8rem;
+  color: #484554;
+  font-weight: 600;
+  margin-right: 2rem;
+`
+
 const Dots = styled.img`
   margin: 1.5rem 0 3rem;
   text-align: center;
+`
+
+const NoMatchingResults = styled.div`
+  height: calc(100% - 300px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
