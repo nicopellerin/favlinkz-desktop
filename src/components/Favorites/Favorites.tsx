@@ -88,7 +88,7 @@ const Favorites = () => {
       )}
       {results.length < 1 && searchText.length < 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
-          <h2>No links added</h2>
+          <h2>No favorite links added</h2>
         </NoMatchingResults>
       )}
     </motion.div>

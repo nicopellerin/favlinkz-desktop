@@ -32,7 +32,7 @@ const Card = ({ link, category, showHeart, user }: Props) => {
   const [mockData, setMockData] = useRecoilState(mockDataState)
   const [favoritesData, setFavoritesData] = useRecoilState(favoritesState)
 
-  const y = useSpring(0, { stiffness: 200, damping: 100 })
+  const y = useSpring(0, { stiffness: 100, damping: 50 })
   const scale = useMotionValue(1)
 
   // Get all Catgeroies data
@@ -102,7 +102,7 @@ const Card = ({ link, category, showHeart, user }: Props) => {
   const handleLike = (link) => {
     setFavoritesData([...favoritesData, link])
     setFavorited(true)
-    setTimeout(() => handleDelete(link.url), 1000)
+    setTimeout(() => handleDelete(link.url), 700)
     // setFavorited(true)
     // setTimeout(() => setFavorited(false), 500)
     // const categoryRef = db
@@ -146,8 +146,8 @@ const Card = ({ link, category, showHeart, user }: Props) => {
           drag="y"
           dragConstraints={{ left: 0, bottom: 50, top: 0 }}
           dragElastic={0.1}
-          // dragMomentum={true}
-          dragTransition={{ bounceStiffness: 200, bounceDamping: 80 }}
+          dragMomentum={true}
+          // dragTransition={{ bounceStiffness: 100, bounceDamping: 30 }}
           title="Drag down image to access Move & Remove functions :)"
           style={{ y }}
           onClick={() => y.set(0)}
@@ -166,8 +166,9 @@ const Card = ({ link, category, showHeart, user }: Props) => {
           {favorited && (
             <FavLinksBg>
               <FavLinksAdded
-                animate={{ x: "-50%", y: "-50%", scale: [0.9, 1.1, 1] }}
-                transition={{ type: "spring", damping: 15 }}
+                initial={{ x: "-50%", y: "-50%" }}
+                animate={{ scale: [0.9, 1.1, 1] }}
+                transition={{ type: "spring", damping: 8 }}
               >
                 Link added to favorites
               </FavLinksAdded>
@@ -249,6 +250,7 @@ const LinksCardItem = styled(motion.div)`
   position: relative;
   user-select: none;
   -moz-user-select: none;
+  border-bottom: 5px solid ${(props) => props.theme.cardBorderBottom};
 
   img {
     width: 100%;
@@ -262,7 +264,7 @@ const LinksCardItem = styled(motion.div)`
 const Title = styled.h2`
   margin: 0;
   word-wrap: break-word;
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: ${(props) => props.theme.cardTitle};
   transition: all 300ms ease-in-out;
 `

@@ -1,9 +1,10 @@
 export default {
-  background: "#0f0f0f",
+  background: "#121212",
   sidebarBorder: "#222",
-  cardBackground: "#121212",
+  cardBackground: "#111",
+  cardBorderBottom: "#222",
   cardTitle: "#fafafa",
   username: "#fafafa",
-  searchBarInput: "#121212",
+  searchBarInput: "#222",
   searchBarInputText: "#ADA9BB",
 }
