@@ -1,6 +1,6 @@
 import * as React from "react"
 import styled from "styled-components"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
 
 import Card from "../Card"
@@ -65,18 +65,20 @@ const Favorites = () => {
           exit="exit"
         >
           {results.map(({ url, title, image }: Results) => (
-            <Card
-              key={url}
-              link={{
-                url,
-                title,
-                image,
-              }}
-              showHeart={false}
-              category="latest"
-              user={null}
-              likeAdded={null}
-            />
+            <AnimatePresence>
+              <Card
+                key={url}
+                link={{
+                  url,
+                  title,
+                  image,
+                }}
+                showHeart={false}
+                category="latest"
+                user={null}
+                likeAdded={null}
+              />
+            </AnimatePresence>
           ))}
         </CardList>
       )}

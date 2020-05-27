@@ -11,6 +11,7 @@ const ProfilePage = () => {
   useLayoutEffect(() => {
     ipcRenderer.send("user-logged-in")
   }, [])
+
   return (
     <RecoilRoot>
       <ThemeProvider>

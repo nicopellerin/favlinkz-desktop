@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { FaHeart, FaStickyNote } from "react-icons/fa"
 import styled from "styled-components"
-import { motion, useMotionValue } from "framer-motion"
+import { motion, useMotionValue, useSpring } from "framer-motion"
 import { atom, useRecoilState, selector } from "recoil"
 import { useLocation } from "react-router-dom"
 
@@ -32,7 +32,7 @@ const Card = ({ link, category, showHeart, user }: Props) => {
   const [mockData, setMockData] = useRecoilState(mockDataState)
   const [favoritesData, setFavoritesData] = useRecoilState(favoritesState)
 
-  const y = useMotionValue(0)
+  const y = useSpring(0, { stiffness: 200, damping: 100 })
 
   // Get all Catgeroies data
   // const [categoryList] = useCategoryData()
@@ -96,7 +96,8 @@ const Card = ({ link, category, showHeart, user }: Props) => {
   // Like page
   const handleLike = (link) => {
     setFavoritesData([...favoritesData, link])
-    handleDelete(link.url)
+    setFavorited(true)
+    setTimeout(() => handleDelete(link.url), 1000)
     // setFavorited(true)
     // setTimeout(() => setFavorited(false), 500)
     // const categoryRef = db
@@ -131,9 +132,9 @@ const Card = ({ link, category, showHeart, user }: Props) => {
         <ImageContainer
           drag="y"
           dragConstraints={{ left: 0, bottom: 50, top: 0 }}
-          dragElastic={0.2}
-          dragMomentum={true}
-          dragTransition={{ bounceStiffness: 600, bounceDamping: 40 }}
+          dragElastic={0.1}
+          // dragMomentum={true}
+          dragTransition={{ bounceStiffness: 200, bounceDamping: 80 }}
           title="Drag down image to access Move & Remove functions :)"
           style={{ y }}
           onClick={() => y.set(0)}
@@ -151,7 +152,12 @@ const Card = ({ link, category, showHeart, user }: Props) => {
           />
           {favorited && (
             <FavLinksBg>
-              <FavLinksAdded>Link added to favorites</FavLinksAdded>
+              <FavLinksAdded
+                animate={{ x: "-50%", y: "-50%", scale: [0.9, 1.1, 1] }}
+                transition={{ type: "spring", damping: 15 }}
+              >
+                Link added to favorites
+              </FavLinksAdded>
             </FavLinksBg>
           )}
 
@@ -344,18 +350,19 @@ const FaHeartWrapper = styled(FaHeart)`
   }
 `
 
-const FavLinksAdded = styled.span`
+const FavLinksAdded = styled(motion.span)`
   display: inline-block;
   border: 1px solid crimson;
   background: #111;
   padding: 10px;
+  font-size: 1.4rem;
   position: absolute;
   width: 60%;
   font-weight: 600;
   text-align: center;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  /* transform: translate(-50%, -50%); */
   border-radius: 5px;
   color: crimson;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
