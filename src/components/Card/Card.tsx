@@ -3,6 +3,7 @@ import { FaHeart, FaStickyNote } from "react-icons/fa"
 import styled from "styled-components"
 import { motion, useMotionValue } from "framer-motion"
 import { atom, useRecoilState, selector } from "recoil"
+import { useLocation } from "react-router-dom"
 
 // import useCategoryData from "../hooks/useCategoryData"
 
@@ -22,6 +23,8 @@ interface Props {
 }
 
 const Card = ({ link, category, showHeart, user }: Props) => {
+  const { pathname } = useLocation()
+
   const [showNote, setShowNote] = useState<boolean>(false)
   const [favorited, setFavorited] = useState<boolean>(false)
   const [onFocus, setOnFocus] = useState(false)
@@ -67,8 +70,16 @@ const Card = ({ link, category, showHeart, user }: Props) => {
 
   // Remove links
   const handleDelete = (url: string) => {
-    const newData = mockData.filter((item) => item.url !== url)
-    setMockData(newData)
+    console.log(pathname)
+    if (pathname.includes("profile")) {
+      const newData = mockData.filter((item) => item.url !== url)
+      setMockData(newData)
+    }
+
+    if (pathname.includes("favorites")) {
+      const newData = favoritesData.filter((item) => item.url !== url)
+      setFavoritesData(newData)
+    }
     // const newLinks = selectedCategory.filter((link: { url: string }) => {
     //   y.set(0)
     //   return link.url !== url
