@@ -1,13 +1,14 @@
 import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { useRecoilValue } from "recoil"
+import { useRecoilValue, useRecoilState } from "recoil"
 
 import Card from "../Card"
 
-import dots from "../../assets/dots.svg"
+import { searchResultsState, searchTextState } from "../Navbar/SearchBar"
+import { favoritesState } from "../../state/favorites"
 
-import { searchResultsState } from "../Navbar/SearchBar"
+import dots from "../../assets/dots.svg"
 
 const favoritesVariants = {
   hidden: {
@@ -40,14 +41,14 @@ interface Results {
 }
 
 const Favorites = () => {
-  const results = useRecoilValue(searchResultsState)
+  const results = useRecoilValue(favoritesState)
+  const [searchText] = useRecoilState(searchTextState)
 
   return (
     <motion.div
       style={{
         display: "flex",
         alignItems: "center",
-        // justifyContent: "center",
         flexDirection: "column",
         marginTop: "4rem",
         height: "100%",
@@ -56,7 +57,7 @@ const Favorites = () => {
       <DotsWrapper>
         <Dots src={dots} alt="dots" />
       </DotsWrapper>
-      {results.length > 0 ? (
+      {results.length > 0 && (
         <CardList
           variants={favoritesVariants}
           initial="hidden"
@@ -78,9 +79,16 @@ const Favorites = () => {
             />
           ))}
         </CardList>
-      ) : (
-        <NoMatchingResults>
+      )}
+
+      {results.length < 1 && searchText.length > 1 && (
+        <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>Found no matching results</h2>
+        </NoMatchingResults>
+      )}
+      {results.length < 1 && searchText.length < 1 && (
+        <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
+          <h2>No links added</h2>
         </NoMatchingResults>
       )}
     </motion.div>
@@ -119,7 +127,7 @@ const Dots = styled.img`
   text-align: center;
 `
 
-const NoMatchingResults = styled.div`
+const NoMatchingResults = styled(motion.div)`
   height: calc(100% - 300px);
   display: flex;
   justify-content: center;

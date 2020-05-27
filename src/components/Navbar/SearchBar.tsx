@@ -3,9 +3,15 @@ import styled from "styled-components"
 import { FaSearch, FaTimesCircle } from "react-icons/fa"
 import { atom, useRecoilState, selector } from "recoil"
 
-import { mockData } from "../../utils/mock"
+import { mockDataState } from "../../state/latest"
 
-const searchTextState = atom({
+interface Results {
+  url: string
+  title: string
+  image: string
+}
+
+export const searchTextState = atom({
   key: "searchTextState",
   default: "",
 })
@@ -13,9 +19,10 @@ const searchTextState = atom({
 export const searchResultsState = selector({
   key: "searchResultsState",
   get: ({ get }) => {
+    const data = get(mockDataState)
     const searchText = get(searchTextState)
 
-    return mockData.filter((item) =>
+    return data.filter((item: Results) =>
       item.title.toLowerCase().includes(searchText.toLowerCase())
     )
   },

@@ -1,13 +1,13 @@
 import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { useRecoilValue } from "recoil"
+import { useRecoilValue, useRecoilState } from "recoil"
 
 import Card from "../Card"
 
-import dots from "../../assets/dots.svg"
+import { searchResultsState, searchTextState } from "../Navbar/SearchBar"
 
-import { searchResultsState } from "../Navbar/SearchBar"
+import dots from "../../assets/dots.svg"
 
 const latestVariants = {
   hidden: {
@@ -41,6 +41,7 @@ interface Results {
 
 const Latest = () => {
   const results = useRecoilValue(searchResultsState)
+  const [searchText, setSearchText] = useRecoilState(searchTextState)
 
   return (
     <motion.div
@@ -56,7 +57,7 @@ const Latest = () => {
       <DotsWrapper>
         <Dots src={dots} alt="dots" />
       </DotsWrapper>
-      {results.length > 0 ? (
+      {results.length > 0 && (
         <CardList
           variants={latestVariants}
           initial="hidden"
@@ -78,9 +79,15 @@ const Latest = () => {
             />
           ))}
         </CardList>
-      ) : (
-        <NoMatchingResults>
+      )}
+      {results.length < 1 && searchText.length > 1 && (
+        <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>Found no matching results</h2>
+        </NoMatchingResults>
+      )}
+      {results.length < 1 && searchText.length < 1 && (
+        <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
+          <h2>No links added</h2>
         </NoMatchingResults>
       )}
     </motion.div>
@@ -118,7 +125,7 @@ const Dots = styled.img`
   text-align: center;
 `
 
-const NoMatchingResults = styled.div`
+const NoMatchingResults = styled(motion.div)`
   height: calc(100% - 300px);
   display: flex;
   justify-content: center;
