@@ -33,6 +33,7 @@ const Card = ({ link, category, showHeart, user }: Props) => {
   const [favoritesData, setFavoritesData] = useRecoilState(favoritesState)
 
   const y = useSpring(0, { stiffness: 200, damping: 100 })
+  const scale = useMotionValue(1)
 
   // Get all Catgeroies data
   // const [categoryList] = useCategoryData()
@@ -70,15 +71,19 @@ const Card = ({ link, category, showHeart, user }: Props) => {
 
   // Remove links
   const handleDelete = (url: string) => {
-    console.log(pathname)
+    scale.set(0)
     if (pathname.includes("profile")) {
-      const newData = mockData.filter((item) => item.url !== url)
-      setMockData(newData)
+      setTimeout(() => {
+        const newData = mockData.filter((item) => item.url !== url)
+        setMockData(newData)
+      }, 200)
     }
 
     if (pathname.includes("favorites")) {
-      const newData = favoritesData.filter((item) => item.url !== url)
-      setFavoritesData(newData)
+      setTimeout(() => {
+        const newData = favoritesData.filter((item) => item.url !== url)
+        setFavoritesData(newData)
+      }, 200)
     }
     // const newLinks = selectedCategory.filter((link: { url: string }) => {
     //   y.set(0)
@@ -127,8 +132,16 @@ const Card = ({ link, category, showHeart, user }: Props) => {
   }
 
   return (
-    <motion.div variants={itemVariants}>
-      <LinksCardItem key={link.url}>
+    <motion.div
+      animate
+      variants={itemVariants}
+      transition={{ type: "spring", damping: 15 }}
+    >
+      <LinksCardItem
+        key={link.url}
+        style={{ scale }}
+        transition={{ type: "tween", duration: 0.18 }}
+      >
         <ImageContainer
           drag="y"
           dragConstraints={{ left: 0, bottom: 50, top: 0 }}
@@ -226,7 +239,7 @@ const Card = ({ link, category, showHeart, user }: Props) => {
 export default Card
 
 // Styles
-const LinksCardItem = styled.div`
+const LinksCardItem = styled(motion.div)`
   min-width: 300px;
   height: 250px;
   background: ${(props) => props.theme.cardBackground};

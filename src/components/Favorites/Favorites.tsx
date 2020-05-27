@@ -65,20 +65,18 @@ const Favorites = () => {
           exit="exit"
         >
           {results.map(({ url, title, image }: Results) => (
-            <AnimatePresence>
-              <Card
-                key={url}
-                link={{
-                  url,
-                  title,
-                  image,
-                }}
-                showHeart={false}
-                category="latest"
-                user={null}
-                likeAdded={null}
-              />
-            </AnimatePresence>
+            <Card
+              key={url}
+              link={{
+                url,
+                title,
+                image,
+              }}
+              showHeart={false}
+              category="latest"
+              user={null}
+              likeAdded={null}
+            />
           ))}
         </CardList>
       )}
