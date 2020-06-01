@@ -19,23 +19,19 @@ const App = () => {
   const user = useAuth()
 
   return (
-    <Router>
-      <Route
-        render={({ location }) => (
-          <AnimateSharedLayout>
-            <Switch>
-              <Route path="/profile">
-                <ProfilePage />
-              </Route>
-              <Route path="/" exact>
-                <LoginPage />
-              </Route>
-            </Switch>
-          </AnimateSharedLayout>
-        )}
-      />
+    <>
+      <Router>
+        <Switch>
+          <Route path="/profile">
+            <ProfilePage />
+          </Route>
+          <Route path="/" exact>
+            <LoginPage />
+          </Route>
+        </Switch>
+      </Router>
       <GlobalStyles />
-    </Router>
+    </>
   )
 }
 

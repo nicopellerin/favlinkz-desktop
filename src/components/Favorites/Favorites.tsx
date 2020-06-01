@@ -1,11 +1,11 @@
 import * as React from "react"
 import styled from "styled-components"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
 
 import Card from "../Card"
 
-import { searchResultsState, searchTextState } from "../Navbar/SearchBar"
+import { searchTextState } from "../../state/searchbar"
 import { favoritesState } from "../../state/favorites"
 
 import dots from "../../assets/dots.svg"
@@ -114,14 +114,6 @@ const CardList = styled(motion.div)`
 const DotsWrapper = styled.div`
   display: flex;
   justify-content: center;
-`
-
-const Title = styled.h3`
-  margin: 0;
-  font-size: 1.8rem;
-  color: #484554;
-  font-weight: 600;
-  margin-right: 2rem;
 `
 
 const Dots = styled.img`

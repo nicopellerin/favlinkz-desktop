@@ -5,7 +5,7 @@ import { useRecoilValue, useRecoilState } from "recoil"
 
 import Card from "../Card"
 
-import { searchResultsState, searchTextState } from "../Navbar/SearchBar"
+import { searchResultsState, searchTextState } from "../../state/searchbar"
 
 import dots from "../../assets/dots.svg"
 
@@ -42,7 +42,7 @@ interface Results {
 
 const Latest = () => {
   const results = useRecoilValue(searchResultsState)
-  const [searchText, setSearchText] = useRecoilState(searchTextState)
+  const [searchText] = useRecoilState(searchTextState)
 
   return (
     <motion.div
@@ -54,7 +54,6 @@ const Latest = () => {
         height: "100%",
       }}
     >
-      {/* <Title>Latest</Title> */}
       <DotsWrapper>
         <Dots src={dots} alt="dots" />
       </DotsWrapper>
@@ -104,17 +103,8 @@ const CardList = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(3, minmax(300px, 350px));
   grid-gap: 4rem;
-  /* max-width: 90%; */
   max-height: 80rem;
   overflow: auto;
-  /* margin: 0 auto; */
-`
-
-const Title = styled.h3`
-  margin: 0;
-  font-size: 2.8rem;
-  letter-spacing: 0.05em;
-  color: var(--primaryColor);
 `
 
 const DotsWrapper = styled.div`

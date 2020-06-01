@@ -29,33 +29,6 @@ const useAuth = () => {
           setUser(user)
 
           db.collection("users").doc(user.uid).set(user, { merge: true })
-
-          // Checks to see if initial 2 categories exist
-          const userRef = db.collection("users").doc(user.uid)
-          let isExist: any
-          userRef
-            .collection("categories")
-            .get()
-            .then((query) => (isExist = query.size))
-            .then(() => {
-              if (!isExist) {
-                userRef
-                  .collection("categories")
-                  .doc("latest linkz")
-                  .set({
-                    createdAt: new Date(),
-                    links: [],
-                    title: "Latest linkz",
-                  })
-                  .then(() =>
-                    userRef.collection("categories").doc("favorites").set({
-                      createdAt: new Date(),
-                      links: [],
-                      title: "Favorites",
-                    })
-                  )
-              }
-            })
         } else {
           localStorage.removeItem("userFavLinkz")
           setUser(null)

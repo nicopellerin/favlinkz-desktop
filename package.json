@@ -30,6 +30,7 @@
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
+    "@types/recoil": "^0.0.0",
     "@types/styled-components": "^5.1.0",
     "better-react-spinkit": "^2.0.4",
     "firebase": "^7.14.5",
