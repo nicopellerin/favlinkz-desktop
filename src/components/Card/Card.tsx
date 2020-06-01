@@ -1,7 +1,12 @@
 import React, { useState } from "react"
 import { FaHeart, FaStickyNote } from "react-icons/fa"
 import styled from "styled-components"
-import { motion, useMotionValue, useSpring } from "framer-motion"
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  AnimatePresence,
+} from "framer-motion"
 import { atom, useRecoilState, selector } from "recoil"
 import { useLocation } from "react-router-dom"
 
@@ -14,8 +19,15 @@ import { maxLength, maxLengthUrl, spliceUrl, removeSpace } from "../../utils"
 
 // import { db } from "../../services/firebase"
 
+interface Link {
+  url: string
+  title: string
+  image: string
+  note: string
+}
+
 interface Props {
-  link: any
+  link: Link
   showHeart: boolean
   likeAdded: number | null
   user: any
@@ -25,8 +37,8 @@ interface Props {
 const Card = ({ link, category, showHeart, user }: Props) => {
   const { pathname } = useLocation()
 
-  const [showNote, setShowNote] = useState<boolean>(false)
-  const [favorited, setFavorited] = useState<boolean>(false)
+  const [showNote, setShowNote] = useState(false)
+  const [favorited, setFavorited] = useState(false)
   const [onFocus, setOnFocus] = useState(false)
 
   const [mockData, setMockData] = useRecoilState(mockDataState)
@@ -45,10 +57,6 @@ const Card = ({ link, category, showHeart, user }: Props) => {
   //   leave: { transform: `translate3d(0, -200px, 0)` },
   //   config: config.gentle,
   // })
-
-  const handleNoteDisplay: () => void = () => {
-    setShowNote((prevState) => !prevState)
-  }
 
   // Handles move to selected category
   function handleMoveCategory(e) {
@@ -147,12 +155,9 @@ const Card = ({ link, category, showHeart, user }: Props) => {
           dragConstraints={{ left: 0, bottom: 50, top: 0 }}
           dragElastic={0.1}
           dragMomentum={true}
-          // dragTransition={{ bounceStiffness: 100, bounceDamping: 30 }}
           title="Drag down image to access Move & Remove functions :)"
           style={{ y }}
           onClick={() => y.set(0)}
-          // onPanStart={isMobile ? () => setOnFocus(true) : null}
-          // onPanEnd={isMobile ? () => setOnFocus(false) : null}
         >
           <img
             draggable="false"
@@ -174,18 +179,20 @@ const Card = ({ link, category, showHeart, user }: Props) => {
               </FavLinksAdded>
             </FavLinksBg>
           )}
-
           <UrlAddr>{spliceUrl(maxLengthUrl(link.url))}</UrlAddr>
-
-          {/* {noteDisplayTransition.map(
-            ({ item, props: ani, key }) =>
-              item && (
-                <NoteDisplay style={ani} key={key}>
-                  <h4>Notes</h4>
-                  <span>{link.note}</span>
-                </NoteDisplay>
-              )
-          )} */}
+          <AnimatePresence>
+            {showNote && (
+              <NoteDisplay
+                initial={{ y: "-100%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "-105%" }}
+                transition={{ type: "spring", damping: 12 }}
+              >
+                <h4>Notes</h4>
+                <span>{link.note}</span>
+              </NoteDisplay>
+            )}
+          </AnimatePresence>
           {showHeart && (
             <FaHeartWrapper
               onClick={() => {
@@ -194,9 +201,7 @@ const Card = ({ link, category, showHeart, user }: Props) => {
             />
           )}
         </ImageContainer>
-        {/* <PullCard>
-          <h4>Pull</h4>
-        </PullCard> */}
+        <PullCard></PullCard>
         <div
           style={{
             padding: "1.5rem 1.5rem ",
@@ -207,7 +212,10 @@ const Card = ({ link, category, showHeart, user }: Props) => {
           </a>
         </div>
         {link.note && (
-          <FaStickyNoteWrapper onClick={() => handleNoteDisplay()} />
+          <FaStickyNoteWrapper
+            title="Show note"
+            onClick={() => setShowNote((prevState) => !prevState)}
+          />
         )}
         {/* <CategorySelect onChange={handleMoveCategory}>
           <option value={"default"}>Move link to...</option>
@@ -257,7 +265,7 @@ const LinksCardItem = styled(motion.div)`
     height: 100%;
     object-fit: cover;
     display: block;
-    display: block;
+    border-radius: 10px;
   }
 `
 
@@ -398,26 +406,33 @@ const FaStickyNoteWrapper = styled(FaStickyNote)`
   position: absolute;
   bottom: 7px;
   right: 10px;
-  font-size: 1.8rem;
-  color: orangered;
+  font-size: 2.6rem;
+  color: var(--secondaryColor);
   padding: 4px;
   z-index: 10;
   cursor: pointer;
+  transition: 150ms;
+
+  &:hover {
+    transform: rotate(3deg);
+  }
 `
 
-const NoteDisplay = styled.div`
+const NoteDisplay = styled(motion.div)`
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
   z-index: 2000;
-  background: #faca0c;
-  padding: 1rem;
+  background: #ffc357;
+  padding: 1.8rem 2rem;
+  border-radius: 10px;
 
   span {
     z-index: 200;
     color: #333;
+    font-size: 1.4rem;
   }
 
   h4 {
@@ -430,12 +445,11 @@ const NoteDisplay = styled.div`
 const PullCard = styled.div`
   position: absolute;
   top: -10px;
-  background: lightgray;
-  border-radius: 15px;
+  background: ${(props) => props.theme.cardTopDiv};
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   width: 100%;
   z-index: -1;
-
-  h4 {
-    color: lightgray;
-  }
+  height: 15px;
+  transition: all 300ms ease-in-out;
 `

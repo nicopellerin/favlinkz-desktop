@@ -64,13 +64,14 @@ const Favorites = () => {
           animate="show"
           exit="exit"
         >
-          {results.map(({ url, title, image }: Results) => (
+          {results.map(({ url, title, image, note }: Results) => (
             <Card
               key={url}
               link={{
                 url,
                 title,
                 image,
+                note,
               }}
               showHeart={false}
               category="latest"
