@@ -32,7 +32,7 @@ const Card = ({ link, category, showHeart, user }: Props) => {
   const [mockData, setMockData] = useRecoilState(mockDataState)
   const [favoritesData, setFavoritesData] = useRecoilState(favoritesState)
 
-  const y = useSpring(0, { stiffness: 100, damping: 50 })
+  const y = useSpring(0, { stiffness: 300, damping: 20 })
   const scale = useMotionValue(1)
 
   // Get all Catgeroies data
