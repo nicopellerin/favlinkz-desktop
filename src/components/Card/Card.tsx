@@ -155,7 +155,7 @@ const Card = ({ link, showHeart, user }: Props) => {
                 initial={{ y: "-100%" }}
                 animate={{ y: 0 }}
                 exit={{ y: "-105%" }}
-                transition={{ type: "spring", damping: 12 }}
+                transition={{ type: "spring", damping: 13 }}
               >
                 <h4>Notes</h4>
                 <span>{link.note}</span>
