@@ -74,9 +74,12 @@ ipcMain.on("user-logged-in", (e) => {
     width: 1200,
     height: 1000,
   })
+  // mainWindow.hide()
   mainWindow.center()
+  // mainWindow.hide()
   mainWindow.setResizable(true)
   userLoggedIn = true
+  // setTimeout(() => mainWindow.show(), 500)
 })
 
 ipcMain.on("user-logged-out", (e) => {

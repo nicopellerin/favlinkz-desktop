@@ -1,39 +1,38 @@
-import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 
-import { firebase, db } from "../services/firebase";
+import { firebase, db } from "../services/firebase"
 
 interface User {
-  displayName: string;
-  photoURL: string;
-  uid: string;
-  email: string;
+  displayName: string | null
+  photoUrl: string | null
+  uid: string
+  email: string | null
 }
 
 const useAuth = () => {
-  const [user, setUser] = useState<User | null>();
+  const [user, setUser] = useState<User | null>()
 
   useEffect(() => {
     return firebase.auth().onAuthStateChanged((firebaseUser) => {
-      const usersRef = db.collection("users").doc(firebaseUser?.uid);
+      const usersRef = db.collection("users").doc(firebaseUser?.uid)
 
       usersRef.get().then(() => {
-        const user: User = {
-          displayName: firebaseUser?.displayName,
-          photoUrl: firebaseUser?.photoURL,
-          uid: firebaseUser?.uid,
-          email: firebaseUser?.email,
-        };
-
         if (firebaseUser) {
-          localStorage.setItem("userFavLinkz", JSON.stringify(user));
-          setUser(user);
+          const user: User = {
+            displayName: firebaseUser.displayName,
+            photoUrl: firebaseUser.photoURL,
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+          }
 
-          db.collection("users").doc(user.uid).set(user, { merge: true });
+          localStorage.setItem("userFavLinkz", JSON.stringify(user))
+          setUser(user)
+
+          db.collection("users").doc(user.uid).set(user, { merge: true })
 
           // Checks to see if initial 2 categories exist
-          const userRef = db.collection("users").doc(user.uid);
-          let isExist: any;
+          const userRef = db.collection("users").doc(user.uid)
+          let isExist: any
           userRef
             .collection("categories")
             .get()
@@ -54,18 +53,18 @@ const useAuth = () => {
                       links: [],
                       title: "Favorites",
                     })
-                  );
+                  )
               }
-            });
+            })
         } else {
-          localStorage.removeItem("userFavLinkz");
-          setUser(null);
+          localStorage.removeItem("userFavLinkz")
+          setUser(null)
         }
-      });
-    });
-  }, [setUser]);
+      })
+    })
+  }, [setUser])
 
-  return user;
-};
+  return user
+}
 
-export default useAuth;
+export default useAuth

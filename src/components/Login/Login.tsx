@@ -51,9 +51,11 @@ const Login = () => {
 
   return (
     <Wrapper
-    // initial={{ opacity: 0 }}
-    // animate={{ opacity: 1 }}
-    // exit={{ opacity: 0 }}
+      animate
+      layoutId="wrapper"
+      // initial={{ opacity: 0 }}
+      // animate={{ opacity: 1 }}
+      // exit={{ opacity: 0 }}
     >
       <Container animate={{ y: [10, 0] }}>
         <InsideContainer>

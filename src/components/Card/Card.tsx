@@ -7,7 +7,7 @@ import {
   useSpring,
   AnimatePresence,
 } from "framer-motion"
-import { atom, useRecoilState, selector } from "recoil"
+import { useRecoilState } from "recoil"
 import { useLocation } from "react-router-dom"
 
 // import useCategoryData from "../hooks/useCategoryData"
@@ -34,12 +34,11 @@ interface Props {
   category: any
 }
 
-const Card = ({ link, category, showHeart, user }: Props) => {
+const Card = ({ link, showHeart, user }: Props) => {
   const { pathname } = useLocation()
 
   const [showNote, setShowNote] = useState(false)
   const [favorited, setFavorited] = useState(false)
-  const [onFocus, setOnFocus] = useState(false)
 
   const [mockData, setMockData] = useRecoilState(mockDataState)
   const [favoritesData, setFavoritesData] = useRecoilState(favoritesState)
@@ -47,34 +46,18 @@ const Card = ({ link, category, showHeart, user }: Props) => {
   const y = useSpring(0, { stiffness: 300, damping: 20 })
   const scale = useMotionValue(1)
 
-  // Get all Catgeroies data
-  // const [categoryList] = useCategoryData()
-
-  // Animations
-  // const noteDisplayTransition = useTransition(showNote, null, {
-  //   from: { transform: `translate3d(0, -100px, 0)` },
-  //   enter: { transform: `translate3d(0, 0, 0)` },
-  //   leave: { transform: `translate3d(0, -200px, 0)` },
-  //   config: config.gentle,
-  // })
-
-  // Handles move to selected category
-  function handleMoveCategory(e) {
-    // const selectedCategory = e.target.value
-    // if (selectedCategory !== "default") {
-    //   const categoryRef = db
-    //     .collection(`users/${user.uid}/categories/`)
-    //     .doc(`${selectedCategory}`)
-    //   categoryRef
-    //     .get()
-    //     .then((doc) => {
-    //       const previousLinks = doc.data().links || []
-    //       const updatedLinks = [...previousLinks, link]
-    //       categoryRef.update({ links: updatedLinks })
-    //       console.log(link)
-    //     })
-    //     .then(() => handleDelete(link.url))
-    // }
+  const itemVariants = {
+    hidden: {
+      y: 5,
+    },
+    show: {
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 10,
+        stiffness: 80,
+      },
+    },
   }
 
   // Remove links
@@ -123,20 +106,6 @@ const Card = ({ link, category, showHeart, user }: Props) => {
     //   categoryRef.update({ links: updatedLikes })
     // })
     // .then(() => setTimeout(() => , 1500))
-  }
-
-  const itemVariants = {
-    hidden: {
-      y: 5,
-    },
-    show: {
-      y: 0,
-      transition: {
-        type: "spring",
-        damping: 10,
-        stiffness: 80,
-      },
-    },
   }
 
   return (
@@ -217,17 +186,6 @@ const Card = ({ link, category, showHeart, user }: Props) => {
             onClick={() => setShowNote((prevState) => !prevState)}
           />
         )}
-        {/* <CategorySelect onChange={handleMoveCategory}>
-          <option value={"default"}>Move link to...</option>
-          {categoryList.slice(2, categoryList.length).map((cat) => {
-            if (cat.title.toLowerCase() === category.toLowerCase()) return
-            return (
-              <option key={cat.id} value={cat.id}>
-                {cat.title}
-              </option>
-            )
-          })}
-        </CategorySelect> */}
         <ShareButton
           style={{ position: "absolute", top: 10, right: 80, zIndex: 0 }}
           onClick={() => alert(link.url)}
@@ -275,30 +233,6 @@ const Title = styled.h2`
   font-size: 1.8rem;
   color: ${(props) => props.theme.cardTitle};
   transition: all 300ms ease-in-out;
-`
-
-const CategorySelect = styled.select`
-  position: absolute;
-  top: 8px;
-  left: 10px;
-  width: 50%;
-  height: 30px;
-  background: white;
-  color: #333;
-  padding-left: 5px;
-  font-size: 14px;
-  border: none;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-
-  option {
-    color: black;
-    background: white;
-    font-weight: small;
-    display: flex;
-    white-space: pre;
-    min-height: 20px;
-    padding: 0px 2px 1px;
-  }
 `
 
 const RemoveButton = styled.button`
@@ -363,7 +297,6 @@ const FaHeartWrapper = styled(FaHeart)`
   cursor: pointer;
   transition: color 100ms ease-in;
   z-index: 100;
-  /* background-color: rgba(255, 255, 255, 0.13); */
   border-radius: 50%;
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.05);
   overflow: visible;
@@ -385,7 +318,6 @@ const FavLinksAdded = styled(motion.span)`
   text-align: center;
   left: 50%;
   top: 50%;
-  /* transform: translate(-50%, -50%); */
   border-radius: 5px;
   color: crimson;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);

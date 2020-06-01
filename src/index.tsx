@@ -22,14 +22,16 @@ const App = () => {
     <Router>
       <Route
         render={({ location }) => (
-          <Switch>
-            <Route path="/profile">
-              <ProfilePage />
-            </Route>
-            <Route path="/" exact>
-              <LoginPage />
-            </Route>
-          </Switch>
+          <AnimateSharedLayout>
+            <Switch>
+              <Route path="/profile">
+                <ProfilePage />
+              </Route>
+              <Route path="/" exact>
+                <LoginPage />
+              </Route>
+            </Switch>
+          </AnimateSharedLayout>
         )}
       />
       <GlobalStyles />

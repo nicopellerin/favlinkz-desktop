@@ -38,6 +38,7 @@ interface Results {
   url: string
   title: string
   image: string
+  note: string
 }
 
 const Favorites = () => {

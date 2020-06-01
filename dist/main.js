@@ -159,10 +159,12 @@ electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-in", e => {
     y: y,
     width: 1200,
     height: 1000
-  });
-  mainWindow.center();
+  }); // mainWindow.hide()
+
+  mainWindow.center(); // mainWindow.hide()
+
   mainWindow.setResizable(true);
-  userLoggedIn = true;
+  userLoggedIn = true; // setTimeout(() => mainWindow.show(), 500)
 });
 electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-out", e => {
   mainWindow.setSize(450, 650);

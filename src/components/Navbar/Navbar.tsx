@@ -102,4 +102,8 @@ const ProfileName = styled.span`
   font-size: 14px;
   cursor: pointer;
   transition: all 300ms ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
 `
