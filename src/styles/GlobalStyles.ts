@@ -23,10 +23,6 @@ export const GlobalStyles = createGlobalStyle`
     height: 100%;
     margin: 0;
     padding: 0;
-
-    /* @media (max-width: 500px) {
-      font-size: 57.5%;
-    } */
   }
 
   body {
@@ -42,7 +38,7 @@ export const GlobalStyles = createGlobalStyle`
   h1, h2, h3, h4, h5, h6 {
     margin-top: 0;
     font-family: var(--systemFont);
-    color: #484554;
+    color: var(--textColor);
   }
 
   h1 {

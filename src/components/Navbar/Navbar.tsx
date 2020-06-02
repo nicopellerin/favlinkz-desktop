@@ -1,7 +1,7 @@
 import * as React from "react"
 import styled from "styled-components"
 import { FaSortDown } from "react-icons/fa"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { useRecoilValue } from "recoil"
 
 import SearchBar from "./SearchBar"
@@ -12,15 +12,16 @@ import { userState } from "../../state/user"
 import logo from "../../assets/favlinkz.svg"
 
 const Navbar: React.FC = () => {
+  const { pathname } = useLocation()
   const { displayName, photoUrl } = useRecoilValue(userState)
+
+  const showSearchBar = !pathname.includes("user")
 
   return (
     <>
       <HeaderWrapper>
         <HeaderContainer>
-          <SearchBarWrapper>
-            <SearchBar />
-          </SearchBarWrapper>
+          <SearchBarWrapper>{showSearchBar && <SearchBar />}</SearchBarWrapper>
           <HeaderLogo>
             <img src={logo} style={{ width: 130 }} />
           </HeaderLogo>

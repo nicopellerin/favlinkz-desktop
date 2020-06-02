@@ -13,10 +13,9 @@ import {
   locationState,
 } from "../../state/searchbar"
 import { favoritesState } from "../../state/favorites"
+import { userState } from "../../state/user"
 
 import { db } from "../../services/firebase"
-
-import { userState } from "../../state/user"
 
 import dots from "../../assets/dots.svg"
 
@@ -98,8 +97,7 @@ const Favorites = () => {
   }
 
   return (
-    <Wrapper
-    >
+    <Wrapper>
       <DotsWrapper>
         <Dots src={dots} alt="dots" draggable="false" />
       </DotsWrapper>
@@ -139,7 +137,7 @@ const Favorites = () => {
           <h2>No favorite links added</h2>
         </NoMatchingResults>
       )}
-    </motion.div>
+    </Wrapper>
   )
 }
 

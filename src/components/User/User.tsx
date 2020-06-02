@@ -3,9 +3,7 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useRecoilValue } from "recoil"
 
-import { userState } from "../../state/user"
-import { favoritesState } from "../../state/favorites"
-import { latestState } from "../../state/latest"
+import { userState, totalLinks } from "../../state/user"
 
 const userVariants = {
   hidden: {
@@ -33,10 +31,7 @@ const userVariants = {
 
 const User = () => {
   const { displayName, photoUrl, email } = useRecoilValue(userState)
-  const latest = useRecoilValue(latestState)
-  const favorites = useRecoilValue(favoritesState)
-
-  const totalLinks = [...latest, ...favorites]
+  const totalLinksLength = useRecoilValue(totalLinks)
 
   return (
     <Wrapper
@@ -49,7 +44,7 @@ const User = () => {
         <UserImage src={photoUrl} alt="avatar" />
         <Name>{displayName}</Name>
         <Email>{email}</Email>
-        <TotalLinks>Total links: {totalLinks.length}</TotalLinks>
+        <TotalLinks>Total links: {totalLinksLength}</TotalLinks>
         <DeleteAccount>Delete account</DeleteAccount>
       </Container>
     </Wrapper>

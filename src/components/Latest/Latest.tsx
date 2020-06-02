@@ -7,8 +7,6 @@ import Spinner from "react-spinkit"
 
 import Card from "../Card"
 
-import { db } from "../../services/firebase"
-
 import {
   searchResultsState,
   searchTextState,
@@ -16,6 +14,8 @@ import {
 } from "../../state/searchbar"
 import { userState } from "../../state/user"
 import { latestState } from "../../state/latest"
+
+import { db } from "../../services/firebase"
 
 import dots from "../../assets/dots.svg"
 
