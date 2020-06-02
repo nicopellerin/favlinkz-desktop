@@ -1,9 +1,8 @@
 import * as React from "react"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
-import uuid from "uuid/v4"
 
 import Card from "../Card"
 
@@ -103,7 +102,7 @@ const Latest = () => {
         >
           {results.map(({ url, title, image, note, id }: Results) => (
             <Card
-              key={`${url}-${uuid()}`}
+              key={id}
               link={{
                 url,
                 title,

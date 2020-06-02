@@ -68,7 +68,7 @@ const Favorites = () => {
         .collection(`users`)
         .doc(user.uid)
         .collection("favorites")
-      // .orderBy("created", "desc")
+        .orderBy("created", "desc")
 
       latestLinks.onSnapshot((links) => {
         const docs: any = []
@@ -94,7 +94,7 @@ const Favorites = () => {
       <DotsWrapper>
         <Dots src={dots} alt="dots" />
       </DotsWrapper>
-      {results.length > 0 && (
+      {results?.length > 0 && (
         <CardList
           variants={favoritesVariants}
           initial="hidden"
@@ -103,7 +103,7 @@ const Favorites = () => {
         >
           {results.map(({ url, title, image, note, id }: Results) => (
             <Card
-              key={url}
+              key={id}
               link={{
                 url,
                 title,
@@ -120,12 +120,12 @@ const Favorites = () => {
         </CardList>
       )}
 
-      {results.length < 1 && searchText.length > 1 && (
+      {results?.length < 1 && searchText.length > 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>Found no matching results</h2>
         </NoMatchingResults>
       )}
-      {results.length < 1 && searchText.length < 1 && (
+      {results?.length < 1 && searchText.length < 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>No favorite links added</h2>
         </NoMatchingResults>

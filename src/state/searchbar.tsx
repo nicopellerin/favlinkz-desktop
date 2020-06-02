@@ -7,6 +7,7 @@ interface Results {
   url: string
   title: string
   image: string
+  id: string
 }
 
 export const searchTextState = atom({
@@ -25,8 +26,6 @@ export const searchResultsState = selector({
     const pathname = get(locationState)
     const data =
       pathname === "favorites" ? get(favoritesState) : get(latestState)
-    // console.log("data", data)
-    console.log(pathname)
 
     if (data) {
       const searchText = get(searchTextState)
