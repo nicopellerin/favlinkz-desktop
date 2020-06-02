@@ -45,7 +45,13 @@ const User = () => {
         <Name>{displayName}</Name>
         <Email>{email}</Email>
         <TotalLinks>Total links: {totalLinksLength}</TotalLinks>
-        <DeleteAccount>Delete account</DeleteAccount>
+        <DeleteAccount
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 1] }}
+          transition={{ delay: 0.2 }}
+        >
+          Delete account
+        </DeleteAccount>
       </Container>
     </Wrapper>
   )
@@ -93,7 +99,7 @@ const TotalLinks = styled.h3`
   color: var(--secondaryColor);
 `
 
-const DeleteAccount = styled.span`
+const DeleteAccount = styled(motion.span)`
   position: absolute;
   bottom: 5rem;
   color: #999;
