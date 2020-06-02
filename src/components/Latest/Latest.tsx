@@ -1,17 +1,23 @@
 import * as React from "react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
+import uuid from "uuid/v4"
 
 import Card from "../Card"
 
 import { db } from "../../services/firebase"
 
-import { searchResultsState, searchTextState } from "../../state/searchbar"
+import {
+  searchResultsState,
+  searchTextState,
+  locationState,
+} from "../../state/searchbar"
 
 import dots from "../../assets/dots.svg"
 import { userState } from "../../state/user"
+import { latestState } from "../../state/latest"
 
 const latestVariants = {
   hidden: {
@@ -42,24 +48,38 @@ interface Results {
   title: string
   image: string
   note: string
+  id: string
 }
 
 const Latest = () => {
   const results = useRecoilValue(searchResultsState)
+  const [latest, setLatest] = useRecoilState(latestState)
   const user = useRecoilValue(userState)
   const [searchText] = useRecoilState(searchTextState)
+  const [location, setLocation] = useRecoilState(locationState)
 
   useEffect(() => {
-    const userRef = db.collection(`users/${user.uid}`)
-
-    userRef.onSnapshot((snapshot) => {
-      const docs = []
-      snapshot.forEach((doc): any => {
-        docs.push({ ...doc.data(), id: doc.id })
-      })
-      console.log(docs[0].links)
-    })
+    setLocation("profile")
   }, [])
+
+  useEffect(() => {
+    if (user.uid) {
+      const latestLinks = db
+        .collection(`users`)
+        .doc(user.uid)
+        .collection("latest")
+        .orderBy("created", "desc")
+
+      latestLinks.onSnapshot((links) => {
+        const docs: any = []
+        links.docs.forEach((link) => {
+          const newLinks = { ...link.data() }
+          docs.push(newLinks)
+        })
+        setLatest(docs)
+      })
+    }
+  }, [user])
 
   return (
     <motion.div
@@ -74,21 +94,22 @@ const Latest = () => {
       <DotsWrapper>
         <Dots src={dots} alt="dots" />
       </DotsWrapper>
-      {results.length > 0 && (
+      {results?.length > 0 && (
         <CardList
           variants={latestVariants}
           initial="hidden"
           animate="show"
           exit="exit"
         >
-          {results.map(({ url, title, image, note }: Results) => (
+          {results.map(({ url, title, image, note, id }: Results) => (
             <Card
-              key={url}
+              key={`${url}-${uuid()}`}
               link={{
                 url,
                 title,
                 image,
                 note,
+                id,
               }}
               showHeart={true}
               category="latest"
@@ -98,12 +119,12 @@ const Latest = () => {
           ))}
         </CardList>
       )}
-      {results.length < 1 && searchText.length > 1 && (
+      {results?.length < 1 && searchText.length > 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>Found no matching results</h2>
         </NoMatchingResults>
       )}
-      {results.length < 1 && searchText.length < 1 && (
+      {results?.length < 1 && searchText.length < 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>No links added</h2>
         </NoMatchingResults>

@@ -1,8 +1,6 @@
 import { atom } from "recoil"
 
-import { mockData } from "../utils/mock"
-
-export const mockDataState = atom({
-  key: "mockDataState",
-  default: mockData,
+export const latestState = atom({
+  key: "latestState",
+  default: [],
 })

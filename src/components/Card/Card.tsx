@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import * as React from "react"
+import { useState, useEffect } from "react"
 import { FaHeart, FaStickyNote } from "react-icons/fa"
 import styled from "styled-components"
 import {
@@ -7,23 +8,25 @@ import {
   useSpring,
   AnimatePresence,
 } from "framer-motion"
-import { useRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
+
 import { useLocation } from "react-router-dom"
 
-// import useCategoryData from "../hooks/useCategoryData"
-
-import { mockDataState } from "../../state/latest"
+import { latestState } from "../../state/latest"
 import { favoritesState } from "../../state/favorites"
 
 import { maxLength, maxLengthUrl, spliceUrl, removeSpace } from "../../utils"
 
-// import { db } from "../../services/firebase"
+import { db } from "../../services/firebase"
+import { userState } from "../../state/user"
+import { locationState } from "../../state/searchbar"
 
 interface Link {
   url: string
   title: string
   image: string
   note: string
+  id: string
 }
 
 interface Props {
@@ -34,14 +37,15 @@ interface Props {
   category: any
 }
 
-const Card = ({ link, showHeart, user }: Props) => {
+const Card = ({ link, showHeart }: Props) => {
   const { pathname } = useLocation()
 
   const [showNote, setShowNote] = useState(false)
   const [favorited, setFavorited] = useState(false)
 
-  const [mockData, setMockData] = useRecoilState(mockDataState)
-  const [favoritesData, setFavoritesData] = useRecoilState(favoritesState)
+  const [latest, setLatest] = useRecoilState(latestState)
+  const [favorites, setFavorites] = useRecoilState(favoritesState)
+  const user = useRecoilValue(userState)
 
   const y = useSpring(0, { stiffness: 300, damping: 20 })
   const scale = useMotionValue(1)
@@ -61,51 +65,53 @@ const Card = ({ link, showHeart, user }: Props) => {
   }
 
   // Remove links
-  const handleDelete = (url: string) => {
+  const handleDelete = (id: string) => {
     scale.set(0)
     if (pathname.includes("profile")) {
       setTimeout(() => {
-        const newData = mockData.filter((item) => item.url !== url)
-        setMockData(newData)
+        const newData = latest.filter((item) => item.id !== id)
+        const latestLinks = db
+          .collection(`users`)
+          .doc(user.uid)
+          .collection("latest")
+
+        latestLinks.doc(id).delete()
+
+        setLatest(newData)
       }, 200)
     }
 
     if (pathname.includes("favorites")) {
       setTimeout(() => {
-        const newData = favoritesData.filter((item) => item.url !== url)
-        setFavoritesData(newData)
+        const newData = favorites.filter((item) => item.id !== id)
+        console.log(user)
+        const favoriteLinks = db
+          .collection(`users`)
+          .doc(user.uid)
+          .collection("favorites")
+
+        favoriteLinks.doc(id).delete()
+
+        setFavorites(newData)
       }, 200)
     }
-    // const newLinks = selectedCategory.filter((link: { url: string }) => {
-    //   y.set(0)
-    //   return link.url !== url
-    // })
-    // // setSelectedCategory(newLinks)
-    // const categoryRef = db
-    //   .collection(`users/${user.uid}/categories/`)
-    //   .doc(`${removeSpace(locationPath)}`)
-    // categoryRef.get().then(() => {
-    //   categoryRef.update({ links: newLinks })
-    // })
   }
 
   // Like page
   const handleLike = (link) => {
-    setFavoritesData([...favoritesData, link])
+    const created = Date.now()
+    const newLink = { ...link, created }
+    setFavorites([...favorites, newLink])
     setFavorited(true)
-    setTimeout(() => handleDelete(link.url), 700)
-    // setFavorited(true)
-    // setTimeout(() => setFavorited(false), 500)
-    // const categoryRef = db
-    //   .collection(`users/${user.uid}/categories/`)
-    //   .doc(`favorites`)
-    // categoryRef.get().then(doc => {
-    //   const previousLikes = doc.data().links || []
-    //   const updatedLikes = [...previousLikes, link]
-    //   handleDelete(link.url)
-    //   categoryRef.update({ links: updatedLikes })
-    // })
-    // .then(() => setTimeout(() => , 1500))
+    const favoritesLinks = db
+      .collection("users")
+      .doc(user.uid)
+      .collection("favorites")
+      .doc(link.id)
+
+    favoritesLinks.set(newLink)
+
+    setTimeout(() => handleDelete(link.id), 700)
   }
 
   return (
@@ -194,7 +200,7 @@ const Card = ({ link, showHeart, user }: Props) => {
         </ShareButton>
         <RemoveButton
           style={{ position: "absolute", top: 10, right: 10, zIndex: 0 }}
-          onClick={() => handleDelete(link.url)}
+          onClick={() => handleDelete(link.id)}
         >
           Remove
         </RemoveButton>
@@ -254,6 +260,7 @@ const ShareButton = styled(RemoveButton)`
 `
 
 const ImageContainer = styled(motion.div)`
+  background: #fff;
   position: relative;
   height: 150px;
   overflow: hidden;

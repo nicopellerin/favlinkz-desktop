@@ -1,12 +1,21 @@
 import * as React from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
 
 import Card from "../Card"
 
-import { searchTextState } from "../../state/searchbar"
+import {
+  searchTextState,
+  searchResultsState,
+  locationState,
+} from "../../state/searchbar"
 import { favoritesState } from "../../state/favorites"
+
+import { db } from "../../services/firebase"
+
+import { userState } from "../../state/user"
 
 import dots from "../../assets/dots.svg"
 
@@ -39,11 +48,38 @@ interface Results {
   title: string
   image: string
   note: string
+  id: string
 }
 
 const Favorites = () => {
-  const results = useRecoilValue(favoritesState)
+  const results = useRecoilValue(searchResultsState)
+  const [favorites, setFavorites] = useRecoilState(favoritesState)
+  const user = useRecoilValue(userState)
   const [searchText] = useRecoilState(searchTextState)
+  const [location, setLocation] = useRecoilState(locationState)
+
+  useEffect(() => {
+    setLocation("favorites")
+  }, [])
+
+  useEffect(() => {
+    if (user.uid) {
+      const latestLinks = db
+        .collection(`users`)
+        .doc(user.uid)
+        .collection("favorites")
+      // .orderBy("created", "desc")
+
+      latestLinks.onSnapshot((links) => {
+        const docs: any = []
+        links.docs.forEach((link) => {
+          const newLinks = { ...link.data() }
+          docs.push(newLinks)
+        })
+        setFavorites(docs)
+      })
+    }
+  }, [user])
 
   return (
     <motion.div
@@ -65,7 +101,7 @@ const Favorites = () => {
           animate="show"
           exit="exit"
         >
-          {results.map(({ url, title, image, note }: Results) => (
+          {results.map(({ url, title, image, note, id }: Results) => (
             <Card
               key={url}
               link={{
@@ -73,6 +109,7 @@ const Favorites = () => {
                 title,
                 image,
                 note,
+                id,
               }}
               showHeart={false}
               category="latest"

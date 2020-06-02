@@ -3,8 +3,8 @@ export function maxLength(str) {
   let newString
 
   newString = str.split("")
-  if (newString.length > 90) {
-    newString = str.split("").splice(0, 90).join("") + " [...]"
+  if (newString.length > 75) {
+    newString = str.split("").splice(0, 75).join("") + " [...]"
   }
   return newString
 }
@@ -13,7 +13,7 @@ export function maxLength(str) {
 export function maxLengthUrl(url) {
   let newUrlString
   newUrlString = url.split("")
-  if (newUrlString.length > 60) {
+  if (newUrlString.length > 30) {
     return (newUrlString = url.split("").splice(0, 30).join("") + " [...]")
   }
 
