@@ -4,6 +4,8 @@ import { motion } from "framer-motion"
 import { useRecoilValue } from "recoil"
 
 import { userState } from "../../state/user"
+import { favoritesState } from "../../state/favorites"
+import { latestState } from "../../state/latest"
 
 const userVariants = {
   hidden: {
@@ -31,6 +33,10 @@ const userVariants = {
 
 const User = () => {
   const { displayName, photoUrl, email } = useRecoilValue(userState)
+  const latest = useRecoilValue(latestState)
+  const favorites = useRecoilValue(favoritesState)
+
+  const totalLinks = [...latest, ...favorites]
 
   return (
     <Wrapper
@@ -43,6 +49,7 @@ const User = () => {
         <UserImage src={photoUrl} alt="avatar" />
         <Name>{displayName}</Name>
         <Email>{email}</Email>
+        <TotalLinks>Total links: {totalLinks.length}</TotalLinks>
         <DeleteAccount>Delete account</DeleteAccount>
       </Container>
     </Wrapper>
@@ -72,7 +79,6 @@ const UserImage = styled.img`
   width: 100px;
   margin-bottom: 2rem;
   border-radius: 50%;
-  /* box-shadow: 0 12px 11px -11px rgba(0, 0, 0, 0.1); */
 `
 
 const Name = styled.h3`
@@ -82,13 +88,20 @@ const Name = styled.h3`
 `
 
 const Email = styled.h5`
-  color: #112;
+  color: var(--primaryColor);
   font-size: 1.6rem;
   font-weight: 500;
 `
 
+const TotalLinks = styled.h3`
+  font-size: 2rem;
+  color: var(--secondaryColor);
+`
+
 const DeleteAccount = styled.span`
-  color: red;
+  position: absolute;
+  bottom: 5rem;
+  color: #999;
   font-size: 1.4rem;
   font-weight: 500;
 `

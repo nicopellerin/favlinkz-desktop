@@ -91,23 +91,15 @@ const Latest = () => {
   if (loading) {
     return (
       <NoMatchingResults>
-        <Spinner name="ball-pulse-rise" color="orangered" fadeIn="full" />
+        <Spinner name="ball-pulse-rise" color="#ff5c5b" fadeIn="full" />
       </NoMatchingResults>
     )
   }
 
   return (
-    <motion.div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-        marginTop: "4rem",
-        height: "100%",
-      }}
-    >
+    <Wrapper>
       <DotsWrapper>
-        <Dots src={dots} alt="dots" />
+        <Dots src={dots} alt="dots" draggable="false" />
       </DotsWrapper>
       {results?.length > 0 && (
         <CardList
@@ -144,13 +136,21 @@ const Latest = () => {
           <h2>No latest links added</h2>
         </NoMatchingResults>
       )}
-    </motion.div>
+    </Wrapper>
   )
 }
 
 export default Latest
 
 // Styles
+const Wrapper = styled(motion.div)`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 4rem;
+  height: 100%;
+`
+
 const CardList = styled(motion.div)`
   padding: 3rem 6rem;
   display: grid;
@@ -163,6 +163,7 @@ const CardList = styled(motion.div)`
 const DotsWrapper = styled.div`
   display: flex;
   justify-content: center;
+  user-select: none;
 `
 
 const Dots = styled.img`
