@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { FaHeart, FaStickyNote } from "react-icons/fa"
 import styled from "styled-components"
 import {
@@ -9,6 +9,14 @@ import {
   AnimatePresence,
 } from "framer-motion"
 import { useRecoilState, useRecoilValue } from "recoil"
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterIcon,
+  TwitterShareButton,
+  EmailShareButton,
+  EmailIcon,
+} from "react-share"
 
 import { useLocation } from "react-router-dom"
 
@@ -192,11 +200,44 @@ const Card = ({ link, showHeart }: Props) => {
             onClick={() => setShowNote((prevState) => !prevState)}
           />
         )}
+        <FacebookShareButton
+          style={{
+            position: "absolute",
+            top: 10,
+            left: 10,
+            zIndex: 0,
+          }}
+          url={link.url}
+        >
+          <FacebookIcon size={26} round={true} />
+        </FacebookShareButton>
+        <TwitterShareButton
+          style={{
+            position: "absolute",
+            top: 10,
+            left: 42,
+            zIndex: 0,
+          }}
+          url={link.url}
+        >
+          <TwitterIcon size={26} round={true} />
+        </TwitterShareButton>
+        <EmailShareButton
+          style={{
+            position: "absolute",
+            top: 10,
+            left: 74,
+            zIndex: 0,
+          }}
+          url={link.url}
+        >
+          <EmailIcon size={26} round={true} />
+        </EmailShareButton>
         <ShareButton
           style={{ position: "absolute", top: 10, right: 80, zIndex: 0 }}
           onClick={() => alert(link.url)}
         >
-          Share
+          Copy link
         </ShareButton>
         <RemoveButton
           style={{ position: "absolute", top: 10, right: 10, zIndex: 0 }}
