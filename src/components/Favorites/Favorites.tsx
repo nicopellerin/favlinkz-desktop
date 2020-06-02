@@ -74,13 +74,17 @@ const Favorites = () => {
         .orderBy("created", "desc")
 
       latestLinks.onSnapshot((links) => {
-        const docs: any = []
-        links.docs.forEach((link) => {
-          const newLinks = { ...link.data() }
-          docs.push(newLinks)
+        if (links.size) {
+          const docs: any = []
+          links.docs.forEach((link) => {
+            const newLinks = { ...link.data() }
+            docs.push(newLinks)
+            setLoading(false)
+          })
+          setFavorites(docs)
+        } else {
           setLoading(false)
-        })
-        setFavorites(docs)
+        }
       })
     }
   }, [user])

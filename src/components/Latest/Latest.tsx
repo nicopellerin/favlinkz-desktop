@@ -73,13 +73,17 @@ const Latest = () => {
         .orderBy("created", "desc")
 
       latestLinks.onSnapshot((links) => {
-        const docs: any = []
-        links.docs.forEach((link) => {
-          const newLinks = { ...link.data() }
-          docs.push(newLinks)
+        if (links.size) {
+          const docs: any = []
+          links.docs.forEach((link) => {
+            const newLinks = { ...link.data() }
+            docs.push(newLinks)
+            setLoading(false)
+          })
+          setLatest(docs)
+        } else {
           setLoading(false)
-        })
-        setLatest(docs)
+        }
       })
     }
   }, [user])
@@ -137,7 +141,7 @@ const Latest = () => {
       )}
       {results?.length < 1 && searchText?.length < 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
-          <h2>No links added</h2>
+          <h2>No latest links added</h2>
         </NoMatchingResults>
       )}
     </motion.div>
