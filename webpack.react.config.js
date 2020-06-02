@@ -22,6 +22,10 @@ module.exports = {
         test: /\.(jpe?g|png|gif|svg)$/,
         use: [{ loader: "file-loader" }],
       },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
     ],
   },
   devServer: {

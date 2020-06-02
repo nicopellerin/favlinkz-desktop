@@ -1,8 +1,9 @@
 import * as React from "react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
+import Spinner from "react-spinkit"
 
 import Card from "../Card"
 
@@ -13,10 +14,10 @@ import {
   searchTextState,
   locationState,
 } from "../../state/searchbar"
-
-import dots from "../../assets/dots.svg"
 import { userState } from "../../state/user"
 import { latestState } from "../../state/latest"
+
+import dots from "../../assets/dots.svg"
 
 const latestVariants = {
   hidden: {
@@ -51,6 +52,8 @@ interface Results {
 }
 
 const Latest = () => {
+  const [loading, setLoading] = useState(true)
+
   const results = useRecoilValue(searchResultsState)
   const [latest, setLatest] = useRecoilState(latestState)
   const user = useRecoilValue(userState)
@@ -74,11 +77,20 @@ const Latest = () => {
         links.docs.forEach((link) => {
           const newLinks = { ...link.data() }
           docs.push(newLinks)
+          setLoading(false)
         })
         setLatest(docs)
       })
     }
   }, [user])
+
+  if (loading) {
+    return (
+      <NoMatchingResults>
+        <Spinner name="ball-pulse-rise" color="orangered" fadeIn="full" />
+      </NoMatchingResults>
+    )
+  }
 
   return (
     <motion.div
@@ -118,12 +130,12 @@ const Latest = () => {
           ))}
         </CardList>
       )}
-      {results?.length < 1 && searchText.length > 1 && (
+      {results?.length < 1 && searchText?.length > 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>Found no matching results</h2>
         </NoMatchingResults>
       )}
-      {results?.length < 1 && searchText.length < 1 && (
+      {results?.length < 1 && searchText?.length < 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>No links added</h2>
         </NoMatchingResults>

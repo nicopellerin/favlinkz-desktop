@@ -1,19 +1,12 @@
 import * as React from "react"
-import { useState } from "react"
 import styled from "styled-components"
 import { FaSearch, FaTimesCircle } from "react-icons/fa"
 import { useRecoilState } from "recoil"
-import { useDebounce } from "use-debounce"
 
 import { searchTextState } from "../../state/searchbar"
 
 const SearchBar = () => {
   const [searchText, setSearchText] = useRecoilState(searchTextState)
-  // const [localSearch, setLocalSearch] = useState("")
-
-  // useDebounce(() => {
-  //   setSearchText(localSearch)
-  // }, 1000)
 
   return (
     <>

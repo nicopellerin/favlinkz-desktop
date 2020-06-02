@@ -1,8 +1,9 @@
 import * as React from "react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
+import Spinner from "react-spinkit"
 
 import Card from "../Card"
 
@@ -52,6 +53,8 @@ interface Results {
 }
 
 const Favorites = () => {
+  const [loading, setLoading] = useState(true)
+
   const results = useRecoilValue(searchResultsState)
   const [favorites, setFavorites] = useRecoilState(favoritesState)
   const user = useRecoilValue(userState)
@@ -75,11 +78,20 @@ const Favorites = () => {
         links.docs.forEach((link) => {
           const newLinks = { ...link.data() }
           docs.push(newLinks)
+          setLoading(false)
         })
         setFavorites(docs)
       })
     }
   }, [user])
+
+  if (loading) {
+    return (
+      <NoMatchingResults>
+        <Spinner name="ball-pulse-rise" color="orangered" fadeIn="full" />
+      </NoMatchingResults>
+    )
+  }
 
   return (
     <motion.div
@@ -120,12 +132,12 @@ const Favorites = () => {
         </CardList>
       )}
 
-      {results?.length < 1 && searchText.length > 1 && (
+      {results?.length < 1 && searchText?.length > 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>Found no matching results</h2>
         </NoMatchingResults>
       )}
-      {results?.length < 1 && searchText.length < 1 && (
+      {results?.length < 1 && searchText?.length < 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>No favorite links added</h2>
         </NoMatchingResults>
