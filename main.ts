@@ -18,8 +18,8 @@ function createWindow() {
     backgroundColor: "#5856d7",
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true,
       nativeWindowOpen: true,
-      // webSecurity: false,
     },
   })
 
@@ -91,3 +91,7 @@ ipcMain.on("user-logged-out", (e) => {
 
 app.on("ready", createWindow)
 app.allowRendererProcessReuse = true
+app.userAgentFallback = app.userAgentFallback.replace(
+  "Electron/" + process.versions.electron,
+  ""
+)

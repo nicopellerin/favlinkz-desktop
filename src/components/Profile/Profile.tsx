@@ -1,7 +1,6 @@
 import * as React from "react"
-import { useState } from "react"
 import styled, { keyframes } from "styled-components"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { HashRouter as Router, Switch, Route } from "react-router-dom"
 
 import Navbar from "../Navbar/Navbar"
@@ -10,7 +9,11 @@ import Latest from "../Latest"
 import Favorites from "../Favorites"
 import User from "../User"
 
+import useAuth from "../../hooks/useAuth"
+
 const Profile = () => {
+  useAuth()
+
   return (
     <Router>
       <Wrapper>

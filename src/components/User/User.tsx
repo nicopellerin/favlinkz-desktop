@@ -1,8 +1,9 @@
 import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
+import { useRecoilValue } from "recoil"
 
-import userImg from "../../assets/nico.jpg"
+import { userState } from "../../state/user"
 
 const userVariants = {
   hidden: {
@@ -29,6 +30,8 @@ const userVariants = {
 }
 
 const User = () => {
+  const { displayName, photoUrl, email } = useRecoilValue(userState)
+
   return (
     <Wrapper
       variants={userVariants}
@@ -37,9 +40,9 @@ const User = () => {
       exit="exit"
     >
       <Container>
-        <UserImage src={userImg} alt="avatar" />
-        <Name>Nico Pellerin</Name>
-        <Email>hello@nicopellerin.io</Email>
+        <UserImage src={photoUrl} alt="avatar" />
+        <Name>{displayName}</Name>
+        <Email>{email}</Email>
         <DeleteAccount>Delete account</DeleteAccount>
       </Container>
     </Wrapper>

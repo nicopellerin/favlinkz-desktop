@@ -2,14 +2,18 @@ import * as React from "react"
 import styled from "styled-components"
 import { FaSortDown } from "react-icons/fa"
 import { Link } from "react-router-dom"
+import { useRecoilValue } from "recoil"
 
 import SearchBar from "./SearchBar"
-
-import logo from "../../assets/favlinkz.svg"
-import userImg from "../../assets/nico.jpg"
 import { DarkMode } from "./DarkMode"
 
+import { userState } from "../../state/user"
+
+import logo from "../../assets/favlinkz.svg"
+
 const Navbar: React.FC = () => {
+  const { displayName, photoUrl } = useRecoilValue(userState)
+
   return (
     <>
       <HeaderWrapper>
@@ -24,9 +28,9 @@ const Navbar: React.FC = () => {
             <Link to="/profile/user">
               <ProfileGroup>
                 <ProfileName>
-                  Nico Pellerin <FaSortDown />
+                  {displayName} <FaSortDown />
                 </ProfileName>
-                <ProfilePic src={userImg} />
+                <ProfilePic src={photoUrl} alt="avatar" />
               </ProfileGroup>
             </Link>
             <DarkMode />

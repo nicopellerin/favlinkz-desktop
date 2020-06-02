@@ -1,12 +1,15 @@
 import * as React from "react"
 import { useState } from "react"
-import { ipcRenderer } from "electron"
+import { ipcRenderer, remote } from "electron"
 import styled from "styled-components"
 import { FaGoogle } from "react-icons/fa"
 import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion"
 import { useHistory } from "react-router-dom"
 import Lottie from "react-lottie"
 import { Circle } from "better-react-spinkit"
+import qs from "qs"
+import { parse } from "url"
+import axios from "axios"
 
 import { firebase } from "../../services/firebase"
 
@@ -20,24 +23,111 @@ const Login = () => {
   const [isSubmiting, setIsSubmiting] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
+  const GOOGLE_AUTHORIZATION_URL =
+    "https://accounts.google.com/o/oauth2/v2/auth"
+  const GOOGLE_TOKEN_URL = "https://www.googleapis.com/oauth2/v4/token"
+  const GOOGLE_PROFILE_URL = "https://www.googleapis.com/userinfo/v2/me"
+
   const history = useHistory()
+
+  const signInWithPopup = async () => {
+    return new Promise((resolve, reject) => {
+      const authWindow = new remote.BrowserWindow({
+        width: 600,
+        height: 700,
+        show: true,
+        "node-integration": false,
+        "web-security": false,
+      })
+
+      const urlParams = {
+        response_type: "code",
+        redirect_uri: "com.nicopellerin.favlinkz:/oauth2Callback",
+        client_id:
+          "445807341018-d03nhf0hioq5qf8g3253agq8jg0t96ru.apps.googleusercontent.com",
+        scope: "profile email",
+      }
+      const authUrl = `${GOOGLE_AUTHORIZATION_URL}?${qs.stringify(urlParams)}`
+
+      const handleNavigation = (url) => {
+        const query = parse(url, true).query
+        if (query) {
+          if (query.error) {
+            reject(new Error(`There was an error: ${query.error}`))
+          } else if (query.code) {
+            authWindow.removeAllListeners("closed")
+            setImmediate(() => authWindow.close())
+
+            resolve(query.code)
+          }
+        }
+      }
+
+      authWindow.on("closed", () => {
+        throw new Error("Auth window was closed by user")
+      })
+
+      authWindow.webContents.on("will-navigate", (event, url) => {
+        handleNavigation(url)
+      })
+
+      authWindow.webContents.on(
+        "did-get-redirect-request",
+        (event, oldUrl, newUrl) => {
+          handleNavigation(newUrl)
+        }
+      )
+
+      authWindow.loadURL(authUrl, {
+        userAgent: "Chrome",
+      })
+    })
+  }
+
+  const fetchAccessTokens = async (code) => {
+    const response = await axios.post(
+      GOOGLE_TOKEN_URL,
+      qs.stringify({
+        code,
+        client_id:
+          "445807341018-d03nhf0hioq5qf8g3253agq8jg0t96ru.apps.googleusercontent.com",
+        redirect_uri: "com.nicopellerin.favlinkz:/oauth2Callback",
+        grant_type: "authorization_code",
+      }),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    )
+    return response.data
+  }
 
   const handleSignIn: () => void = async () => {
     setIsSubmiting(true)
-    // const provider = new firebase.auth.GoogleAuthProvider()
-    // try {
-    //   await firebase.auth().signInWithPopup(provider)
-    // } catch (err) {
-    //   setAuthError(err)
-    // }
-    setTimeout(() => setIsSubmiting(false), 500)
-    setTimeout(() => {
-      setIsLoggedIn(true)
-    }, 500)
-    setTimeout(() => {
-      ipcRenderer.send("user-logged-in")
-      history.push("/profile")
-    }, 1750)
+
+    try {
+      const code = await signInWithPopup()
+      const tokens = await fetchAccessTokens(code)
+
+      const credential = firebase.auth.GoogleAuthProvider.credential(
+        null,
+        tokens.access_token
+      )
+
+      await firebase.auth().signInWithCredential(credential)
+      setTimeout(() => setIsSubmiting(false), 500)
+      setTimeout(() => {
+        setIsLoggedIn(true)
+      }, 500)
+      setTimeout(() => {
+        ipcRenderer.send("user-logged-in")
+        history.push("/profile")
+      }, 1750)
+    } catch (err) {
+      setAuthError(err)
+      setIsSubmiting(false)
+    }
   }
 
   const connexionOptions = {
@@ -178,6 +268,8 @@ const ErrorMsg = styled(motion.span)`
   max-width: 75%;
   margin: 0 auto;
   text-align: center;
+  color: var(--whiteTextColor);
+  line-height: 1.4em;
 `
 
 const LoggedInText = styled.h3`

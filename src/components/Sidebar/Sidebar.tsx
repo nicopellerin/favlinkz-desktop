@@ -4,13 +4,12 @@ import styled from "styled-components"
 import { FaHome, FaHeart, FaSignOutAlt, FaUser } from "react-icons/fa"
 import { NavLink, Link } from "react-router-dom"
 
+import { firebase } from "../../services/firebase"
+
 const Sidebar = () => {
-  const handleSignOut = (): void => {
+  const handleSignOut = () => {
     ipcRenderer.send("user-logged-out")
-    // firebase.auth().signOut()
-    // localStorage.removeItem("userFavLinkz")
-    // location.reload()
-    // location.replace("/")
+    firebase.auth().signOut()
   }
 
   return (

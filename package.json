@@ -32,15 +32,18 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/recoil": "^0.0.0",
     "@types/styled-components": "^5.1.0",
+    "axios": "^0.19.2",
     "better-react-spinkit": "^2.0.4",
     "firebase": "^7.14.5",
     "framer-motion": "^2.0.0-beta.72",
+    "qs": "^6.9.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-icons": "^3.10.0",
     "react-lottie": "^1.2.3",
     "react-router-dom": "^5.2.0",
     "recoil": "^0.0.7",
-    "styled-components": "^5.1.0"
+    "styled-components": "^5.1.0",
+    "url": "^0.11.0"
   }
 }

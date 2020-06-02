@@ -1,13 +1,17 @@
 import * as React from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
 
 import Card from "../Card"
 
+import { db } from "../../services/firebase"
+
 import { searchResultsState, searchTextState } from "../../state/searchbar"
 
 import dots from "../../assets/dots.svg"
+import { userState } from "../../state/user"
 
 const latestVariants = {
   hidden: {
@@ -42,7 +46,20 @@ interface Results {
 
 const Latest = () => {
   const results = useRecoilValue(searchResultsState)
+  const user = useRecoilValue(userState)
   const [searchText] = useRecoilState(searchTextState)
+
+  useEffect(() => {
+    const userRef = db.collection(`users/${user.uid}`)
+
+    userRef.onSnapshot((snapshot) => {
+      const docs = []
+      snapshot.forEach((doc): any => {
+        docs.push({ ...doc.data(), id: doc.id })
+      })
+      console.log(docs[0].links)
+    })
+  }, [])
 
   return (
     <motion.div

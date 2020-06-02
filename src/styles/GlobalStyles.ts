@@ -6,6 +6,7 @@ export const GlobalStyles = createGlobalStyle`
     --secondaryColor: #ff5c5b;
 
     --textColor: #484554;
+    --whiteTextColor: #fbf8ff;
     --menuColor: #E6E6E6;
     
     --darkBlue: #615de0;

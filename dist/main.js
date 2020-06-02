@@ -119,8 +119,9 @@ function createWindow() {
     backgroundColor: "#5856d7",
     webPreferences: {
       nodeIntegration: true,
-      nativeWindowOpen: true // webSecurity: false,
-
+      enableRemoteModule: true,
+      nativeWindowOpen: true,
+      webSecurity: false
     }
   });
 
@@ -174,6 +175,7 @@ electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-out", e => {
 });
 electron__WEBPACK_IMPORTED_MODULE_0__["app"].on("ready", createWindow);
 electron__WEBPACK_IMPORTED_MODULE_0__["app"].allowRendererProcessReuse = true;
+electron__WEBPACK_IMPORTED_MODULE_0__["app"].userAgentFallback = electron__WEBPACK_IMPORTED_MODULE_0__["app"].userAgentFallback.replace("Electron/" + process.versions.electron, "");
 
 /***/ }),
 
