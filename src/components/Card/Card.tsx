@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { FaHeart, FaStickyNote } from "react-icons/fa"
 import styled from "styled-components"
 import {
@@ -23,11 +23,10 @@ import { useLocation } from "react-router-dom"
 import { latestState } from "../../state/latest"
 import { favoritesState } from "../../state/favorites"
 
-import { maxLength, maxLengthUrl, spliceUrl, removeSpace } from "../../utils"
+import { maxLength, maxLengthUrl, spliceUrl } from "../../utils"
 
 import { db } from "../../services/firebase"
 import { userState } from "../../state/user"
-import { locationState } from "../../state/searchbar"
 
 interface Link {
   url: string
@@ -50,6 +49,7 @@ const Card = ({ link, showHeart }: Props) => {
 
   const [showNote, setShowNote] = useState(false)
   const [favorited, setFavorited] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   const [latest, setLatest] = useRecoilState(latestState)
   const [favorites, setFavorites] = useRecoilState(favoritesState)
@@ -71,6 +71,21 @@ const Card = ({ link, showHeart }: Props) => {
       },
     },
   }
+
+  // Copy url to clipboard
+  const copyToClipboard = (url: string) => {
+    const clipboard = window.navigator.clipboard
+    setCopied(true)
+    return clipboard.writeText(url)
+  }
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setCopied(false)
+    }, 1000)
+
+    return () => clearTimeout(id)
+  }, [copied])
 
   // Remove links
   const handleDelete = (id: string) => {
@@ -234,10 +249,11 @@ const Card = ({ link, showHeart }: Props) => {
           <EmailIcon size={26} round={true} />
         </EmailShareButton>
         <ShareButton
+          copied={copied ? true : false}
           style={{ position: "absolute", top: 10, right: 80, zIndex: 0 }}
-          onClick={() => alert(link.url)}
+          onClick={() => copyToClipboard(link.url)}
         >
-          Copy link
+          {copied ? `Link copied` : `Copy link`}
         </ShareButton>
         <RemoveButton
           style={{ position: "absolute", top: 10, right: 10, zIndex: 0 }}
@@ -294,10 +310,13 @@ const RemoveButton = styled.button`
   font-weight: 600;
   cursor: pointer;
   font-size: 1.4rem;
+  outline: none;
 `
 
 const ShareButton = styled(RemoveButton)`
-  background: #4b36dc;
+  background: ${(props: { copied: boolean }) =>
+    props.copied ? "#48BEA2" : "#4b36dc"};
+  outline: none;
 `
 
 const ImageContainer = styled(motion.div)`

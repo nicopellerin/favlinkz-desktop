@@ -1,7 +1,7 @@
 import * as React from "react"
 import { ipcRenderer } from "electron"
 import styled from "styled-components"
-import { FaHome, FaHeart, FaSignOutAlt, FaUser } from "react-icons/fa"
+import { FaHome, FaHeart, FaSignOutAlt, FaUser, FaLink } from "react-icons/fa"
 import { NavLink, Link } from "react-router-dom"
 
 import { firebase } from "../../services/firebase"
@@ -22,7 +22,7 @@ const Sidebar = () => {
             color: "var(--primaryColor)",
           }}
         >
-          <FaHome size={22} />
+          <FaLink title="Latest" size={21} />
         </NavLink>
         <NavLink
           activeStyle={{
@@ -30,7 +30,7 @@ const Sidebar = () => {
           }}
           to="/profile/favorites"
         >
-          <FaHeart size={22} />
+          <FaHeart title="Favorites" size={22} />
         </NavLink>
         <NavLink
           activeStyle={{
@@ -38,11 +38,16 @@ const Sidebar = () => {
           }}
           to="/profile/user"
         >
-          <FaUser size={22} />
+          <FaUser title="Profile" size={22} />
         </NavLink>
       </Container>
       <LinkStyled to="/">
-        <FaSignOutAlt onClick={handleSignOut} size={22} color="#ADA9BB" />
+        <FaSignOutAlt
+          title="Log out"
+          onClick={handleSignOut}
+          size={22}
+          color="#ADA9BB"
+        />
       </LinkStyled>
     </Wrapper>
   )
