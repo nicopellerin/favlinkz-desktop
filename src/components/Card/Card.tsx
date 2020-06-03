@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { FaHeart, FaStickyNote } from "react-icons/fa"
+import { FaHeart, FaStickyNote, FaFilePdf } from "react-icons/fa"
 import styled from "styled-components"
 import {
   motion,
@@ -28,6 +28,7 @@ import { maxLength, maxLengthUrl, spliceUrl } from "../../utils"
 
 import { db } from "../../services/firebase"
 import { userState } from "../../state/user"
+import { ipcRenderer } from "electron"
 
 interface Link {
   url: string
@@ -87,6 +88,10 @@ const Card = ({ link, showHeart }: Props) => {
 
     return () => clearTimeout(id)
   }, [copied])
+
+  const pdfPrint = () => {
+    ipcRenderer.send("print-to-pdf", link.url)
+  }
 
   // Remove links
   const handleDelete = (id: string) => {
@@ -199,8 +204,16 @@ const Card = ({ link, showHeart }: Props) => {
               </NoteDisplay>
             )}
           </AnimatePresence>
+          <PdfPrint
+            title="Save to PDF"
+            showHeart={showHeart ? true : false}
+            onClick={pdfPrint}
+          >
+            PDF
+          </PdfPrint>
           {showHeart && (
             <FaHeartWrapper
+              title="Add to favorites"
               onClick={() => {
                 handleLike(link)
               }}
@@ -330,7 +343,7 @@ const RemoveButton = styled.button`
 
 const ShareButton = styled(RemoveButton)`
   background: ${(props: { copied: boolean }) =>
-    props.copied ? "#48BEA2" : "#4b36dc"};
+    props.copied ? "#00C29F" : "#4b36dc"};
   outline: none;
 `
 
@@ -466,4 +479,25 @@ const PullCard = styled.div`
   z-index: -1;
   height: 15px;
   transition: all 300ms ease-in-out;
+`
+
+const PdfPrint = styled(FaFilePdf)`
+  position: absolute;
+  right: ${(props: { showHeart: boolean }) =>
+    props.showHeart ? "45px" : "10px"};
+  bottom: 10px;
+  font-size: 3rem;
+  background: black;
+  color: #f4f4f4;
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color 100ms ease-in;
+  z-index: 100;
+  border-radius: 50%;
+  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    color: var(--secondaryColor);
+  }
 `

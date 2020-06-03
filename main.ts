@@ -1,6 +1,8 @@
-import { app, BrowserWindow, ipcMain, screen } from "electron"
+import { app, BrowserWindow, ipcMain, screen, shell } from "electron"
 import * as path from "path"
 import * as url from "url"
+import fs from "fs"
+import os from "os"
 
 let mainWindow: Electron.BrowserWindow | null
 
@@ -62,6 +64,7 @@ function createWindow() {
   })
 }
 
+// User has logged in
 ipcMain.on("user-logged-in", (e) => {
   e.preventDefault()
   let bounds = screen.getPrimaryDisplay().bounds
@@ -82,6 +85,7 @@ ipcMain.on("user-logged-in", (e) => {
   // setTimeout(() => mainWindow.show(), 500)
 })
 
+// User has logged out
 ipcMain.on("user-logged-out", (e) => {
   mainWindow.setSize(450, 650)
   mainWindow.center()
@@ -95,3 +99,23 @@ app.userAgentFallback = app.userAgentFallback.replace(
   "Electron/" + process.versions.electron,
   ""
 )
+
+ipcMain.on("print-to-pdf", (event, link) => {
+  const pdfPath = path.join(__dirname, "../test.pdf")
+
+  const win = new BrowserWindow({
+    show: false,
+  })
+
+  win.loadURL(link)
+
+  win.webContents.on("did-finish-load", () => {
+    win.webContents.printToPDF({}).then((data) => {
+      fs.writeFile(pdfPath, data, (error) => {
+        if (error) throw error
+        console.log("Write PDF successfully.")
+        win.close()
+      })
+    })
+  })
+})

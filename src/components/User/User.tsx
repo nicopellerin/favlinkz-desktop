@@ -7,10 +7,10 @@ import { userState, totalLinks } from "../../state/user"
 
 const userVariants = {
   hidden: {
-    y: 10,
+    y: -40,
   },
   show: {
-    y: 0,
+    y: -50,
     transition: {
       type: "spring",
       damping: 10,
@@ -103,7 +103,7 @@ const TotalLinks = styled.h3`
 `
 
 const DeleteAccount = styled(motion.span)`
-  position: absolute;
+  position: fixed;
   bottom: 5rem;
   opacity: 0;
   color: #999;

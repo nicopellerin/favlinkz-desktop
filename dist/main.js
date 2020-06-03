@@ -101,6 +101,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var url__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! url */ "url");
 /* harmony import */ var url__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(url__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! fs */ "fs");
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
@@ -147,7 +150,8 @@ function createWindow() {
       options.backgroundColor = "#fff";
     }
   });
-}
+} // User has logged in
+
 
 electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-in", e => {
   e.preventDefault();
@@ -165,7 +169,8 @@ electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-in", e => {
 
   mainWindow.setResizable(true);
   userLoggedIn = true; // setTimeout(() => mainWindow.show(), 500)
-});
+}); // User has logged out
+
 electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-out", e => {
   mainWindow.setSize(450, 650);
   mainWindow.center();
@@ -175,6 +180,22 @@ electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-out", e => {
 electron__WEBPACK_IMPORTED_MODULE_0__["app"].on("ready", createWindow);
 electron__WEBPACK_IMPORTED_MODULE_0__["app"].allowRendererProcessReuse = true;
 electron__WEBPACK_IMPORTED_MODULE_0__["app"].userAgentFallback = electron__WEBPACK_IMPORTED_MODULE_0__["app"].userAgentFallback.replace("Electron/" + process.versions.electron, "");
+electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("print-to-pdf", (event, link) => {
+  var pdfPath = path__WEBPACK_IMPORTED_MODULE_1__["join"](__dirname, "../test.pdf");
+  var win = new electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"]({
+    show: false
+  });
+  win.loadURL(link);
+  win.webContents.on("did-finish-load", () => {
+    win.webContents.printToPDF({}).then(data => {
+      fs__WEBPACK_IMPORTED_MODULE_3___default.a.writeFile(pdfPath, data, error => {
+        if (error) throw error;
+        console.log("Write PDF successfully.");
+        win.close();
+      });
+    });
+  });
+});
 
 /***/ }),
 
@@ -186,6 +207,17 @@ electron__WEBPACK_IMPORTED_MODULE_0__["app"].userAgentFallback = electron__WEBPA
 /***/ (function(module, exports) {
 
 module.exports = require("electron");
+
+/***/ }),
+
+/***/ "fs":
+/*!*********************!*\
+  !*** external "fs" ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
 
 /***/ }),
 

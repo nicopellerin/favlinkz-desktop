@@ -87,7 +87,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 15rem;
+  height: 16rem;
 
   a {
     color: #ada9bb;
