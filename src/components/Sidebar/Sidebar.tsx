@@ -1,7 +1,14 @@
 import * as React from "react"
 import { ipcRenderer } from "electron"
 import styled from "styled-components"
-import { FaHome, FaHeart, FaSignOutAlt, FaUser, FaLink } from "react-icons/fa"
+import {
+  FaHome,
+  FaHeart,
+  FaSignOutAlt,
+  FaUser,
+  FaLink,
+  FaFilePdf,
+} from "react-icons/fa"
 import { NavLink, Link } from "react-router-dom"
 
 import { firebase } from "../../services/firebase"
@@ -22,7 +29,7 @@ const Sidebar = () => {
             color: "var(--primaryColor)",
           }}
         >
-          <FaLink title="Latest" size={21} />
+          <IconLink title="Latest" size={21} />
         </NavLink>
         <NavLink
           activeStyle={{
@@ -30,7 +37,15 @@ const Sidebar = () => {
           }}
           to="/profile/favorites"
         >
-          <FaHeart title="Favorites" size={22} />
+          <IconHeart title="Favorites" size={22} />
+        </NavLink>
+        <NavLink
+          activeStyle={{
+            color: "var(--primaryColor)",
+          }}
+          to="/profile/saved"
+        >
+          <IconPDF title="Favorites" size={22} />
         </NavLink>
         <NavLink
           activeStyle={{
@@ -38,7 +53,7 @@ const Sidebar = () => {
           }}
           to="/profile/user"
         >
-          <FaUser title="Profile" size={22} />
+          <IconUser title="Profile" size={22} />
         </NavLink>
       </Container>
       <LinkStyled to="/">
@@ -72,7 +87,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 12rem;
+  height: 15rem;
 
   a {
     color: #ada9bb;
@@ -86,4 +101,20 @@ const Container = styled.div`
 const LinkStyled = styled(Link)`
   position: absolute;
   bottom: 3rem;
+`
+
+const IconLink = styled(FaLink)`
+  -webkit-app-region: no-drag;
+`
+
+const IconHeart = styled(FaHeart)`
+  -webkit-app-region: no-drag;
+`
+
+const IconUser = styled(FaUser)`
+  -webkit-app-region: no-drag;
+`
+
+const IconPDF = styled(FaFilePdf)`
+  -webkit-app-region: no-drag;
 `

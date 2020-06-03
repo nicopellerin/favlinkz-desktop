@@ -46,6 +46,7 @@ const Login = () => {
         client_id:
           "445807341018-d03nhf0hioq5qf8g3253agq8jg0t96ru.apps.googleusercontent.com",
         scope: "profile email",
+        prompt: "select_account",
       }
       const authUrl = `${GOOGLE_AUTHORIZATION_URL}?${qs.stringify(urlParams)}`
 

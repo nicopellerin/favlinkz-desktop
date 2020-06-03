@@ -1,5 +1,6 @@
 import * as React from "react"
 import { useContext } from "react"
+import styled from "styled-components"
 
 import { ThemeContext } from "../../context/ThemeProvider"
 
@@ -7,7 +8,7 @@ export const DarkMode = () => {
   const { toggleDark } = useContext(ThemeContext)
 
   return (
-    <svg
+    <Icon
       onClick={toggleDark}
       xmlns="http://www.w3.org/2000/svg"
       width="18"
@@ -24,6 +25,11 @@ export const DarkMode = () => {
         d="M 16.347 9 C 16.347 13.058 13.058 16.347 9 16.347 L 9 1.653 C 13.058 1.653 16.347 4.942 16.347 9 Z"
         fill="#484554"
       ></path>
-    </svg>
+    </Icon>
   )
 }
+
+// Styles
+const Icon = styled.svg`
+  -webkit-app-region: no-drag;
+`

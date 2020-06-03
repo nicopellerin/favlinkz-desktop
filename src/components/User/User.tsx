@@ -41,12 +41,12 @@ const User = () => {
       exit="exit"
     >
       <Container>
-        <UserImage src={photoUrl} alt="avatar" />
+        <UserImage src={photoUrl} alt="avatar" draggable="false" />
         <Name>{displayName}</Name>
         <Email>{email}</Email>
         <TotalLinks>Total links: {totalLinksLength}</TotalLinks>
         <DeleteAccount
-          initial={{ opacity: 0 }}
+          // initial={{ opacity: 0 }}
           animate={{ opacity: [0, 1] }}
           transition={{ delay: 0.2 }}
         >
@@ -65,7 +65,7 @@ const Wrapper = styled(motion.div)`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100% - 75px);
+  height: calc(100% - 100px);
 `
 
 const Container = styled.div`
@@ -86,23 +86,28 @@ const Name = styled.h3`
   color: ${(props) => props.theme.username};
   font-size: 3.2rem;
   margin-bottom: 2rem;
+  user-select: none;
 `
 
 const Email = styled.h5`
   color: var(--primaryColor);
   font-size: 1.6rem;
   font-weight: 500;
+  user-select: none;
 `
 
 const TotalLinks = styled.h3`
   font-size: 2rem;
   color: var(--secondaryColor);
+  user-select: none;
 `
 
 const DeleteAccount = styled(motion.span)`
   position: absolute;
   bottom: 5rem;
+  opacity: 0;
   color: #999;
   font-size: 1.4rem;
   font-weight: 500;
+  user-select: none;
 `

@@ -17,6 +17,7 @@ import {
   EmailShareButton,
   EmailIcon,
 } from "react-share"
+import ReactTooltip from "react-tooltip"
 
 import { useLocation } from "react-router-dom"
 
@@ -137,6 +138,13 @@ const Card = ({ link, showHeart }: Props) => {
     setTimeout(() => handleDelete(link.id), 700)
   }
 
+  const ogImage = (image: string, url: string) => {
+    if (!image.startsWith("http")) {
+      return `${url}/${image}`
+    }
+    return image
+  }
+
   return (
     <motion.div
       animate
@@ -161,7 +169,7 @@ const Card = ({ link, showHeart }: Props) => {
             draggable="false"
             src={
               link.image
-                ? link.image
+                ? ogImage(link.image, link.url)
                 : `https://i0.wp.com/www.littlebitesofbeauty.com/wp-content/uploads/2015/06/default-placeholder.png`
             }
             alt={link.title}
@@ -206,8 +214,15 @@ const Card = ({ link, showHeart }: Props) => {
           }}
         >
           <a href={`${link.url}`} target="_blank" rel="noopener noreferrer">
-            <Title>{maxLength(link.title)}</Title>
+            <Title data-tip="Click to open">{maxLength(link.title)}</Title>
           </a>
+          <ReactTooltip
+            backgroundColor="#5856d7"
+            border={true}
+            borderColor="#615de0"
+            delayShow={1000}
+            delayUpdate={0}
+          />
         </div>
         {link.note && (
           <FaStickyNoteWrapper

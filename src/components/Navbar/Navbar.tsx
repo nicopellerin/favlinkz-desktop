@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
         <HeaderContainer>
           <SearchBarWrapper>{showSearchBar && <SearchBar />}</SearchBarWrapper>
           <HeaderLogo>
-            <img src={logo} style={{ width: 130 }} />
+            <img src={logo} style={{ width: 130 }} draggable="false" />
           </HeaderLogo>
           <MenuCta>
             <Link to="/profile/user">
@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
                 <ProfileName>
                   {displayName} <FaSortDown />
                 </ProfileName>
-                <ProfilePic src={photoUrl} alt="avatar" />
+                <ProfilePic src={photoUrl} alt="avatar" draggable="false" />
               </ProfileGroup>
             </Link>
             <DarkMode />
@@ -62,7 +62,7 @@ const HeaderContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   z-index: 3000;
-  height: 75px;
+  height: 100px;
 `
 
 const HeaderLogo = styled.div`
@@ -81,6 +81,7 @@ const MenuCta = styled.div`
   align-items: center;
   justify-self: end;
   position: relative;
+  -webkit-app-region: no-drag;
 `
 
 const ProfileGroup = styled.div`
