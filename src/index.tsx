@@ -27,6 +27,7 @@ document.body.appendChild(root)
 
 const App = () => {
   useAuth()
+
   const [user] = useRecoilState(userState)
 
   useEffect(() => {
