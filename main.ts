@@ -173,7 +173,9 @@ app.whenReady().then(() => {
   // tray.setToolTip("This is my application.")
   // tray.setContextMenu(contextMenu)
   tray.on("click", () => {
-    createWindow()
+    if (!mainWindow) {
+      createWindow()
+    }
   })
 })
 

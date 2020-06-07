@@ -229,7 +229,9 @@ electron__WEBPACK_IMPORTED_MODULE_0__["app"].whenReady().then(() => {
   // tray.setContextMenu(contextMenu)
 
   tray.on("click", () => {
-    createWindow();
+    if (!mainWindow) {
+      createWindow();
+    }
   });
 }); // Print to pdf
 
