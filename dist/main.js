@@ -110,7 +110,7 @@ __webpack_require__.r(__webpack_exports__);
 var mainWindow;
 var userLoggedIn = false;
 var isDev =  true ? true : undefined;
-var isMac = process.platform === "darwin" ? true : false;
+var isMac = process.platform === "darwin" ? true : false; // Create main window
 
 function createWindow() {
   mainWindow = new electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"]({
@@ -175,7 +175,8 @@ electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-out", e => {
   mainWindow.center();
   mainWindow.setResizable(false);
   userLoggedIn = false;
-});
+}); // Menu
+
 var menu = [...(isMac ? [{
   label: electron__WEBPACK_IMPORTED_MODULE_0__["app"].name,
   submenu: [{
@@ -195,12 +196,16 @@ var menu = [...(isMac ? [{
   }, {
     role: "toggleDevTools"
   }]
-}] : [])];
+}] : [])]; // Init
+
 electron__WEBPACK_IMPORTED_MODULE_0__["app"].on("ready", () => {
   createWindow();
   var mainMenu = electron__WEBPACK_IMPORTED_MODULE_0__["Menu"].buildFromTemplate(menu);
   electron__WEBPACK_IMPORTED_MODULE_0__["Menu"].setApplicationMenu(mainMenu);
 });
+electron__WEBPACK_IMPORTED_MODULE_0__["app"].allowRendererProcessReuse = true;
+electron__WEBPACK_IMPORTED_MODULE_0__["app"].userAgentFallback = electron__WEBPACK_IMPORTED_MODULE_0__["app"].userAgentFallback.replace("Electron/" + process.versions.electron, ""); // Don't exit program when window closes (Mac only)
+
 electron__WEBPACK_IMPORTED_MODULE_0__["app"].on("window-all-closed", () => {
   if (!isMac) {
     electron__WEBPACK_IMPORTED_MODULE_0__["app"].quit();
@@ -210,29 +215,24 @@ electron__WEBPACK_IMPORTED_MODULE_0__["app"].on("activate", () => {
   if (electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"].getAllWindows().length === 0) {
     createWindow();
   }
-});
-electron__WEBPACK_IMPORTED_MODULE_0__["app"].allowRendererProcessReuse = true;
-electron__WEBPACK_IMPORTED_MODULE_0__["app"].userAgentFallback = electron__WEBPACK_IMPORTED_MODULE_0__["app"].userAgentFallback.replace("Electron/" + process.versions.electron, "");
+}); // System tray
+
 var tray = null;
 electron__WEBPACK_IMPORTED_MODULE_0__["app"].whenReady().then(() => {
-  tray = new electron__WEBPACK_IMPORTED_MODULE_0__["Tray"]("./src/assets/tray-icon.png");
-  var contextMenu = electron__WEBPACK_IMPORTED_MODULE_0__["Menu"].buildFromTemplate([{
-    label: "Item1",
-    type: "radio"
-  }, {
-    label: "Item2",
-    type: "radio"
-  }, {
-    label: "Item3",
-    type: "radio",
-    checked: true
-  }, {
-    label: "Item4",
-    type: "radio"
-  }]);
-  tray.setToolTip("This is my application.");
-  tray.setContextMenu(contextMenu);
-});
+  tray = new electron__WEBPACK_IMPORTED_MODULE_0__["Tray"]("./src/assets/tray-icon.png"); // const contextMenu = Menu.buildFromTemplate([
+  //   { label: "Item1", type: "radio" },
+  //   { label: "Item2", type: "radio" },
+  //   { label: "Item3", type: "radio", checked: true },
+  //   { label: "Item4", type: "radio" },
+  // ])
+  // tray.setToolTip("This is my application.")
+  // tray.setContextMenu(contextMenu)
+
+  tray.on("click", () => {
+    createWindow();
+  });
+}); // Print to pdf
+
 electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("print-to-pdf", (event, link) => {
   var pdfPath = path__WEBPACK_IMPORTED_MODULE_1__["join"](__dirname, "../test.pdf");
   var win = new electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"]({

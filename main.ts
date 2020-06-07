@@ -1,24 +1,16 @@
-import {
-  app,
-  BrowserWindow,
-  ipcMain,
-  screen,
-  Tray,
-  Menu,
-  MenuItemConstructorOptions,
-} from "electron"
+import { app, BrowserWindow, ipcMain, screen, Tray, Menu } from "electron"
 import * as path from "path"
 import * as url from "url"
 import fs from "fs"
-import os from "os"
 
 let mainWindow: Electron.BrowserWindow | null
 
-let userLoggedIn: boolean = false
+let userLoggedIn = false
 
 const isDev = process.env.NODE_ENV !== "production" ? true : false
 const isMac = process.platform === "darwin" ? true : false
 
+// Create main window
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 450,
@@ -100,6 +92,7 @@ ipcMain.on("user-logged-out", (e) => {
   userLoggedIn = false
 })
 
+// Menu
 const menu = [
   ...(isMac
     ? [
@@ -140,13 +133,21 @@ const menu = [
     : []),
 ]
 
+// Init
 app.on("ready", () => {
   createWindow()
 
-  const mainMenu = Menu.buildFromTemplate(menu) as MenuItemConstructorOptions
+  const mainMenu = Menu.buildFromTemplate(menu)
   Menu.setApplicationMenu(mainMenu)
 })
 
+app.allowRendererProcessReuse = true
+app.userAgentFallback = app.userAgentFallback.replace(
+  "Electron/" + process.versions.electron,
+  ""
+)
+
+// Don't exit program when window closes (Mac only)
 app.on("window-all-closed", () => {
   if (!isMac) {
     app.quit()
@@ -159,25 +160,24 @@ app.on("activate", () => {
   }
 })
 
-app.allowRendererProcessReuse = true
-app.userAgentFallback = app.userAgentFallback.replace(
-  "Electron/" + process.versions.electron,
-  ""
-)
-
+// System tray
 let tray = null
 app.whenReady().then(() => {
   tray = new Tray("./src/assets/tray-icon.png")
-  const contextMenu = Menu.buildFromTemplate([
-    { label: "Item1", type: "radio" },
-    { label: "Item2", type: "radio" },
-    { label: "Item3", type: "radio", checked: true },
-    { label: "Item4", type: "radio" },
-  ])
-  tray.setToolTip("This is my application.")
-  tray.setContextMenu(contextMenu)
+  // const contextMenu = Menu.buildFromTemplate([
+  //   { label: "Item1", type: "radio" },
+  //   { label: "Item2", type: "radio" },
+  //   { label: "Item3", type: "radio", checked: true },
+  //   { label: "Item4", type: "radio" },
+  // ])
+  // tray.setToolTip("This is my application.")
+  // tray.setContextMenu(contextMenu)
+  tray.on("click", () => {
+    createWindow()
+  })
 })
 
+// Print to pdf
 ipcMain.on("print-to-pdf", (event, link) => {
   const pdfPath = path.join(__dirname, "../test.pdf")
 
