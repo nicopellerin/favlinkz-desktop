@@ -140,7 +140,6 @@ function createWindow() {
   });
   mainWindow.webContents.on("new-window", function (evt, url, frameName, disposition, options, additionalFeatures) {
     if (options.width == 800 && options.height == 600) {
-      //default size is 800x600
       var {
         width,
         height
@@ -163,12 +162,10 @@ electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-in", e => {
     y: y,
     width: 1200,
     height: 1000
-  }); // mainWindow.hide()
-
-  mainWindow.center(); // mainWindow.hide()
-
+  });
+  mainWindow.center();
   mainWindow.setResizable(true);
-  userLoggedIn = true; // setTimeout(() => mainWindow.show(), 500)
+  userLoggedIn = true;
 }); // User has logged out
 
 electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-out", e => {

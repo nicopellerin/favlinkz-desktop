@@ -55,7 +55,6 @@ function createWindow() {
     additionalFeatures
   ) {
     if (options.width == 800 && options.height == 600) {
-      //default size is 800x600
       let { width, height } = screen.getPrimaryDisplay().workAreaSize
       options.width = (width * 1) | 0
       options.height = (height * 1) | 0
@@ -77,12 +76,9 @@ ipcMain.on("user-logged-in", (e) => {
     width: 1200,
     height: 1000,
   })
-  // mainWindow.hide()
   mainWindow.center()
-  // mainWindow.hide()
   mainWindow.setResizable(true)
   userLoggedIn = true
-  // setTimeout(() => mainWindow.show(), 500)
 })
 
 // User has logged out

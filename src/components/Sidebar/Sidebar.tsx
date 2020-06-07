@@ -17,6 +17,7 @@ const Sidebar = () => {
   const handleSignOut = () => {
     ipcRenderer.send("user-logged-out")
     firebase.auth().signOut()
+    localStorage.removeItem("userFavLinkz")
   }
 
   return (

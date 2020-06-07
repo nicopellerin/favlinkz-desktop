@@ -8,16 +8,14 @@ import Profile from "../components/Profile"
 import { ThemeProvider } from "../context/ThemeProvider"
 
 const ProfilePage = () => {
-  useLayoutEffect(() => {
-    ipcRenderer.send("user-logged-in")
-  }, [])
+  // useLayoutEffect(() => {
+  //   ipcRenderer.send("user-logged-in")
+  // }, [])
 
   return (
-    <RecoilRoot>
-      <ThemeProvider>
-        <Profile />
-      </ThemeProvider>
-    </RecoilRoot>
+    <ThemeProvider>
+      <Profile />
+    </ThemeProvider>
   )
 }
 

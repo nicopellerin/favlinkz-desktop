@@ -4,7 +4,12 @@ import { favoritesState } from "./favorites"
 
 export const userState = atom({
   key: "userState",
-  default: { displayName: "", photoUrl: "", uid: "", email: "" },
+  default: JSON.parse(localStorage.getItem("userFavLinkz")!) || {
+    displayName: "",
+    photoUrl: "",
+    uid: "",
+    email: "",
+  },
 })
 
 export const totalLinks = selector({

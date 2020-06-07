@@ -65,6 +65,7 @@ const Login = () => {
       }
 
       authWindow.on("closed", () => {
+        setIsSubmiting(false)
         throw new Error("Auth window was closed by user")
       })
 
@@ -115,7 +116,7 @@ const Login = () => {
         null,
         tokens.access_token
       )
-
+      // firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(())
       await firebase.auth().signInWithCredential(credential)
       setTimeout(() => setIsSubmiting(false), 500)
       setTimeout(() => {
