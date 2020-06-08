@@ -1,9 +1,7 @@
-import { app, BrowserWindow, ipcMain, screen, Tray, Menu } from "electron"
-import * as path from "path"
-import * as url from "url"
-import fs from "fs"
+import { app, BrowserWindow, Tray, Menu, ipcMain, screen } from "electron"
+import MainWindow from "./MainWindow"
 
-let mainWindow: Electron.BrowserWindow | null
+let mainWindow: MainWindow | null
 
 let userLoggedIn = false
 
@@ -12,61 +10,13 @@ const isMac = process.platform === "darwin" ? true : false
 
 // Create main window
 function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 450,
-    height: 650,
-    center: true,
-    title: "favlinkz",
-    resizable: userLoggedIn ? true : false,
-    titleBarStyle: "hiddenInset",
-    show: false,
-    backgroundColor: "#5856d7",
-    webPreferences: {
-      nodeIntegration: true,
-      enableRemoteModule: true,
-      nativeWindowOpen: true,
-    },
-  })
-
-  if (process.env.NODE_ENV === "development") {
-    mainWindow.loadURL(`http://localhost:4000`)
-  } else {
-    mainWindow.loadURL(
-      url.format({
-        pathname: path.join(__dirname, "./src", "index.html"),
-        protocol: "file:",
-        slashes: true,
-      })
-    )
-  }
-
-  mainWindow.on("ready-to-show", function () {
-    mainWindow.show()
-    mainWindow.focus()
-  })
+  mainWindow = new MainWindow(userLoggedIn)
 
   mainWindow.on("closed", () => {
     mainWindow = null
   })
-
-  mainWindow.webContents.on("new-window", function (
-    evt,
-    url,
-    frameName,
-    disposition,
-    options,
-    additionalFeatures
-  ) {
-    if (options.width == 800 && options.height == 600) {
-      let { width, height } = screen.getPrimaryDisplay().workAreaSize
-      options.width = (width * 1) | 0
-      options.height = (height * 1) | 0
-      ;(options.backgroundColor = "#fff"), (options.titleBarStyle = "default")
-    }
-  })
 }
 
-// User has logged in
 ipcMain.on("user-logged-in", (e) => {
   e.preventDefault()
   let bounds = screen.getPrimaryDisplay().bounds
@@ -81,15 +31,14 @@ ipcMain.on("user-logged-in", (e) => {
   })
   mainWindow.center()
   mainWindow.setResizable(true)
-  userLoggedIn = true
+  mainWindow.userLoggedIn = true
 })
 
-// User has logged out
 ipcMain.on("user-logged-out", (e) => {
   mainWindow.setSize(450, 650)
   mainWindow.center()
   mainWindow.setResizable(false)
-  userLoggedIn = false
+  mainWindow.userLoggedIn = false
 })
 
 // Menu
@@ -136,7 +85,6 @@ const menu = [
 // Init
 app.on("ready", () => {
   createWindow()
-
   const mainMenu = Menu.buildFromTemplate(menu)
   Menu.setApplicationMenu(mainMenu)
 })
@@ -155,7 +103,7 @@ app.on("window-all-closed", () => {
 })
 
 app.on("activate", () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
+  if (!mainWindow?.isMinimized() && !mainWindow) {
     createWindow()
   }
 })
@@ -164,43 +112,19 @@ app.on("activate", () => {
 let tray = null
 app.whenReady().then(() => {
   tray = new Tray("./src/assets/tray-icon.png")
-  // const contextMenu = Menu.buildFromTemplate([
-  //   { label: "Item1", type: "radio" },
-  //   { label: "Item2", type: "radio" },
-  //   { label: "Item3", type: "radio", checked: true },
-  //   { label: "Item4", type: "radio" },
-  // ])
-  // tray.setToolTip("This is my application.")
-  // tray.setContextMenu(contextMenu)
   tray.on("click", () => {
+    if (BrowserWindow.getAllWindows().length > 0 && mainWindow.isVisible()) {
+      mainWindow.hide()
+    } else if (BrowserWindow.getAllWindows().length > 0) {
+      mainWindow.show()
+    }
+
+    if (mainWindow.isMinimized()) {
+      mainWindow.show()
+    }
+
     if (!mainWindow) {
       createWindow()
     }
-  })
-  tray.on("right-click", () => {
-    if (!mainWindow) {
-      createWindow()
-    }
-  })
-})
-
-// Print to pdf
-ipcMain.on("print-to-pdf", (event, link) => {
-  const pdfPath = path.join(__dirname, "../test.pdf")
-
-  const win = new BrowserWindow({
-    show: false,
-  })
-
-  win.loadURL(link)
-
-  win.webContents.on("did-finish-load", () => {
-    win.webContents.printToPDF({}).then((data) => {
-      fs.writeFile(pdfPath, data, (error) => {
-        if (error) throw error
-        console.log("Write PDF successfully.")
-        win.close()
-      })
-    })
   })
 })

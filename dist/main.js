@@ -86,6 +86,58 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./MainWindow.ts":
+/*!***********************!*\
+  !*** ./MainWindow.ts ***!
+  \***********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MainWindow; });
+/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ "electron");
+/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var url__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! url */ "url");
+/* harmony import */ var url__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(url__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+class MainWindow extends electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"] {
+  constructor(userLoggedIn) {
+    super({
+      width: 450,
+      height: 650,
+      center: true,
+      title: "favlinkz",
+      resizable: userLoggedIn ? true : false,
+      titleBarStyle: "hiddenInset",
+      show: false,
+      backgroundColor: "#5856d7",
+      webPreferences: {
+        nodeIntegration: true,
+        enableRemoteModule: true,
+        nativeWindowOpen: true
+      }
+    });
+    this.userLoggedIn = userLoggedIn;
+
+    if (true) {
+      this.loadURL("http://localhost:4000");
+    } else {}
+
+    this.on("ready-to-show", function () {
+      this.show();
+      this.focus();
+    });
+  }
+
+}
+
+/***/ }),
+
 /***/ "./main.ts":
 /*!*****************!*\
   !*** ./main.ts ***!
@@ -97,14 +149,7 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ "electron");
 /* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! path */ "path");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var url__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! url */ "url");
-/* harmony import */ var url__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(url__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! fs */ "fs");
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_3__);
-
-
+/* harmony import */ var _MainWindow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MainWindow */ "./MainWindow.ts");
 
 
 var mainWindow;
@@ -113,46 +158,11 @@ var isDev =  true ? true : undefined;
 var isMac = process.platform === "darwin" ? true : false; // Create main window
 
 function createWindow() {
-  mainWindow = new electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"]({
-    width: 450,
-    height: 650,
-    center: true,
-    title: "favlinkz",
-    resizable: userLoggedIn ? true : false,
-    titleBarStyle: "hiddenInset",
-    show: false,
-    backgroundColor: "#5856d7",
-    webPreferences: {
-      nodeIntegration: true,
-      enableRemoteModule: true,
-      nativeWindowOpen: true
-    }
-  });
-
-  if (true) {
-    mainWindow.loadURL("http://localhost:4000");
-  } else {}
-
-  mainWindow.on("ready-to-show", function () {
-    mainWindow.show();
-    mainWindow.focus();
-  });
+  mainWindow = new _MainWindow__WEBPACK_IMPORTED_MODULE_1__["default"](userLoggedIn);
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
-  mainWindow.webContents.on("new-window", function (evt, url, frameName, disposition, options, additionalFeatures) {
-    if (options.width == 800 && options.height == 600) {
-      var {
-        width,
-        height
-      } = electron__WEBPACK_IMPORTED_MODULE_0__["screen"].getPrimaryDisplay().workAreaSize;
-      options.width = width * 1 | 0;
-      options.height = height * 1 | 0;
-      options.backgroundColor = "#fff", options.titleBarStyle = "default";
-    }
-  });
-} // User has logged in
-
+}
 
 electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-in", e => {
   e.preventDefault();
@@ -167,14 +177,13 @@ electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-in", e => {
   });
   mainWindow.center();
   mainWindow.setResizable(true);
-  userLoggedIn = true;
-}); // User has logged out
-
+  mainWindow.userLoggedIn = true;
+});
 electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-out", e => {
   mainWindow.setSize(450, 650);
   mainWindow.center();
   mainWindow.setResizable(false);
-  userLoggedIn = false;
+  mainWindow.userLoggedIn = false;
 }); // Menu
 
 var menu = [...(isMac ? [{
@@ -212,48 +221,30 @@ electron__WEBPACK_IMPORTED_MODULE_0__["app"].on("window-all-closed", () => {
   }
 });
 electron__WEBPACK_IMPORTED_MODULE_0__["app"].on("activate", () => {
-  if (electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"].getAllWindows().length === 0) {
+  var _mainWindow;
+
+  if (!((_mainWindow = mainWindow) === null || _mainWindow === void 0 ? void 0 : _mainWindow.isMinimized()) && !mainWindow) {
     createWindow();
   }
 }); // System tray
 
 var tray = null;
 electron__WEBPACK_IMPORTED_MODULE_0__["app"].whenReady().then(() => {
-  tray = new electron__WEBPACK_IMPORTED_MODULE_0__["Tray"]("./src/assets/tray-icon.png"); // const contextMenu = Menu.buildFromTemplate([
-  //   { label: "Item1", type: "radio" },
-  //   { label: "Item2", type: "radio" },
-  //   { label: "Item3", type: "radio", checked: true },
-  //   { label: "Item4", type: "radio" },
-  // ])
-  // tray.setToolTip("This is my application.")
-  // tray.setContextMenu(contextMenu)
-
+  tray = new electron__WEBPACK_IMPORTED_MODULE_0__["Tray"]("./src/assets/tray-icon.png");
   tray.on("click", () => {
-    if (!mainWindow) {
-      createWindow();
+    if (electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"].getAllWindows().length > 0 && mainWindow.isVisible()) {
+      mainWindow.hide();
+    } else if (electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"].getAllWindows().length > 0) {
+      mainWindow.show();
     }
-  });
-  tray.on("right-click", () => {
-    if (!mainWindow) {
-      createWindow();
-    }
-  });
-}); // Print to pdf
 
-electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("print-to-pdf", (event, link) => {
-  var pdfPath = path__WEBPACK_IMPORTED_MODULE_1__["join"](__dirname, "../test.pdf");
-  var win = new electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"]({
-    show: false
-  });
-  win.loadURL(link);
-  win.webContents.on("did-finish-load", () => {
-    win.webContents.printToPDF({}).then(data => {
-      fs__WEBPACK_IMPORTED_MODULE_3___default.a.writeFile(pdfPath, data, error => {
-        if (error) throw error;
-        console.log("Write PDF successfully.");
-        win.close();
-      });
-    });
+    if (mainWindow.isMinimized()) {
+      mainWindow.show();
+    }
+
+    if (!mainWindow) {
+      createWindow();
+    }
   });
 });
 
@@ -267,17 +258,6 @@ electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("print-to-pdf", (event, link
 /***/ (function(module, exports) {
 
 module.exports = require("electron");
-
-/***/ }),
-
-/***/ "fs":
-/*!*********************!*\
-  !*** external "fs" ***!
-  \*********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("fs");
 
 /***/ }),
 
