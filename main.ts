@@ -61,7 +61,7 @@ function createWindow() {
       let { width, height } = screen.getPrimaryDisplay().workAreaSize
       options.width = (width * 1) | 0
       options.height = (height * 1) | 0
-      options.backgroundColor = "#fff"
+      ;(options.backgroundColor = "#fff"), (options.titleBarStyle = "default")
     }
   })
 }
@@ -173,6 +173,11 @@ app.whenReady().then(() => {
   // tray.setToolTip("This is my application.")
   // tray.setContextMenu(contextMenu)
   tray.on("click", () => {
+    if (!mainWindow) {
+      createWindow()
+    }
+  })
+  tray.on("right-click", () => {
     if (!mainWindow) {
       createWindow()
     }

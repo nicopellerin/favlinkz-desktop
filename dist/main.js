@@ -148,7 +148,7 @@ function createWindow() {
       } = electron__WEBPACK_IMPORTED_MODULE_0__["screen"].getPrimaryDisplay().workAreaSize;
       options.width = width * 1 | 0;
       options.height = height * 1 | 0;
-      options.backgroundColor = "#fff";
+      options.backgroundColor = "#fff", options.titleBarStyle = "default";
     }
   });
 } // User has logged in
@@ -229,6 +229,11 @@ electron__WEBPACK_IMPORTED_MODULE_0__["app"].whenReady().then(() => {
   // tray.setContextMenu(contextMenu)
 
   tray.on("click", () => {
+    if (!mainWindow) {
+      createWindow();
+    }
+  });
+  tray.on("right-click", () => {
     if (!mainWindow) {
       createWindow();
     }

@@ -1,11 +1,14 @@
 import * as React from "react"
+import { useState } from "react"
 import styled from "styled-components"
 import { FaSearch, FaTimesCircle } from "react-icons/fa"
 import { useRecoilState } from "recoil"
 
 import { searchTextState } from "../../state/searchbar"
+import { motion } from "framer-motion"
 
 const SearchBar = () => {
+  const [isFocused, setIsFocused] = useState(false)
   const [searchText, setSearchText] = useRecoilState(searchTextState)
 
   return (
@@ -13,11 +16,14 @@ const SearchBar = () => {
       <SearchBarWrapper>
         <SearchIcon>
           <SearchBarContainer>
-            <input
+            <motion.input
               type="text"
               value={searchText}
               placeholder="Search by title..."
               onChange={(e) => setSearchText(e.target.value)}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setTimeout(() => setIsFocused(false), 100)}
+              style={{ width: isFocused ? 275 : 180 }}
             />
           </SearchBarContainer>
           {searchText.length > 0 ? (
@@ -62,16 +68,17 @@ const SearchBarContainer = styled.div`
     font-family: inherit;
     padding: 10px 12px;
     width: 180px;
+    outline: none;
     transition: all 300ms ease-in-out;
 
     &:placeholder {
       -webkit-user-select: none;
     }
-
+    /* 
     &:focus {
       width: 275px;
       outline: none;
-    }
+    } */
   }
 `
 

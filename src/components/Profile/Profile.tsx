@@ -15,6 +15,7 @@ import Sidebar from "../Sidebar"
 import Latest from "../Latest"
 import Favorites from "../Favorites"
 import User from "../User"
+import Saved from "../Saved"
 
 const Profile = () => {
   return (
@@ -33,6 +34,9 @@ const Profile = () => {
               </Route>
               <Route path="/profile/user">
                 <User />
+              </Route>
+              <Route path="/profile/saved">
+                <Saved />
               </Route>
             </Switch>
           </div>
