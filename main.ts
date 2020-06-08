@@ -123,6 +123,10 @@ app.whenReady().then(() => {
       mainWindow.show()
     }
 
+    if (!mainWindow.isFocused()) {
+      mainWindow.show()
+    }
+
     if (!mainWindow) {
       createWindow()
     }
