@@ -8,4 +8,6 @@ export default {
   username: "#fafafa",
   searchBarInput: "#222",
   searchBarInputText: "#ADA9BB",
+  prevIcon: "rgba(0,0,0, 0.1)",
+  nextIcon: "rgba(0,0,0, 0.1)",
 }

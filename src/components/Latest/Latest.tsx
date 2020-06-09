@@ -235,7 +235,7 @@ const PrevIcon = styled(motion.div)`
   user-select: none;
   cursor: pointer;
   z-index: 2;
-  background: rgba(255, 255, 255, 0.5);
+  background: ${(props) => props.theme.prevIcon};
   height: 40px;
   width: 40px;
   border-radius: 50%;
@@ -250,7 +250,7 @@ const NextIcon = styled(motion.div)`
   user-select: none;
   cursor: pointer;
   z-index: 2;
-  background: rgba(255, 255, 255, 0.5);
+  background: ${(props) => props.theme.nextIcon};
   height: 40px;
   width: 40px;
   border-radius: 50%;
