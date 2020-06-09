@@ -1,9 +1,9 @@
-import { BrowserWindow, ipcMain, screen } from "electron"
+import { BrowserWindow } from "electron"
 import path from "path"
 import url from "url"
 
 export default class MainWindow extends BrowserWindow {
-  constructor(public userLoggedIn) {
+  constructor(readonly userLoggedIn: boolean) {
     super({
       width: 450,
       height: 650,
@@ -11,6 +11,7 @@ export default class MainWindow extends BrowserWindow {
       title: "favlinkz",
       resizable: userLoggedIn ? true : false,
       titleBarStyle: "hiddenInset",
+      icon: "src/assets/icon_144.png",
       show: false,
       backgroundColor: "#5856d7",
       webPreferences: {

@@ -114,6 +114,7 @@ class MainWindow extends electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"] 
       title: "favlinkz",
       resizable: userLoggedIn ? true : false,
       titleBarStyle: "hiddenInset",
+      icon: "src/assets/icon_144.png",
       show: false,
       backgroundColor: "#5856d7",
       webPreferences: {
@@ -153,9 +154,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var mainWindow;
-var userLoggedIn = false;
 var isDev =  true ? true : undefined;
-var isMac = process.platform === "darwin" ? true : false; // Create main window
+var isMac = process.platform === "darwin" ? true : false;
+var userLoggedIn = false; // Create main window
 
 function createWindow() {
   mainWindow = new _MainWindow__WEBPACK_IMPORTED_MODULE_1__["default"](userLoggedIn);
@@ -177,13 +178,13 @@ electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-in", e => {
   });
   mainWindow.center();
   mainWindow.setResizable(true);
-  mainWindow.userLoggedIn = true;
+  userLoggedIn = true;
 });
 electron__WEBPACK_IMPORTED_MODULE_0__["ipcMain"].on("user-logged-out", e => {
   mainWindow.setSize(450, 650);
   mainWindow.center();
   mainWindow.setResizable(false);
-  mainWindow.userLoggedIn = false;
+  userLoggedIn = false;
 }); // Menu
 
 var menu = [...(isMac ? [{
@@ -232,22 +233,22 @@ var tray = null;
 electron__WEBPACK_IMPORTED_MODULE_0__["app"].whenReady().then(() => {
   tray = new electron__WEBPACK_IMPORTED_MODULE_0__["Tray"]("./src/assets/tray-icon.png");
   tray.on("click", () => {
-    if (electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"].getAllWindows().length > 0 && mainWindow.isVisible()) {
-      mainWindow.hide();
-    } else if (electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"].getAllWindows().length > 0) {
-      mainWindow.show();
-    }
+    switch (true) {
+      case !mainWindow:
+        createWindow();
 
-    if (mainWindow.isMinimized()) {
-      mainWindow.show();
-    }
+      case electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"].getAllWindows().length > 0 && mainWindow.isVisible():
+        mainWindow.hide();
+        break;
 
-    if (!mainWindow.isFocused()) {
-      mainWindow.show();
-    }
+      case electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"].getAllWindows().length > 0:
+        mainWindow.show();
+        break;
 
-    if (!mainWindow) {
-      createWindow();
+      case mainWindow.isMinimized():
+      case !mainWindow.isFocused():
+        mainWindow.show();
+        break;
     }
   });
 });

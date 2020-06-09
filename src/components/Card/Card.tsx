@@ -220,7 +220,7 @@ const Card = ({ link, showHeart }: Props) => {
             />
           )}
         </ImageContainer>
-        <PullCard></PullCard>
+        {/* <PullCard></PullCard> */}
         <div
           style={{
             padding: "1.5rem 1.5rem ",
@@ -477,7 +477,7 @@ const PullCard = styled.div`
   border-top-right-radius: 10px;
   width: 100%;
   z-index: -1;
-  height: 15px;
+  height: 25px;
   transition: all 300ms ease-in-out;
 `
 

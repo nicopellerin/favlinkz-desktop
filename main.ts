@@ -1,12 +1,13 @@
 import { app, BrowserWindow, Tray, Menu, ipcMain, screen } from "electron"
+
 import MainWindow from "./MainWindow"
 
 let mainWindow: MainWindow | null
 
-let userLoggedIn = false
-
 const isDev = process.env.NODE_ENV !== "production" ? true : false
 const isMac = process.platform === "darwin" ? true : false
+
+let userLoggedIn = false
 
 // Create main window
 function createWindow() {
@@ -31,14 +32,14 @@ ipcMain.on("user-logged-in", (e) => {
   })
   mainWindow.center()
   mainWindow.setResizable(true)
-  mainWindow.userLoggedIn = true
+  userLoggedIn = true
 })
 
 ipcMain.on("user-logged-out", (e) => {
   mainWindow.setSize(450, 650)
   mainWindow.center()
   mainWindow.setResizable(false)
-  mainWindow.userLoggedIn = false
+  userLoggedIn = false
 })
 
 // Menu
@@ -85,6 +86,7 @@ const menu = [
 // Init
 app.on("ready", () => {
   createWindow()
+
   const mainMenu = Menu.buildFromTemplate(menu)
   Menu.setApplicationMenu(mainMenu)
 })
@@ -113,22 +115,19 @@ let tray = null
 app.whenReady().then(() => {
   tray = new Tray("./src/assets/tray-icon.png")
   tray.on("click", () => {
-    if (BrowserWindow.getAllWindows().length > 0 && mainWindow.isVisible()) {
-      mainWindow.hide()
-    } else if (BrowserWindow.getAllWindows().length > 0) {
-      mainWindow.show()
-    }
-
-    if (mainWindow.isMinimized()) {
-      mainWindow.show()
-    }
-
-    if (!mainWindow.isFocused()) {
-      mainWindow.show()
-    }
-
-    if (!mainWindow) {
-      createWindow()
+    switch (true) {
+      case !mainWindow:
+        createWindow()
+      case BrowserWindow.getAllWindows().length > 0 && mainWindow.isVisible():
+        mainWindow.hide()
+        break
+      case BrowserWindow.getAllWindows().length > 0:
+        mainWindow.show()
+        break
+      case mainWindow.isMinimized():
+      case !mainWindow.isFocused():
+        mainWindow.show()
+        break
     }
   })
 })
