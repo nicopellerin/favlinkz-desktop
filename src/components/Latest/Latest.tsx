@@ -49,6 +49,7 @@ interface Results {
   image: string
   note: string
   id: string
+  rss: string
 }
 
 interface StyledProps {
@@ -129,7 +130,7 @@ const Latest = () => {
         >
           {results
             .slice((page - 1) * 6, (page - 1) * 6 + 6)
-            .map(({ url, title, image, note, id }: Results) => (
+            .map(({ url, title, image, note, id, rss }: Results) => (
               <Card
                 key={id}
                 link={{
@@ -138,6 +139,7 @@ const Latest = () => {
                   image,
                   note,
                   id,
+                  rss,
                 }}
                 showHeart={true}
                 category="latest"

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { FaHeart, FaStickyNote, FaFilePdf } from "react-icons/fa"
+import { FaHeart, FaStickyNote, FaFilePdf, FaRss } from "react-icons/fa"
 import styled from "styled-components"
 import {
   motion,
@@ -36,6 +36,7 @@ interface Link {
   image: string
   note: string
   id: string
+  rss: string
 }
 
 interface Props {
@@ -89,8 +90,8 @@ const Card = ({ link, showHeart }: Props) => {
     return () => clearTimeout(id)
   }, [copied])
 
-  const pdfPrint = () => {
-    ipcRenderer.send("print-to-pdf", link.url)
+  const subscribeToRssFeed = () => {
+    // ipcRenderer.send("print-to-pdf", link.url)
   }
 
   // Remove links
@@ -204,13 +205,13 @@ const Card = ({ link, showHeart }: Props) => {
               </NoteDisplay>
             )}
           </AnimatePresence>
-          <PdfPrint
-            title="Save to PDF"
-            showHeart={showHeart ? true : false}
-            onClick={pdfPrint}
-          >
-            PDF
-          </PdfPrint>
+          {link.rss && (
+            <RssIcon
+              title="Subscribe to RSS feed"
+              showHeart={showHeart ? true : false}
+              onClick={subscribeToRssFeed}
+            />
+          )}
           {showHeart && (
             <FaHeartWrapper
               title="Add to favorites"
@@ -479,6 +480,27 @@ const PullCard = styled.div`
   z-index: -1;
   height: 25px;
   transition: all 300ms ease-in-out;
+`
+
+const RssIcon = styled(FaRss)`
+  position: absolute;
+  right: ${(props: { showHeart: boolean }) =>
+    props.showHeart ? "45px" : "10px"};
+  bottom: 10px;
+  font-size: 3rem;
+  background: black;
+  color: #f4f4f4;
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color 100ms ease-in;
+  z-index: 100;
+  border-radius: 50%;
+  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    color: var(--secondaryColor);
+  }
 `
 
 const PdfPrint = styled(FaFilePdf)`
