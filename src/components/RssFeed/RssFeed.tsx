@@ -10,6 +10,7 @@ import { db } from "../../services/firebase"
 import Parser from "rss-parser"
 import RssCard from "./RssCard"
 import { Switch, Route, HashRouter as Router } from "react-router-dom"
+import { FaRss } from "react-icons/fa"
 
 const parser = new Parser()
 
@@ -91,14 +92,23 @@ const RssFeed = () => {
       animate="show"
       exit="exit"
     >
-      {rss?.length > 0 &&
+      {feeds?.length > 0 &&
         rss.map((feed) => (
           <RssCard key={feed.title} id={feed.id} feed={feed.feed} />
         ))}
-      {!loading && rss?.length < 1 && (
+      {!loading && feeds?.length < 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
-          <h2>Found 0 RSS feeds</h2>
-          <h4>Click the RSS icon on cards to start building feed</h4>
+          <h2>
+            Found <span style={{ color: "var(--primaryColor)" }}>0</span> RSS
+            feeds
+          </h2>
+          <h4 style={{ display: "flex", alignItems: "center" }}>
+            Click the RSS icon{" "}
+            <FaRss
+              style={{ margin: "0 7px", color: "var(--secondaryColor)" }}
+            />{" "}
+            on cards to start building feed collection
+          </h4>
         </NoMatchingResults>
       )}
     </Wrapper>

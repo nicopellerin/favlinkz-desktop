@@ -9,13 +9,39 @@ const RssFeedUrls = () => {
   const history = useHistory()
   const feed = history?.location?.state?.feed
 
+  const latestVariants = {
+    hidden: {
+      y: 10,
+    },
+    show: {
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 10,
+        stiffness: 80,
+        velocity: 2,
+        staggerChildren: 0.02,
+      },
+    },
+    exit: {
+      transition: {
+        type: "tween",
+        damping: 100,
+        stiffness: 80,
+        staggerChildren: 0.5,
+      },
+    },
+  }
+
   return (
-    <Wrapper key="content" initial="collapsed" animate="open" exit="collapsed">
+    <Wrapper
+      initial="hidden"
+      animate="show"
+      exit="exit"
+      variants={latestVariants}
+    >
       {feed?.items?.length && (
-        <FeedList
-          variants={{ collapsed: { y: 20 }, open: { y: 0 } }}
-          transition={{ duration: 0.5 }}
-        >
+        <FeedList>
           <Title>{feed?.title}</Title>
           <Url>
             <a href={feed?.link}>{feed?.link}</a>

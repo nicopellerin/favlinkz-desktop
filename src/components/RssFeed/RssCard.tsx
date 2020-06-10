@@ -3,9 +3,14 @@ import { useState } from "react"
 import styled from "styled-components"
 import { motion, AnimatePresence } from "framer-motion"
 import { Link } from "react-router-dom"
+import { useRecoilState } from "recoil"
+
+import { rssState } from "../../state/rss"
+import { FaLink, FaRss } from "react-icons/fa"
 
 const RssCard = ({ feed, id }) => {
   // const [toggle, setToggle] = useState(false)
+  const [feeds, setFeeds] = useRecoilState(rssState)
 
   return (
     <Card>
@@ -13,13 +18,20 @@ const RssCard = ({ feed, id }) => {
         <div>
           <Title>{feed?.title}</Title>
           <Desc>{feed?.description}</Desc>
-          <Url>{feed?.link}</Url>
+          <Url>
+            <FaLink size={14} style={{ marginRight: 5 }} />{" "}
+            <a href={feed?.link} target="_blank">
+              {feed?.link}
+            </a>
+          </Url>
         </div>
         <ButtonGroup>
           <Link to={{ pathname: `/profile/rssfeed/${id}`, state: { feed } }}>
-            <ShowFeedButton>Show feed</ShowFeedButton>
+            <ShowFeedButton>
+              Show feed <FaRss style={{ marginLeft: 5 }} />
+            </ShowFeedButton>
           </Link>
-          <RemoveButton>Remove</RemoveButton>
+          <RemoveButton onClick={() => setFeeds([])}>Remove</RemoveButton>
         </ButtonGroup>
       </Heading>
     </Card>
@@ -54,12 +66,19 @@ const Title = styled.h3`
 
 const Desc = styled.h5`
   font-size: 1.6rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.6rem;
 `
 
 const Url = styled.h5`
   font-size: 1.6rem;
-  font-weight: 400;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+
+  a {
+    color: #333;
+    text-decoration: underline;
+  }
 `
 
 const ButtonGroup = styled.div`
@@ -87,4 +106,6 @@ const ShowFeedButton = styled(RemoveButton)`
   background: #4b36dc;
   outline: none;
   margin-right: 1rem;
+  display: flex;
+  align-items: center;
 `
