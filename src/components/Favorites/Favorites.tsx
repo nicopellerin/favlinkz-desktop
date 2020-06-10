@@ -53,6 +53,8 @@ interface Results {
 
 const Favorites = () => {
   const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [lastVisible, setLastVisible] = useState(6)
 
   const results = useRecoilValue(searchResultsState)
   const [favorites, setFavorites] = useRecoilState(favoritesState)
@@ -108,22 +110,24 @@ const Favorites = () => {
           animate="show"
           exit="exit"
         >
-          {results.map(({ url, title, image, note, id }: Results) => (
-            <Card
-              key={id}
-              link={{
-                url,
-                title,
-                image,
-                note,
-                id,
-              }}
-              showHeart={false}
-              category="latest"
-              user={null}
-              likeAdded={null}
-            />
-          ))}
+          {results
+            .slice(currentPage, lastVisible)
+            .map(({ url, title, image, note, id }: Results) => (
+              <Card
+                key={id}
+                link={{
+                  url,
+                  title,
+                  image,
+                  note,
+                  id,
+                }}
+                showHeart={false}
+                category="latest"
+                user={null}
+                likeAdded={null}
+              />
+            ))}
         </CardList>
       )}
 
@@ -192,7 +196,7 @@ const Wrapper = styled(motion.div)`
 `
 
 const CardList = styled(motion.div)`
-  padding: 0 6rem 3rem 6rem;
+  padding: 0.5rem 6rem 3rem 6rem;
   display: grid;
   grid-template-columns: repeat(3, minmax(300px, 350px));
   grid-gap: 4rem;

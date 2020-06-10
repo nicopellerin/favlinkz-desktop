@@ -98,6 +98,7 @@ const ProfilePic = styled.img`
   margin-left: 10px;
   margin-right: 0.5rem;
   cursor: pointer;
+  user-select: none;
 `
 
 const ProfileName = styled.span`
