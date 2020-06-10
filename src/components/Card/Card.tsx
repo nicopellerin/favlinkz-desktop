@@ -453,8 +453,8 @@ const FavLinksAdded = styled(motion.span)`
 `
 
 const RssAdded = styled(FavLinksAdded)`
-  border: 1px solid green;
-  color: green;
+  border: 1px solid #00c29f;
+  color: #00c29f;
 `
 
 const FavLinksBg = styled.div`

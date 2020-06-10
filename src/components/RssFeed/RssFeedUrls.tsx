@@ -59,6 +59,14 @@ const RssFeedUrls = () => {
         </FeedList>
       )}
       <PrevIcon
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{
+          type: "spring",
+          damping: 10,
+          stiffness: 80,
+          delay: 0.3,
+        }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => history.goBack()}
