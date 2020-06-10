@@ -10,4 +10,5 @@ export default {
   searchBarInputText: "#ADA9BB",
   prevIcon: "rgba(0,0,0, 0.1)",
   nextIcon: "rgba(0,0,0, 0.1)",
+  textColor: "#fafafa",
 }

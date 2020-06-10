@@ -1,13 +1,15 @@
 import * as React from "react"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { rssState } from "../../state/rss"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { userState } from "../../state/user"
 import { db } from "../../services/firebase"
 
 import Parser from "rss-parser"
+import RssCard from "./RssCard"
+import { Switch, Route, HashRouter as Router } from "react-router-dom"
 
 const parser = new Parser()
 
@@ -38,6 +40,8 @@ const userVariants = {
 const RssFeed = () => {
   const [feeds, setFeeds] = useRecoilState(rssState)
   const [rss, setRss] = useState([])
+  const [loading, setLoading] = useState(true)
+
   const user = useRecoilValue(userState)
 
   useEffect(() => {
@@ -59,16 +63,26 @@ const RssFeed = () => {
     })
   }, [])
 
-  useEffect(() => {
-    ;(async () => {
+  const parseRss = async (feeds) => {
+    if (feeds?.length) {
       let feed = await parser.parseURL(feeds[0].feed)
-      console.log(feed)
-      setRss(feed)
-      // feed.items.forEach((item) => {
-      //   console.log(item.title + ":" + item.link)
-      // })
-    })()
+      // let feed2 = await parser.parseURL(feeds[1].feed)
+      console.log(feeds)
+      setRss([...rss, { id: feeds[0].id, feed }])
+      setLoading(false)
+    } else {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    // TODO - Add proper loop
+    parseRss(feeds)
   }, [feeds])
+
+  if (loading) {
+    return null
+  }
 
   return (
     <Wrapper
@@ -77,19 +91,16 @@ const RssFeed = () => {
       animate="show"
       exit="exit"
     >
-      <Card>
-        <Title>{rss?.title}</Title>
-        <Desc>{rss?.description}</Desc>
-        <FeedList>
-          {rss?.items?.map((feed) => (
-            <Feed key={feed.title}>
-              <a href={feed.link} target="_blank">
-                {feed.title}
-              </a>
-            </Feed>
-          ))}
-        </FeedList>
-      </Card>
+      {rss?.length > 0 &&
+        rss.map((feed) => (
+          <RssCard key={feed.title} id={feed.id} feed={feed.feed} />
+        ))}
+      {!loading && rss?.length < 1 && (
+        <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
+          <h2>Found 0 RSS feeds</h2>
+          <h4>Click the RSS icon on cards to start building feed</h4>
+        </NoMatchingResults>
+      )}
     </Wrapper>
   )
 }
@@ -102,39 +113,14 @@ const Wrapper = styled(motion.div)`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100% - 100px);
+  min-height: calc(100% - 100px);
 `
 
-const Card = styled.div``
-
-const Title = styled.h3`
-  color: var(--primaryColor);
-  margin-bottom: 1rem;
-  font-size: 4rem;
-`
-
-const Desc = styled.h5`
-  font-size: 1.6rem;
-`
-
-const FeedList = styled.ul`
-  list-style: none;
-  padding: 0;
-
-  a {
-    color: #333;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`
-
-const Feed = styled.li`
-  color: #333;
-  font-size: 1.6rem;
-
-  &:not(:last-child) {
-    margin-bottom: 1rem;
-  }
+const NoMatchingResults = styled(motion.div)`
+  height: calc(100% - 300px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
 `

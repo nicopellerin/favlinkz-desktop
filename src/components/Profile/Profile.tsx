@@ -16,6 +16,7 @@ import Latest from "../Latest"
 import Favorites from "../Favorites"
 import User from "../User"
 import RssFeed from "../RssFeed"
+import RssFeedUrls from "../RssFeed/RssFeedUrls"
 
 const Profile = () => {
   return (
@@ -35,8 +36,11 @@ const Profile = () => {
               <Route path="/profile/user">
                 <User />
               </Route>
-              <Route path="/profile/rssfeed">
+              <Route exact path="/profile/rssfeed">
                 <RssFeed />
+              </Route>
+              <Route path="/profile/rssfeed/:id">
+                <RssFeedUrls />
               </Route>
             </Switch>
           </div>

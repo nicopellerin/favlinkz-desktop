@@ -55,6 +55,7 @@ const Card = ({ link, showHeart }: Props) => {
   const [favorited, setFavorited] = useState(false)
   const [copied, setCopied] = useState(false)
   const [subscribed, setSubscribed] = useState(false)
+  const [addedToRssFeed, setAddedToRssFeed] = useState(false)
 
   const [latest, setLatest] = useRecoilState(latestState)
   const [favorites, setFavorites] = useRecoilState(favoritesState)
@@ -105,9 +106,11 @@ const Card = ({ link, showHeart }: Props) => {
       .collection("rss")
       .doc(id)
 
-    newSubscription.set({ title, url, feed: rss })
+    newSubscription.set({ title, url, feed: rss, id })
 
     setSubscribed((prevState) => !prevState)
+    setAddedToRssFeed(true)
+    setTimeout(() => setAddedToRssFeed(false), 1500)
   }
 
   // Remove links
@@ -205,6 +208,17 @@ const Card = ({ link, showHeart }: Props) => {
               >
                 Link added to favorites
               </FavLinksAdded>
+            </FavLinksBg>
+          )}
+          {addedToRssFeed && (
+            <FavLinksBg>
+              <RssAdded
+                initial={{ x: "-50%", y: "-50%" }}
+                animate={{ scale: [0.9, 1.1, 1] }}
+                transition={{ type: "spring", damping: 8 }}
+              >
+                Added to RSS feed collection
+              </RssAdded>
             </FavLinksBg>
           )}
           <UrlAddr>{spliceUrl(maxLengthUrl(link.url))}</UrlAddr>
@@ -436,6 +450,11 @@ const FavLinksAdded = styled(motion.span)`
   color: crimson;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   z-index: 9000;
+`
+
+const RssAdded = styled(FavLinksAdded)`
+  border: 1px solid green;
+  color: green;
 `
 
 const FavLinksBg = styled.div`
