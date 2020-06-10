@@ -133,6 +133,22 @@ class MainWindow extends electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"] 
       this.show();
       this.focus();
     });
+    this.webContents.on("new-window", function (evt, url, frameName, disposition, options, additionalFeatures) {
+      var {
+        width,
+        height
+      } = electron__WEBPACK_IMPORTED_MODULE_0__["screen"].getPrimaryDisplay().workAreaSize;
+      var bounds = electron__WEBPACK_IMPORTED_MODULE_0__["screen"].getPrimaryDisplay().bounds;
+      var x = Math.ceil(bounds.x + (bounds.width - width * 0.95) / 2);
+      var y = Math.ceil(bounds.y + (bounds.height - height * 0.95) / 2);
+      options.width = width * 0.95 | 0;
+      options.height = height * 0.95 | 0;
+      options.x = x;
+      options.y = y;
+      options.backgroundColor = "#fff";
+      options.titleBarStyle = "default";
+      options.resizable = true;
+    });
   }
 
 }

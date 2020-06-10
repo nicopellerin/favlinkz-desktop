@@ -1,4 +1,4 @@
-import { BrowserWindow } from "electron"
+import { BrowserWindow, screen } from "electron"
 import path from "path"
 import url from "url"
 
@@ -36,6 +36,28 @@ export default class MainWindow extends BrowserWindow {
     this.on("ready-to-show", function () {
       this.show()
       this.focus()
+    })
+
+    this.webContents.on("new-window", function (
+      evt,
+      url,
+      frameName,
+      disposition,
+      options,
+      additionalFeatures
+    ) {
+      let { width, height } = screen.getPrimaryDisplay().workAreaSize
+      let bounds = screen.getPrimaryDisplay().bounds
+      let x = Math.ceil(bounds.x + (bounds.width - width * 0.95) / 2)
+      let y = Math.ceil(bounds.y + (bounds.height - height * 0.95) / 2)
+
+      options.width = (width * 0.95) | 0
+      options.height = (height * 0.95) | 0
+      options.x = x
+      options.y = y
+      options.backgroundColor = "#fff"
+      options.titleBarStyle = "default"
+      options.resizable = true
     })
   }
 }
