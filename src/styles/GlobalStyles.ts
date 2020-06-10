@@ -68,7 +68,6 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   a {
-    color: var(--menuColor);
     text-decoration: none;
   }
 

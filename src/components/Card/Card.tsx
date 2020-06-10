@@ -20,6 +20,7 @@ import {
 import ReactTooltip from "react-tooltip"
 
 import { useLocation } from "react-router-dom"
+// import { ipcRenderer } from "electron"
 
 import { latestState } from "../../state/latest"
 import { favoritesState } from "../../state/favorites"
@@ -27,8 +28,8 @@ import { favoritesState } from "../../state/favorites"
 import { maxLength, maxLengthUrl, spliceUrl } from "../../utils"
 
 import { db } from "../../services/firebase"
+
 import { userState } from "../../state/user"
-import { ipcRenderer } from "electron"
 
 interface Link {
   url: string
@@ -53,6 +54,7 @@ const Card = ({ link, showHeart }: Props) => {
   const [showNote, setShowNote] = useState(false)
   const [favorited, setFavorited] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [subscribed, setSubscribed] = useState(false)
 
   const [latest, setLatest] = useRecoilState(latestState)
   const [favorites, setFavorites] = useRecoilState(favoritesState)
@@ -90,8 +92,22 @@ const Card = ({ link, showHeart }: Props) => {
     return () => clearTimeout(id)
   }, [copied])
 
-  const subscribeToRssFeed = () => {
+  const subscribeToRssFeed = (
+    rss: string,
+    id: string,
+    title: string,
+    url: string
+  ) => {
     // ipcRenderer.send("print-to-pdf", link.url)
+    const newSubscription = db
+      .collection(`users`)
+      .doc(user.uid)
+      .collection("rss")
+      .doc(id)
+
+    newSubscription.set({ title, url, feed: rss })
+
+    setSubscribed((prevState) => !prevState)
   }
 
   // Remove links
@@ -209,7 +225,9 @@ const Card = ({ link, showHeart }: Props) => {
             <RssIcon
               title="Subscribe to RSS feed"
               showHeart={showHeart ? true : false}
-              onClick={subscribeToRssFeed}
+              onClick={() =>
+                subscribeToRssFeed(link.rss, link.id, link.title, link.url)
+              }
             />
           )}
           {showHeart && (

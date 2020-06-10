@@ -8,6 +8,7 @@ import {
   FaUser,
   FaLink,
   FaFilePdf,
+  FaRss,
 } from "react-icons/fa"
 import { NavLink, Link } from "react-router-dom"
 
@@ -44,9 +45,9 @@ const Sidebar = () => {
           activeStyle={{
             color: "var(--primaryColor)",
           }}
-          to="/profile/saved"
+          to="/profile/rssfeed"
         >
-          <IconPDF title="Favorites" size={22} />
+          <IconRSS title="Rss Feed" size={22} />
         </NavLink>
         <NavLink
           activeStyle={{
@@ -116,6 +117,6 @@ const IconUser = styled(FaUser)`
   -webkit-app-region: no-drag;
 `
 
-const IconPDF = styled(FaFilePdf)`
+const IconRSS = styled(FaRss)`
   -webkit-app-region: no-drag;
 `

@@ -15,7 +15,7 @@ import Sidebar from "../Sidebar"
 import Latest from "../Latest"
 import Favorites from "../Favorites"
 import User from "../User"
-import Saved from "../Saved"
+import RssFeed from "../RssFeed"
 
 const Profile = () => {
   return (
@@ -35,8 +35,8 @@ const Profile = () => {
               <Route path="/profile/user">
                 <User />
               </Route>
-              <Route path="/profile/saved">
-                <Saved />
+              <Route path="/profile/rssfeed">
+                <RssFeed />
               </Route>
             </Switch>
           </div>
