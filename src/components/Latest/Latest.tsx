@@ -161,7 +161,12 @@ const Latest = () => {
       <PaginateControls
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", damping: 10, stiffness: 80, delay: 0.3 }}
+        transition={{
+          type: "spring",
+          damping: 10,
+          stiffness: 80,
+          delay: 0.3,
+        }}
       >
         <PrevIcon
           whileHover={{ scale: 1.05 }}
