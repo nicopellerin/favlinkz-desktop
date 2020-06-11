@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { FaRss } from "react-icons/fa"
 import Parser from "rss-parser"
+import uuid from "uuid/v4"
 
 import RssCard from "./RssCard"
 
@@ -68,11 +69,14 @@ const RssFeed = () => {
     })
   }, [])
 
+  const CORS_PROXY = "https://cors-anywhere.herokuapp.com/"
+
   const parseRss = async (feeds) => {
     // setLoading(true)
     const arr = []
     for (let feed of feeds) {
-      const res = await parser.parseURL(feed.feed)
+      let res = await parser.parseURL(feed.feed)
+      res = { ...res, id: feed["id"] }
       arr.push(res)
     }
     // setLoading(false)
@@ -84,6 +88,7 @@ const RssFeed = () => {
     setRss(res)
     // cache["allFeeds"] = res
   }
+  console.log(rss)
 
   useEffect(() => {
     loadParsedRss()

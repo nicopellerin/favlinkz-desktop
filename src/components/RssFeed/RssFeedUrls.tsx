@@ -10,7 +10,7 @@ import { maxLength } from "../../utils"
 
 const RssFeedUrls = () => {
   const history = useHistory()
-  const { feed } = history?.location?.state
+  const feed = history?.location?.state?.feed as any
 
   const latestVariants = {
     hidden: {
@@ -45,7 +45,13 @@ const RssFeedUrls = () => {
     >
       {feed?.items?.length && (
         <FeedList>
-          <Title>{maxLength(feed?.title)}</Title>
+          <Title>
+            {maxLength(
+              feed?.title ||
+                feed?.link?.split(".")[1][0].toUpperCase() +
+                  feed?.link?.split(".")[1].slice(1)
+            )}
+          </Title>
           <Url>
             <a href={feed?.link}>{feed?.link}</a>
           </Url>
@@ -53,11 +59,11 @@ const RssFeedUrls = () => {
             <Dots src={dots} alt="dots" draggable="false" />
           </DotsWrapper>
           {feed?.items?.slice(0, 10).map((feed: Feed) => (
-            <Feed key={feed.title}>
+            <FeedItem key={feed.title}>
               <a href={feed.link} target="_blank">
                 {feed.title}
               </a>
-            </Feed>
+            </FeedItem>
           ))}
         </FeedList>
       )}
@@ -117,7 +123,7 @@ const FeedList = styled(motion.ul)`
   }
 `
 
-const Feed = styled.li`
+const FeedItem = styled.li`
   color: #333;
   font-size: 1.6rem;
 

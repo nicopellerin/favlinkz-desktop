@@ -1,12 +1,14 @@
 import * as React from "react"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
-import { useRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { FaLink, FaRss } from "react-icons/fa"
 
 import { Feed } from "../../models/feed"
+import { db } from "../../services/firebase"
 
 import { rssState } from "../../state/rss"
+import { userState } from "../../state/user"
 
 import { maxLength } from "../../utils"
 
@@ -16,12 +18,29 @@ interface Props {
 
 const RssCard: React.FC<Props> = ({ feed }) => {
   const [feeds, setFeeds] = useRecoilState(rssState)
+  const user = useRecoilValue(userState)
+
+  const removeFeed = (id: string) => {
+    const newFeeds = feeds.filter((f) => f.id !== id)
+
+    const rssFeed = db.collection(`users`).doc(user.uid).collection("rss")
+    rssFeed.doc(id).delete()
+
+    setFeeds(newFeeds)
+  }
 
   return (
     <Card>
       <Heading>
         <div>
-          <Title title={feed?.title}>{maxLength(feed?.title, 34)}</Title>
+          <Title title={feed?.title}>
+            {maxLength(
+              feed?.title ||
+                feed?.link?.split(".")[1][0].toUpperCase() +
+                  feed?.link?.split(".")[1].slice(1),
+              34
+            )}
+          </Title>
           <Desc>{maxLength(feed?.description, 70)}</Desc>
           <Url>
             <FaLink size={14} style={{ marginRight: 5 }} />{" "}
@@ -38,7 +57,9 @@ const RssCard: React.FC<Props> = ({ feed }) => {
               Show feed <FaRss style={{ marginLeft: 5 }} />
             </ShowFeedButton>
           </Link>
-          <RemoveButton onClick={() => setFeeds([])}>Remove</RemoveButton>
+          <RemoveButton onClick={() => removeFeed(feed?.id)}>
+            Remove
+          </RemoveButton>
         </ButtonGroup>
       </Heading>
     </Card>
