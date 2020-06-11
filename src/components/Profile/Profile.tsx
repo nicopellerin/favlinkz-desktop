@@ -1,14 +1,7 @@
 import * as React from "react"
-import { useEffect } from "react"
 import styled, { keyframes } from "styled-components"
 import { motion } from "framer-motion"
-import {
-  HashRouter as Router,
-  Switch,
-  Route,
-  useHistory,
-  Redirect,
-} from "react-router-dom"
+import { HashRouter as Router, Switch, Route } from "react-router-dom"
 
 import Navbar from "../Navbar/Navbar"
 import Sidebar from "../Sidebar"

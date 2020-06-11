@@ -3,12 +3,7 @@ import { atom, selector } from "recoil"
 import { latestState } from "../state/latest"
 import { favoritesState } from "./favorites"
 
-interface Results {
-  url: string
-  title: string
-  image: string
-  id: string
-}
+import { Link } from "../models/link"
 
 export const searchTextState = atom({
   key: "searchTextState",
@@ -20,7 +15,7 @@ export const locationState = atom({
   default: "",
 })
 
-export const searchResultsState = selector({
+export const searchResultsState = selector<Array<Link>>({
   key: "searchResultsState",
   get: ({ get }) => {
     const pathname = get(locationState)
@@ -30,7 +25,7 @@ export const searchResultsState = selector({
     if (data) {
       const searchText = get(searchTextState)
 
-      return data.filter((item: Results) =>
+      return data.filter((item: Link) =>
         item.title.toLowerCase().includes(searchText.toLowerCase())
       )
     }

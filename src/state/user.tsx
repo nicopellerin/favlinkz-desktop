@@ -1,8 +1,11 @@
 import { atom, selector } from "recoil"
+
 import { latestState } from "./latest"
 import { favoritesState } from "./favorites"
 
-export const userState = atom({
+import { User } from "../models/user"
+
+export const userState = atom<User>({
   key: "userState",
   default: JSON.parse(localStorage.getItem("userFavLinkz")!) || {
     displayName: "",

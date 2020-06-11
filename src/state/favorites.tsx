@@ -1,6 +1,8 @@
 import { atom } from "recoil"
 
-export const favoritesState = atom({
+import { Link } from "../models/link"
+
+export const favoritesState = atom<Array<Link>>({
   key: "favoritesState",
   default: [],
 })

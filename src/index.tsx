@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useEffect } from "react"
 import ReactDom from "react-dom"
-import { useRecoilState, RecoilRoot, getAtomWithKey } from "recoil"
+import { useRecoilState, RecoilRoot } from "recoil"
 import { HashRouter as Router, Switch, Route, Redirect } from "react-router-dom"
 import { ipcRenderer } from "electron"
 
@@ -13,8 +13,7 @@ import LoginPage from "./containers/LoginPage"
 import { userState } from "./state/user"
 
 import { GlobalStyles } from "./styles/GlobalStyles"
-
-// import { PersistanceObserver } from "./state/persistance"
+import PrivateRoute from "./components/PrivateRoute"
 
 const root = document.createElement("div")
 root.style.height = "100%"
@@ -43,16 +42,8 @@ const App = () => {
   )
 }
 
-// const initializeState = ({ set }) => {
-//   const storage = Object.values(localStorage)
-//   for (const key of storage) {
-//     set(getAtomWithKey(key), JSON.parse(storage[key])).value
-//   }
-// }
-
 ReactDom.render(
   <RecoilRoot>
-    {/* <PersistanceObserver /> */}
     <App />
     <GlobalStyles />
   </RecoilRoot>,

@@ -1,15 +1,20 @@
 import * as React from "react"
-import { useState } from "react"
 import styled from "styled-components"
-import { motion, AnimatePresence } from "framer-motion"
 import { Link } from "react-router-dom"
 import { useRecoilState } from "recoil"
+import { FaLink, FaRss } from "react-icons/fa"
+
+import { Feed } from "../../models/feed"
 
 import { rssState } from "../../state/rss"
-import { FaLink, FaRss } from "react-icons/fa"
+
 import { maxLength } from "../../utils"
 
-const RssCard = ({ feed, id }) => {
+interface Props {
+  feed: Feed
+}
+
+const RssCard: React.FC<Props> = ({ feed }) => {
   const [feeds, setFeeds] = useRecoilState(rssState)
 
   return (
@@ -26,7 +31,9 @@ const RssCard = ({ feed, id }) => {
           </Url>
         </div>
         <ButtonGroup>
-          <Link to={{ pathname: `/profile/rssfeed/${id}`, state: { feed } }}>
+          <Link
+            to={{ pathname: `/profile/rssfeed/${feed?.id}`, state: { feed } }}
+          >
             <ShowFeedButton>
               Show feed <FaRss style={{ marginLeft: 5 }} />
             </ShowFeedButton>
@@ -99,7 +106,6 @@ const RemoveButton = styled.button`
   cursor: pointer;
   font-size: 1.4rem;
   outline: none;
-  /* position: absolute; */
 `
 
 const ShowFeedButton = styled(RemoveButton)`

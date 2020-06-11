@@ -12,8 +12,11 @@ import {
   searchTextState,
   locationState,
 } from "../../state/searchbar"
+
 import { userState } from "../../state/user"
 import { latestState } from "../../state/latest"
+
+import { Link } from "../../models/link"
 
 import { db } from "../../services/firebase"
 
@@ -59,9 +62,6 @@ interface StyledProps {
 const Latest = () => {
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
-  const [lastPag, setLastPage] = useState(6)
-  const [disabledPrevPag, setDisabledPrevPag] = useState(false)
-  const [disabledNextPag, setDisabledNextPag] = useState(false)
 
   const results = useRecoilValue(searchResultsState)
   const [latest, setLatest] = useRecoilState(latestState)
@@ -130,22 +130,8 @@ const Latest = () => {
         >
           {results
             .slice((page - 1) * 6, (page - 1) * 6 + 6)
-            .map(({ url, title, image, note, id, rss }: Results) => (
-              <Card
-                key={id}
-                link={{
-                  url,
-                  title,
-                  image,
-                  note,
-                  id,
-                  rss,
-                }}
-                showHeart={true}
-                category="latest"
-                user={null}
-                likeAdded={null}
-              />
+            .map((link: Link) => (
+              <Card key={link.id} link={link} showHeart={true} />
             ))}
         </CardList>
       )}

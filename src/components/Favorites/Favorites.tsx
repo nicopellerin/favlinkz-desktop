@@ -15,6 +15,8 @@ import {
 import { favoritesState } from "../../state/favorites"
 import { userState } from "../../state/user"
 
+import { Link } from "../../models/link"
+
 import { db } from "../../services/firebase"
 
 import dots from "../../assets/dots.svg"
@@ -41,14 +43,6 @@ const favoritesVariants = {
       staggerChildren: 0.5,
     },
   },
-}
-
-interface Results {
-  url: string
-  title: string
-  image: string
-  note: string
-  id: string
 }
 
 interface StyledProps {
@@ -125,21 +119,8 @@ const Favorites = () => {
         >
           {results
             .slice((page - 1) * 6, (page - 1) * 6 + 6)
-            .map(({ url, title, image, note, id }: Results) => (
-              <Card
-                key={id}
-                link={{
-                  url,
-                  title,
-                  image,
-                  note,
-                  id,
-                }}
-                showHeart={false}
-                category="latest"
-                user={null}
-                likeAdded={null}
-              />
+            .map((link: Link) => (
+              <Card key={link.id} link={link} showHeart={false} />
             ))}
         </CardList>
       )}

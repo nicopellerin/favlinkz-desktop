@@ -1,15 +1,7 @@
 import * as React from "react"
 import { ipcRenderer } from "electron"
 import styled from "styled-components"
-import {
-  FaHome,
-  FaHeart,
-  FaSignOutAlt,
-  FaUser,
-  FaLink,
-  FaFilePdf,
-  FaRss,
-} from "react-icons/fa"
+import { FaHeart, FaSignOutAlt, FaUser, FaLink, FaRss } from "react-icons/fa"
 import { NavLink, Link } from "react-router-dom"
 
 import { firebase } from "../../services/firebase"

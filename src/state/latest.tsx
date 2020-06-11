@@ -1,6 +1,8 @@
 import { atom } from "recoil"
 
-export const latestState = atom({
+import { Link } from "../models/link"
+
+export const latestState = atom<Array<Link>>({
   key: "latestState",
   default: [],
 })

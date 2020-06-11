@@ -3,12 +3,14 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useHistory } from "react-router-dom"
 
+import { Feed } from "../../models/feed"
+
 import dots from "../../assets/dots.svg"
 import { maxLength } from "../../utils"
 
 const RssFeedUrls = () => {
   const history = useHistory()
-  const feed = history?.location?.state?.feed
+  const { feed } = history?.location?.state
 
   const latestVariants = {
     hidden: {
@@ -50,7 +52,7 @@ const RssFeedUrls = () => {
           <DotsWrapper>
             <Dots src={dots} alt="dots" draggable="false" />
           </DotsWrapper>
-          {feed?.items?.slice(0, 10).map((feed) => (
+          {feed?.items?.slice(0, 10).map((feed: Feed) => (
             <Feed key={feed.title}>
               <a href={feed.link} target="_blank">
                 {feed.title}

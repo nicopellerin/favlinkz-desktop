@@ -10,6 +10,7 @@ import RssCard from "./RssCard"
 
 import { userState } from "../../state/user"
 import { rssState, rssFeedsState } from "../../state/rss"
+import { Feed } from "../../models/feed"
 
 import { db } from "../../services/firebase"
 
@@ -86,9 +87,7 @@ const RssFeed = () => {
 
   useEffect(() => {
     loadParsedRss()
-
-    console.log(rss)
-  }, [feeds, cache])
+  }, [feeds])
 
   // if (loading) {
   //   return null
@@ -102,9 +101,8 @@ const RssFeed = () => {
       exit="exit"
     >
       {feeds?.length > 0 &&
-        rss?.map((feed) => (
-          <RssCard key={feed.title} id={feed.id} feed={feed} />
-        ))}
+        rss?.map((feed: Feed) => <RssCard key={feed.title} feed={feed} />)}
+
       {!loading && feeds?.length < 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>

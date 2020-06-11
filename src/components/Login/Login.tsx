@@ -9,12 +9,12 @@ import Lottie from "react-lottie"
 import { Circle } from "better-react-spinkit"
 import qs from "qs"
 import { parse } from "url"
+import { ParsedURLQuery } from "querystring"
 import axios from "axios"
 
 import { firebase } from "../../services/firebase"
 
 import Logo from "../../assets/favlinkz-white.svg"
-// import BG from "../../assets/bg.png";
 
 import successAnimation from "../../assets/success.json"
 
@@ -26,18 +26,15 @@ const Login = () => {
   const GOOGLE_AUTHORIZATION_URL =
     "https://accounts.google.com/o/oauth2/v2/auth"
   const GOOGLE_TOKEN_URL = "https://www.googleapis.com/oauth2/v4/token"
-  const GOOGLE_PROFILE_URL = "https://www.googleapis.com/userinfo/v2/me"
 
   const history = useHistory()
 
   const signInWithPopup = async () => {
-    return new Promise((resolve, reject) => {
+    return new Promise<ParsedURLQuery>((resolve, reject) => {
       const authWindow = new remote.BrowserWindow({
         width: 600,
         height: 700,
         show: true,
-        "node-integration": false,
-        "web-security": false,
       })
 
       const urlParams = {
@@ -50,13 +47,13 @@ const Login = () => {
       }
       const authUrl = `${GOOGLE_AUTHORIZATION_URL}?${qs.stringify(urlParams)}`
 
-      const handleNavigation = (url) => {
+      const handleNavigation = (url: string) => {
         const query = parse(url, true).query
         if (query) {
           if (query.error) {
             reject(new Error(`There was an error: ${query.error}`))
           } else if (query.code) {
-            authWindow.removeAllListeners("closed")
+            // authWindow.removeListener("closed")
             setImmediate(() => authWindow.close())
 
             resolve(query.code)
@@ -73,12 +70,12 @@ const Login = () => {
         handleNavigation(url)
       })
 
-      authWindow.webContents.on(
-        "did-get-redirect-request",
-        (event, oldUrl, newUrl) => {
-          handleNavigation(newUrl)
-        }
-      )
+      // authWindow.webContents.on(
+      //   "did-get-redirect-request",
+      //   (event, oldUrl, newUrl) => {
+      //     handleNavigation(newUrl)
+      //   }
+      // )
 
       authWindow.loadURL(authUrl, {
         userAgent: "Chrome",
@@ -86,7 +83,7 @@ const Login = () => {
     })
   }
 
-  const fetchAccessTokens = async (code) => {
+  const fetchAccessTokens = async (code: string) => {
     const response = await axios.post(
       GOOGLE_TOKEN_URL,
       qs.stringify({
@@ -109,7 +106,7 @@ const Login = () => {
     setIsSubmiting(true)
 
     try {
-      const code = await signInWithPopup()
+      const code: string = await signInWithPopup()
       const tokens = await fetchAccessTokens(code)
 
       const credential = firebase.auth.GoogleAuthProvider.credential(
@@ -142,13 +139,7 @@ const Login = () => {
   }
 
   return (
-    <Wrapper
-      animate
-      layoutId="wrapper"
-      // initial={{ opacity: 0 }}
-      // animate={{ opacity: 1 }}
-      // exit={{ opacity: 0 }}
-    >
+    <Wrapper animate layoutId="wrapper">
       <Container animate={{ y: [10, 0] }}>
         <InsideContainer>
           <AnimateSharedLayout>

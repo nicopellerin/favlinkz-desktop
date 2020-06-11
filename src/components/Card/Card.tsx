@@ -25,30 +25,19 @@ import { useLocation } from "react-router-dom"
 import { latestState } from "../../state/latest"
 import { favoritesState } from "../../state/favorites"
 
-import { maxLength, maxLengthUrl, spliceUrl } from "../../utils"
+import { Link } from "../../models/link"
+import { userState } from "../../state/user"
 
 import { db } from "../../services/firebase"
 
-import { userState } from "../../state/user"
-
-interface Link {
-  url: string
-  title: string
-  image: string
-  note: string
-  id: string
-  rss: string
-}
+import { maxLength, maxLengthUrl, spliceUrl } from "../../utils"
 
 interface Props {
   link: Link
   showHeart: boolean
-  likeAdded: number | null
-  user: any
-  category: any
 }
 
-const Card = ({ link, showHeart }: Props) => {
+const Card: React.FC<Props> = ({ link, showHeart }) => {
   const { pathname } = useLocation()
 
   const [showNote, setShowNote] = useState(false)
@@ -147,7 +136,7 @@ const Card = ({ link, showHeart }: Props) => {
   }
 
   // Like page
-  const handleLike = (link) => {
+  const handleLike = (link: Link) => {
     const created = Date.now()
     const newLink = { ...link, created }
     setFavorites([...favorites, newLink])
