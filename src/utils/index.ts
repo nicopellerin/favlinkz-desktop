@@ -1,10 +1,10 @@
 // String max length 60 characters
-export function maxLength(str) {
+export function maxLength(str, len = 75) {
   let newString
 
-  newString = str.split("")
-  if (newString.length > 75) {
-    newString = str.split("").splice(0, 75).join("") + " [...]"
+  newString = str?.split("")
+  if (newString?.length > len) {
+    newString = str?.split("").splice(0, len).join("") + " [...]"
   }
   return newString
 }
@@ -12,9 +12,9 @@ export function maxLength(str) {
 // Max length for url cards
 export function maxLengthUrl(url) {
   let newUrlString
-  newUrlString = url.split("")
-  if (newUrlString.length > 30) {
-    return (newUrlString = url.split("").splice(0, 30).join("") + " [...]")
+  newUrlString = url?.split("")
+  if (newUrlString?.length > 26) {
+    return (newUrlString = url?.split("").splice(0, 26).join("") + " [...]")
   }
 
   return url
@@ -22,7 +22,7 @@ export function maxLengthUrl(url) {
 
 // Splice url to show only pathname
 export function spliceUrl(url) {
-  const urlDomain = url.match(
+  const urlDomain = url?.match(
     /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n?]+)/gim
   )
   return urlDomain

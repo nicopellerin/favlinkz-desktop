@@ -1,16 +1,17 @@
 import * as React from "react"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import { motion, AnimatePresence } from "framer-motion"
-import { rssState } from "../../state/rss"
+import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
-import { userState } from "../../state/user"
-import { db } from "../../services/firebase"
-
-import Parser from "rss-parser"
-import RssCard from "./RssCard"
-import { Switch, Route, HashRouter as Router } from "react-router-dom"
 import { FaRss } from "react-icons/fa"
+import Parser from "rss-parser"
+
+import RssCard from "./RssCard"
+
+import { userState } from "../../state/user"
+import { rssState, rssFeedsState } from "../../state/rss"
+
+import { db } from "../../services/firebase"
 
 const parser = new Parser()
 
@@ -38,11 +39,13 @@ const userVariants = {
   },
 }
 
-const RssFeed = () => {
-  const [feeds, setFeeds] = useRecoilState(rssState)
-  const [rss, setRss] = useState([])
-  const [loading, setLoading] = useState(true)
+// const cache = {}
 
+const RssFeed = () => {
+  const [loading, setLoading] = useState(false)
+
+  const [feeds, setFeeds] = useRecoilState(rssState)
+  const [rss, setRss] = useRecoilState(rssFeedsState)
   const user = useRecoilValue(userState)
 
   useEffect(() => {
@@ -65,25 +68,31 @@ const RssFeed = () => {
   }, [])
 
   const parseRss = async (feeds) => {
-    if (feeds?.length) {
-      let feed = await parser.parseURL(feeds[0].feed)
-      // let feed2 = await parser.parseURL(feeds[1].feed)
-      console.log(feeds)
-      setRss([...rss, { id: feeds[0].id, feed }])
-      setLoading(false)
-    } else {
-      setLoading(false)
+    // setLoading(true)
+    const arr = []
+    for (let feed of feeds) {
+      const res = await parser.parseURL(feed.feed)
+      arr.push(res)
     }
+    // setLoading(false)
+    return arr
+  }
+
+  const loadParsedRss = async () => {
+    const res = await parseRss(feeds)
+    setRss(res)
+    // cache["allFeeds"] = res
   }
 
   useEffect(() => {
-    // TODO - Add proper loop
-    parseRss(feeds)
-  }, [feeds])
+    loadParsedRss()
 
-  if (loading) {
-    return null
-  }
+    console.log(rss)
+  }, [feeds, cache])
+
+  // if (loading) {
+  //   return null
+  // }
 
   return (
     <Wrapper
@@ -93,8 +102,8 @@ const RssFeed = () => {
       exit="exit"
     >
       {feeds?.length > 0 &&
-        rss.map((feed) => (
-          <RssCard key={feed.title} id={feed.id} feed={feed.feed} />
+        rss?.map((feed) => (
+          <RssCard key={feed.title} id={feed.id} feed={feed} />
         ))}
       {!loading && feeds?.length < 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>

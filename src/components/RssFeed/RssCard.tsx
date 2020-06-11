@@ -7,17 +7,17 @@ import { useRecoilState } from "recoil"
 
 import { rssState } from "../../state/rss"
 import { FaLink, FaRss } from "react-icons/fa"
+import { maxLength } from "../../utils"
 
 const RssCard = ({ feed, id }) => {
-  // const [toggle, setToggle] = useState(false)
   const [feeds, setFeeds] = useRecoilState(rssState)
 
   return (
     <Card>
       <Heading>
         <div>
-          <Title>{feed?.title}</Title>
-          <Desc>{feed?.description}</Desc>
+          <Title title={feed?.title}>{maxLength(feed?.title, 34)}</Title>
+          <Desc>{maxLength(feed?.description, 70)}</Desc>
           <Url>
             <FaLink size={14} style={{ marginRight: 5 }} />{" "}
             <a href={feed?.link} target="_blank">

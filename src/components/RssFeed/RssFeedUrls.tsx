@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { useHistory } from "react-router-dom"
 
 import dots from "../../assets/dots.svg"
+import { maxLength } from "../../utils"
 
 const RssFeedUrls = () => {
   const history = useHistory()
@@ -42,7 +43,7 @@ const RssFeedUrls = () => {
     >
       {feed?.items?.length && (
         <FeedList>
-          <Title>{feed?.title}</Title>
+          <Title>{maxLength(feed?.title)}</Title>
           <Url>
             <a href={feed?.link}>{feed?.link}</a>
           </Url>
@@ -126,8 +127,10 @@ const Feed = styled.li`
 const Title = styled.h3`
   color: var(--primaryColor);
   margin-bottom: 1rem;
-  font-size: 4.2rem;
+  font-size: 3.6rem;
   font-weight: 500;
+  text-align: center;
+  max-width: 80%;
 `
 
 const Url = styled.h5`
