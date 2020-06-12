@@ -4,4 +4,5 @@ export interface Feed {
   link: string
   description: string
   items: any
+  contentSnippet: string
 }

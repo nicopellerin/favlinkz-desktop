@@ -2,6 +2,7 @@ import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useHistory } from "react-router-dom"
+import ReactTooltip from "react-tooltip"
 
 import { Feed } from "../../models/feed"
 
@@ -11,6 +12,8 @@ import { maxLength } from "../../utils"
 const RssFeedUrls = () => {
   const history = useHistory()
   const feed = history?.location?.state?.feed as any
+
+  console.log(feed)
 
   const latestVariants = {
     hidden: {
@@ -60,9 +63,20 @@ const RssFeedUrls = () => {
           </DotsWrapper>
           {feed?.items?.slice(0, 10).map((feed: Feed) => (
             <FeedItem key={feed.title}>
-              <a href={feed.link} target="_blank">
+              <a
+                data-tip={maxLength(feed.contentSnippet, 140)}
+                href={feed.link}
+                target="_blank"
+              >
                 {feed.title}
               </a>
+              <ReactTooltip
+                backgroundColor="#5856d7"
+                border={true}
+                borderColor="#615de0"
+                delayShow={1000}
+                delayUpdate={0}
+              />
             </FeedItem>
           ))}
         </FeedList>
