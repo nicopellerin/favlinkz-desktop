@@ -15,7 +15,8 @@ const Navbar: React.FC = () => {
   const { pathname } = useLocation()
   const { displayName, photoUrl } = useRecoilValue(userState)
 
-  const showSearchBar = !pathname.includes("user")
+  const showSearchBar =
+    !pathname.includes("user") && !pathname.includes("rssfeed")
 
   return (
     <>
