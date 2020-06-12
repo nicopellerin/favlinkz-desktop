@@ -4,6 +4,7 @@ const parser = new Parser()
 ;(async () => {
   self.addEventListener("message", async (event) => {
     const feeds = event.data
+    console.log(feeds)
     if (feeds) {
       console.log("yo")
       const arr = []

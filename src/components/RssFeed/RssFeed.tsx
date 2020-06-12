@@ -47,62 +47,22 @@ const userVariants = {
 // const cache = {}
 
 const RssFeed = () => {
-  const RSS_FEEDS_URLS = "rssFeedsUrls"
-
   const history = useHistory()
-  const prevLocation = history?.location?.state?.from
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   const [feeds, setFeeds] = useRecoilState(rssState)
   const [rss, setRss] = useRecoilState(rssFeedsState)
   const user = useRecoilValue(userState)
 
-  const worker = new Worker()
-
-  worker.onmessage = (event) => {
-    setRss(event.data)
-    setLoading(false)
-  }
-
-  useEffect(() => {
-    const rssData = db
-      .collection(`users`)
-      .doc(user.uid)
-      .collection("rss")
-      .orderBy("created", "desc")
-    // .limit(itemsPerPage)
-
-    rssData.onSnapshot((feeds) => {
-      if (feeds.size) {
-        const docs: any = []
-        feeds.docs.forEach((link) => {
-          const newFeeds = { ...link.data() }
-          docs.push(newFeeds)
-        })
-        setFeeds(docs)
-      } else {
-        return null
-      }
-    })
-  }, [])
-
-  let feedsLastBuild = []
-  useEffect(() => {
-    ipcRenderer.send("updateTrayIcon")
-    rss.map((feed) => {
-      feedsLastBuild.push({ id: feed.id, lastBuildDate: feed.lastBuildDate })
-    })
-    localStorage.setItem("feeds", JSON.stringify(feedsLastBuild))
-  }, [rss])
-
-  useEffect(() => {
-    if (prevLocation !== RSS_FEEDS_URLS) {
-      worker.postMessage(feeds)
-    } else {
-      setLoading(false)
-    }
-  }, [feeds])
+  // let feedsLastBuild = []
+  // useEffect(() => {
+  //   ipcRenderer.send("updateTrayIcon")
+  //   rss.map((feed) => {
+  //     feedsLastBuild.push({ id: feed.id, lastBuildDate: feed.lastBuildDate })
+  //   })
+  //   localStorage.setItem("feeds", JSON.stringify(feedsLastBuild))
+  // }, [rss])
 
   return (
     <Wrapper
@@ -116,7 +76,7 @@ const RssFeed = () => {
           <RssCard key={feed.title} feed={feed} />
         ))}
 
-      {loading && <Spinner name="ball-pulse-rise" color="#ff5c5b" />}
+      {/* {loading && <Spinner name="ball-pulse-rise" color="#ff5c5b" />} */}
 
       {!loading && feeds?.length < 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>

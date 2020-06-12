@@ -13,13 +13,46 @@ import RssFeed from "../RssFeed"
 import RssFeedUrls from "../RssFeed/RssFeedUrls"
 
 import Worker from "../RssFeed/parsing.worker"
+import { db } from "../../services/firebase"
+import { userState } from "../../state/user"
+import { rssState, rssFeedsState } from "../../state/rss"
+import { useRecoilState, useRecoilValue } from "recoil"
 
 const Profile = () => {
   const worker = new Worker()
 
+  const [feeds, setFeeds] = useRecoilState(rssState)
+  const [rss, setRss] = useRecoilState(rssFeedsState)
+
+  const user = useRecoilValue(userState)
+
   useEffect(() => {
-    worker.postMessage({ fetch: true })
+    const rssData = db
+      .collection(`users`)
+      .doc(user.uid)
+      .collection("rss")
+      .orderBy("created", "desc")
+    // .limit(itemsPerPage)
+
+    rssData.onSnapshot((feeds) => {
+      if (feeds.size) {
+        const docs: any = []
+        feeds.docs.forEach((link) => {
+          const newFeeds = { ...link.data() }
+          docs.push(newFeeds)
+        })
+        setFeeds(docs)
+        worker.postMessage(docs)
+      } else {
+        return null
+      }
+    })
   }, [])
+
+  worker.onmessage = (event) => {
+    setRss(event.data)
+  }
+
   return (
     <Router>
       <Wrapper>
