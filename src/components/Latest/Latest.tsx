@@ -46,15 +46,6 @@ const latestVariants = {
   },
 }
 
-interface Results {
-  url: string
-  title: string
-  image: string
-  note: string
-  id: string
-  rss: string
-}
-
 interface StyledProps {
   disabled: boolean
 }
@@ -64,9 +55,9 @@ const Latest = () => {
   const [page, setPage] = useState(1)
 
   const results = useRecoilValue(searchResultsState)
+  const [searchText] = useRecoilState(searchTextState)
   const [latest, setLatest] = useRecoilState(latestState)
   const user = useRecoilValue(userState)
-  const [searchText] = useRecoilState(searchTextState)
   const [location, setLocation] = useRecoilState(locationState)
 
   let totalPages = Math.ceil(latest.length / 6)
@@ -173,14 +164,18 @@ const Latest = () => {
         <NextIcon
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          disabled={page + 1 > totalPages}
+          disabled={page + 1 > totalPages || results?.length <= 6}
           onClick={() => nextPage(page)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18">
             <path
               d="M 0.429 0.318 C 0.843 -0.106 1.525 -0.106 1.94 0.318 L 9.493 8.055 C 9.913 8.485 9.913 9.172 9.493 9.602 L 9.493 9.602 C 9.079 10.026 8.397 10.026 7.982 9.602 L 0.429 1.865 C 0.009 1.435 0.009 0.748 0.429 0.318 Z M 9.379 8.229 C 9.799 8.659 9.799 9.346 9.379 9.776 L 1.826 17.513 C 1.412 17.937 0.729 17.937 0.315 17.513 L 0.315 17.513 C -0.105 17.083 -0.105 16.396 0.315 15.966 L 7.869 8.229 C 8.283 7.805 8.965 7.805 9.379 8.229 Z"
               transform="translate(0.016 0.085) rotate(-360 4.904 8.916)"
-              fill={page + 1 > totalPages ? "#bbb" : "var(--primaryColor)"}
+              fill={
+                page + 1 > totalPages || results?.length <= 6
+                  ? "#bbb"
+                  : "var(--primaryColor)"
+              }
             ></path>
           </svg>
         </NextIcon>

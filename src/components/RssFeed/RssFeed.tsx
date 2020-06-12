@@ -51,8 +51,11 @@ const RssFeed = () => {
   const user = useRecoilValue(userState)
 
   useEffect(() => {
-    const rssData = db.collection(`users`).doc(user.uid).collection("rss")
-    // .orderBy("created", "desc")
+    const rssData = db
+      .collection(`users`)
+      .doc(user.uid)
+      .collection("rss")
+      .orderBy("created", "desc")
     // .limit(itemsPerPage)
 
     rssData.onSnapshot((feeds) => {
@@ -69,7 +72,7 @@ const RssFeed = () => {
     })
   }, [])
 
-  const CORS_PROXY = "https://cors-anywhere.herokuapp.com/"
+  // const CORS_PROXY = "https://cors-anywhere.herokuapp.com/"
 
   const parseRss = async (feeds) => {
     // setLoading(true)
@@ -88,11 +91,10 @@ const RssFeed = () => {
     setRss(res)
     // cache["allFeeds"] = res
   }
-  console.log(rss)
 
   useEffect(() => {
     loadParsedRss()
-  }, [feeds])
+  }, [rss])
 
   // if (loading) {
   //   return null

@@ -95,7 +95,7 @@ const Card: React.FC<Props> = ({ link, showHeart }) => {
       .collection("rss")
       .doc(id)
 
-    newSubscription.set({ title, url, feed: rss, id })
+    newSubscription.set({ title, url, feed: rss, id, created: Date.now() })
 
     setSubscribed((prevState) => !prevState)
     setAddedToRssFeed(true)

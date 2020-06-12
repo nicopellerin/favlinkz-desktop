@@ -38,7 +38,7 @@ const RssCard: React.FC<Props> = ({ feed }) => {
               feed?.title ||
                 feed?.link?.split(".")[1][0].toUpperCase() +
                   feed?.link?.split(".")[1].slice(1),
-              34
+              36
             )}
           </Title>
           <Desc>{maxLength(feed?.description, 70)}</Desc>
@@ -88,13 +88,14 @@ const Heading = styled.div`
 const Title = styled.h3`
   color: var(--primaryColor);
   margin-bottom: 1rem;
-  font-size: 3rem;
+  font-size: 2.8rem;
   font-weight: 500;
 `
 
 const Desc = styled.h5`
   font-size: 1.6rem;
   margin-bottom: 1.6rem;
+  color: ${(props) => props.theme.textColor};
 `
 
 const Url = styled.h5`
@@ -102,9 +103,10 @@ const Url = styled.h5`
   font-weight: 500;
   display: flex;
   align-items: center;
+  color: ${(props) => props.theme.textColor};
 
   a {
-    color: #333;
+    color: ${(props) => props.theme.textColor};
     text-decoration: underline;
   }
 `
