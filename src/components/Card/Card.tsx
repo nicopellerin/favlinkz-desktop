@@ -34,10 +34,10 @@ import { maxLength, maxLengthUrl, spliceUrl, validURL } from "../../utils"
 
 interface Props {
   link: Link
-  showHeart: boolean
+  showheart: boolean
 }
 
-const Card: React.FC<Props> = ({ link, showHeart }) => {
+const Card: React.FC<Props> = ({ link, showheart }) => {
   const { pathname } = useLocation()
 
   const [showNote, setShowNote] = useState(false)
@@ -242,7 +242,7 @@ const Card: React.FC<Props> = ({ link, showHeart }) => {
           {link.rss && (
             <RssIcon
               title="Subscribe to RSS feed"
-              showHeart={showHeart ? true : false}
+              showheart={showheart}
               onClick={() =>
                 subscribeToRssFeed(
                   link.rss,
@@ -254,7 +254,7 @@ const Card: React.FC<Props> = ({ link, showHeart }) => {
               }
             />
           )}
-          {showHeart && (
+          {showheart && (
             <FaHeartWrapper
               title="Add to favorites"
               onClick={() => {
@@ -531,8 +531,8 @@ const PullCard = styled.div`
 
 const RssIcon = styled(FaRss)`
   position: absolute;
-  right: ${(props: { showHeart: boolean }) =>
-    props.showHeart ? "45px" : "10px"};
+  right: ${(props: { showheart: boolean }) =>
+    props.showheart ? "45px" : "10px"};
   bottom: 10px;
   font-size: 3rem;
   background: black;
@@ -552,8 +552,8 @@ const RssIcon = styled(FaRss)`
 
 const PdfPrint = styled(FaFilePdf)`
   position: absolute;
-  right: ${(props: { showHeart: boolean }) =>
-    props.showHeart ? "45px" : "10px"};
+  right: ${(props: { showheart: boolean }) =>
+    props.showheart ? "45px" : "10px"};
   bottom: 10px;
   font-size: 3rem;
   background: black;

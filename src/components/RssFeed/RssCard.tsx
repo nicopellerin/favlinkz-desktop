@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { FaLink, FaRss } from "react-icons/fa"
 
-import { Feed } from "../../models/feed"
+import { ParsedFeed } from "../../models/feed"
 import { db } from "../../services/firebase"
 
 import { rssState } from "../../state/rss"
@@ -14,7 +14,7 @@ import { maxLength } from "../../utils"
 import { motion } from "framer-motion"
 
 interface Props {
-  feed: Feed
+  feed: ParsedFeed
 }
 
 const RssCard: React.FC<Props> = ({ feed }) => {

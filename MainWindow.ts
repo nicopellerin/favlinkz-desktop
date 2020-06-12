@@ -17,6 +17,7 @@ export default class MainWindow extends BrowserWindow {
         nodeIntegration: true,
         enableRemoteModule: true,
         nativeWindowOpen: true,
+        nodeIntegrationInWorker: true,
       },
     })
 

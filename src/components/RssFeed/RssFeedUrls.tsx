@@ -4,14 +4,14 @@ import { motion } from "framer-motion"
 import { useHistory, Link } from "react-router-dom"
 import ReactTooltip from "react-tooltip"
 
-import { Feed } from "../../models/feed"
+import { Feed, ParsedFeed } from "../../models/feed"
 
 import dots from "../../assets/dots.svg"
 import { maxLength } from "../../utils"
 
 const RssFeedUrls = () => {
   const history = useHistory()
-  const feed = history?.location?.state?.feed as any
+  const feed = history?.location?.state?.feed
 
   const latestVariants = {
     hidden: {
@@ -60,7 +60,7 @@ const RssFeedUrls = () => {
           <DotsWrapper>
             <Dots src={dots} alt="dots" draggable="false" />
           </DotsWrapper>
-          {feed?.items?.slice(0, 10).map((feed: Feed) => (
+          {feed?.items?.slice(0, 10).map((feed: ParsedFeed) => (
             <FeedItem key={feed.title}>
               <a
                 data-tip={maxLength(feed.contentSnippet, 140)}

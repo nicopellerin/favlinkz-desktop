@@ -1,4 +1,12 @@
-import { app, BrowserWindow, Tray, Menu, ipcMain, screen } from "electron"
+import {
+  app,
+  BrowserWindow,
+  Tray,
+  Menu,
+  ipcMain,
+  screen,
+  MenuItemConstructorOptions,
+} from "electron"
 
 import MainWindow from "./MainWindow"
 
@@ -43,7 +51,7 @@ ipcMain.on("user-logged-out", (e) => {
 })
 
 // Menu
-const menu = [
+const menu: MenuItemConstructorOptions[] = [
   ...(isMac
     ? [
         {
@@ -69,7 +77,7 @@ const menu = [
               role: "reload",
             },
             {
-              role: "forcereload",
+              role: "forceReload",
             },
             {
               type: "separator",
@@ -130,4 +138,8 @@ app.whenReady().then(() => {
         break
     }
   })
+})
+
+ipcMain.on("updateTrayIcon", () => {
+  tray.setImage("./src/assets/tray-icon-notif.png")
 })

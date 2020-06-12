@@ -120,7 +120,7 @@ const Favorites = () => {
           {results
             .slice((page - 1) * 6, (page - 1) * 6 + 6)
             .map((link: Link) => (
-              <Card key={link.id} link={link} showHeart={false} />
+              <Card key={link.id} link={link} showheart={false} />
             ))}
         </CardList>
       )}

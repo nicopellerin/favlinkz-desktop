@@ -1,4 +1,5 @@
 import * as React from "react"
+import { ipcRenderer } from "electron"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
@@ -6,17 +7,18 @@ import { useRecoilValue, useRecoilState } from "recoil"
 import { FaRss } from "react-icons/fa"
 import Parser from "rss-parser"
 import Spinner from "react-spinkit"
+import { useHistory } from "react-router-dom"
 
 import RssCard from "./RssCard"
 
 import { userState } from "../../state/user"
 import { rssState, rssFeedsState } from "../../state/rss"
-import { Feed } from "../../models/feed"
+
+import { Feed, ParsedFeed } from "../../models/feed"
+
+import Worker from "./parsing.worker.js"
 
 import { db } from "../../services/firebase"
-import { useHistory } from "react-router-dom"
-
-const parser = new Parser()
 
 const userVariants = {
   hidden: {
@@ -48,13 +50,20 @@ const RssFeed = () => {
   const RSS_FEEDS_URLS = "rssFeedsUrls"
 
   const history = useHistory()
-  const prevLocation = history?.location?.state?.from as any
+  const prevLocation = history?.location?.state?.from
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const [feeds, setFeeds] = useRecoilState(rssState)
   const [rss, setRss] = useRecoilState(rssFeedsState)
   const user = useRecoilValue(userState)
+
+  const worker = new Worker()
+
+  worker.onmessage = (event) => {
+    setRss(event.data)
+    setLoading(false)
+  }
 
   useEffect(() => {
     const rssData = db
@@ -78,34 +87,21 @@ const RssFeed = () => {
     })
   }, [])
 
-  // const CORS_PROXY = "https://cors-anywhere.herokuapp.com/"
-
-  const parseRss = async (feeds) => {
-    setLoading(true)
-    const arr = []
-    for (let feed of feeds) {
-      let res = await parser.parseURL(feed.feed)
-      res = { ...res, id: feed["id"], image: feed["image"] }
-      arr.push(res)
-    }
-    setLoading(false)
-    return arr
-  }
-
-  const loadParsedRss = async () => {
-    const res = await parseRss(feeds)
-    setRss(res)
-    // cache["allFeeds"] = res
-  }
+  let feedsLastBuild = []
+  useEffect(() => {
+    ipcRenderer.send("updateTrayIcon")
+    rss.map((feed) => {
+      feedsLastBuild.push({ id: feed.id, lastBuildDate: feed.lastBuildDate })
+    })
+    localStorage.setItem("feeds", JSON.stringify(feedsLastBuild))
+  }, [rss])
 
   useEffect(() => {
-    // if (prevLocation !== RSS_FEEDS_URLS) {
-    //   loadParsedRss()
-    //   return
-    // }
-    loadParsedRss()
-
-    setLoading(false)
+    if (prevLocation !== RSS_FEEDS_URLS) {
+      worker.postMessage(feeds)
+    } else {
+      setLoading(false)
+    }
   }, [feeds])
 
   return (
@@ -116,11 +112,11 @@ const RssFeed = () => {
       exit="exit"
     >
       {feeds?.length > 0 &&
-        rss?.map((feed: Feed) => <RssCard key={feed.title} feed={feed} />)}
+        rss?.map((feed: ParsedFeed) => (
+          <RssCard key={feed.title} feed={feed} />
+        ))}
 
-      {loading && prevLocation !== RSS_FEEDS_URLS && (
-        <Spinner name="ball-pulse-rise" color="#ff5c5b" fadeIn="full" />
-      )}
+      {loading && <Spinner name="ball-pulse-rise" color="#ff5c5b" />}
 
       {!loading && feeds?.length < 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>

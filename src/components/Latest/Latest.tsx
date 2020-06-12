@@ -122,7 +122,7 @@ const Latest = () => {
           {results
             .slice((page - 1) * 6, (page - 1) * 6 + 6)
             .map((link: Link) => (
-              <Card key={link.id} link={link} showHeart={true} />
+              <Card key={link.id} link={link} showheart={true} />
             ))}
         </CardList>
       )}

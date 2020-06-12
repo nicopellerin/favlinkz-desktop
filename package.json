@@ -21,6 +21,7 @@
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
     "@types/history": "4.7.3",
+    "@types/node": "^14.0.13",
     "babel-loader": "^8.1.0",
     "babili-webpack-plugin": "^0.1.2",
     "cross-env": "^7.0.2",
@@ -33,7 +34,8 @@
     "style-loader": "^1.2.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "worker-loader": "^2.0.0"
   },
   "dependencies": {
     "@types/qs": "^6.9.3",
@@ -48,6 +50,7 @@
     "better-react-spinkit": "^2.0.4",
     "firebase": "^7.15.0",
     "framer-motion": "^2.0.0-beta.72",
+    "history": "^5.0.0",
     "qs": "^6.9.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

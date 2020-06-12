@@ -23,6 +23,10 @@ module.exports = {
         test: /\.(jpe?g|png|gif|svg)$/,
         use: [{ loader: "file-loader" }],
       },
+      {
+        test: /\.worker\.js$/,
+        use: { loader: "worker-loader" },
+      },
     ],
   },
   output: {

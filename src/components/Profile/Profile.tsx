@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useEffect } from "react"
 import styled, { keyframes } from "styled-components"
 import { motion } from "framer-motion"
 import { HashRouter as Router, Switch, Route } from "react-router-dom"
@@ -11,7 +12,14 @@ import User from "../User"
 import RssFeed from "../RssFeed"
 import RssFeedUrls from "../RssFeed/RssFeedUrls"
 
+import Worker from "../RssFeed/parsing.worker"
+
 const Profile = () => {
+  const worker = new Worker()
+
+  useEffect(() => {
+    worker.postMessage({ fetch: true })
+  }, [])
   return (
     <Router>
       <Wrapper>

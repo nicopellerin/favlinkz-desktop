@@ -50,8 +50,10 @@ const Sidebar = () => {
             color: "var(--primaryColor)",
           }}
           to="/profile/rssfeed"
+          style={{ position: "relative" }}
         >
           <IconRSS title="Rss Feed" size={22} />
+          <NotifyRSS />
         </NavLink>
         <NavLink
           activeStyle={{
@@ -123,4 +125,15 @@ const IconUser = styled(FaUser)`
 
 const IconRSS = styled(FaRss)`
   -webkit-app-region: no-drag;
+`
+
+const NotifyRSS = styled.div`
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  background: #ff3636;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  z-index: 2;
 `
