@@ -82,11 +82,13 @@ const Card: React.FC<Props> = ({ link, showHeart }) => {
     return () => clearTimeout(id)
   }, [copied])
 
+  // Add website to rss feed collection
   const subscribeToRssFeed = (
     rss: string,
     id: string,
     title: string,
-    url: string
+    url: string,
+    image: string
   ) => {
     // ipcRenderer.send("print-to-pdf", link.url)
     const newSubscription = db
@@ -95,7 +97,14 @@ const Card: React.FC<Props> = ({ link, showHeart }) => {
       .collection("rss")
       .doc(id)
 
-    newSubscription.set({ title, url, feed: rss, id, created: Date.now() })
+    newSubscription.set({
+      title,
+      url,
+      feed: rss,
+      id,
+      created: Date.now(),
+      image,
+    })
 
     setSubscribed((prevState) => !prevState)
     setAddedToRssFeed(true)
@@ -229,7 +238,13 @@ const Card: React.FC<Props> = ({ link, showHeart }) => {
               title="Subscribe to RSS feed"
               showHeart={showHeart ? true : false}
               onClick={() =>
-                subscribeToRssFeed(link.rss, link.id, link.title, link.url)
+                subscribeToRssFeed(
+                  link.rss,
+                  link.id,
+                  link.title,
+                  link.url,
+                  link.image
+                )
               }
             />
           )}

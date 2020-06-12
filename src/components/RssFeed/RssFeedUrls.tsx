@@ -1,7 +1,7 @@
 import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { useHistory } from "react-router-dom"
+import { useHistory, Link } from "react-router-dom"
 import ReactTooltip from "react-tooltip"
 
 import { Feed } from "../../models/feed"
@@ -12,8 +12,6 @@ import { maxLength } from "../../utils"
 const RssFeedUrls = () => {
   const history = useHistory()
   const feed = history?.location?.state?.feed as any
-
-  console.log(feed)
 
   const latestVariants = {
     hidden: {
@@ -48,6 +46,7 @@ const RssFeedUrls = () => {
     >
       {feed?.items?.length && (
         <FeedList>
+          {feed?.image && <FeedImage src={feed?.image} alt="Og image" />}
           <Title>
             {maxLength(
               feed?.title ||
@@ -81,28 +80,31 @@ const RssFeedUrls = () => {
           ))}
         </FeedList>
       )}
-      <PrevIcon
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{
-          type: "spring",
-          damping: 10,
-          stiffness: 80,
-          delay: 0.3,
-        }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => history.goBack()}
+      <Link
+        to={{ pathname: "/profile/rssfeed", state: { from: "rssFeedsUrls" } }}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18">
-          <path
-            d="M 0.429 0.318 C 0.843 -0.106 1.525 -0.106 1.94 0.318 L 9.493 8.055 C 9.913 8.485 9.913 9.172 9.493 9.602 L 9.493 9.602 C 9.079 10.026 8.397 10.026 7.982 9.602 L 0.429 1.865 C 0.009 1.435 0.009 0.748 0.429 0.318 Z M 9.379 8.229 C 9.799 8.659 9.799 9.346 9.379 9.776 L 1.826 17.513 C 1.412 17.937 0.729 17.937 0.315 17.513 L 0.315 17.513 C -0.105 17.083 -0.105 16.396 0.315 15.966 L 7.869 8.229 C 8.283 7.805 8.965 7.805 9.379 8.229 Z"
-            transform="translate(0.016 0.085) rotate(-180 4.904 8.916)"
-            fill={"var(--primaryColor)"}
-          ></path>
-        </svg>
-        <BackText>Back</BackText>
-      </PrevIcon>
+        <PrevIcon
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{
+            type: "spring",
+            damping: 10,
+            stiffness: 80,
+            delay: 0.3,
+          }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18">
+            <path
+              d="M 0.429 0.318 C 0.843 -0.106 1.525 -0.106 1.94 0.318 L 9.493 8.055 C 9.913 8.485 9.913 9.172 9.493 9.602 L 9.493 9.602 C 9.079 10.026 8.397 10.026 7.982 9.602 L 0.429 1.865 C 0.009 1.435 0.009 0.748 0.429 0.318 Z M 9.379 8.229 C 9.799 8.659 9.799 9.346 9.379 9.776 L 1.826 17.513 C 1.412 17.937 0.729 17.937 0.315 17.513 L 0.315 17.513 C -0.105 17.083 -0.105 16.396 0.315 15.966 L 7.869 8.229 C 8.283 7.805 8.965 7.805 9.379 8.229 Z"
+              transform="translate(0.016 0.085) rotate(-180 4.904 8.916)"
+              fill={"var(--primaryColor)"}
+            ></path>
+          </svg>
+          <BackText>Back</BackText>
+        </PrevIcon>
+      </Link>
     </Wrapper>
   )
 }
@@ -121,6 +123,7 @@ const Wrapper = styled(motion.div)`
 const FeedList = styled(motion.ul)`
   list-style: none;
   padding: 0;
+  margin-top: 0;
   transition: color 300ms ease-in-out;
   height: calc(100% - 100px);
   display: flex;
@@ -142,7 +145,7 @@ const FeedItem = styled.li`
   font-size: 1.6rem;
 
   &:not(:last-child) {
-    margin-bottom: 2rem;
+    margin-bottom: 1.4rem;
   }
 `
 
@@ -157,7 +160,7 @@ const Title = styled.h3`
 
 const Url = styled.h5`
   font-size: 1.6rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2.6rem;
   /* font-weight: 400; */
 `
 
@@ -168,7 +171,7 @@ const DotsWrapper = styled.div`
 `
 
 const Dots = styled.img`
-  margin: 0rem 0 3rem;
+  margin: 0rem 0 2.6rem;
   text-align: center;
 `
 
@@ -190,4 +193,11 @@ const BackText = styled.span`
   margin-left: 1rem;
   font-size: 1.4rem;
   color: var(--primaryColor);
+`
+
+const FeedImage = styled.img`
+  width: 7.5rem;
+  height: 7.5rem;
+  object-fit: cover;
+  margin-bottom: 1.6rem;
 `

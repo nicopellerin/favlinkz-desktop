@@ -22,10 +22,8 @@ const RssCard: React.FC<Props> = ({ feed }) => {
 
   const removeFeed = (id: string) => {
     const newFeeds = feeds.filter((f) => f.id !== id)
-
     const rssFeed = db.collection(`users`).doc(user.uid).collection("rss")
     rssFeed.doc(id).delete()
-
     setFeeds(newFeeds)
   }
 
@@ -95,6 +93,7 @@ const Title = styled.h3`
 const Desc = styled.h5`
   font-size: 1.6rem;
   margin-bottom: 1.6rem;
+  transition: color 300ms ease-in-out;
   color: ${(props) => props.theme.textColor};
 `
 
@@ -103,9 +102,11 @@ const Url = styled.h5`
   font-weight: 500;
   display: flex;
   align-items: center;
+  transition: color 300ms ease-in-out;
   color: ${(props) => props.theme.textColor};
 
   a {
+    transition: color 300ms ease-in-out;
     color: ${(props) => props.theme.textColor};
     text-decoration: underline;
   }

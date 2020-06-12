@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
 import { FaRss } from "react-icons/fa"
 import Parser from "rss-parser"
-import uuid from "uuid/v4"
+import Spinner from "react-spinkit"
 
 import RssCard from "./RssCard"
 
@@ -14,6 +14,7 @@ import { rssState, rssFeedsState } from "../../state/rss"
 import { Feed } from "../../models/feed"
 
 import { db } from "../../services/firebase"
+import { useHistory } from "react-router-dom"
 
 const parser = new Parser()
 
@@ -44,6 +45,11 @@ const userVariants = {
 // const cache = {}
 
 const RssFeed = () => {
+  const RSS_FEEDS_URLS = "rssFeedsUrls"
+
+  const history = useHistory()
+  const prevLocation = history?.location?.state?.from as any
+
   const [loading, setLoading] = useState(false)
 
   const [feeds, setFeeds] = useRecoilState(rssState)
@@ -75,14 +81,14 @@ const RssFeed = () => {
   // const CORS_PROXY = "https://cors-anywhere.herokuapp.com/"
 
   const parseRss = async (feeds) => {
-    // setLoading(true)
+    setLoading(true)
     const arr = []
     for (let feed of feeds) {
       let res = await parser.parseURL(feed.feed)
-      res = { ...res, id: feed["id"] }
+      res = { ...res, id: feed["id"], image: feed["image"] }
       arr.push(res)
     }
-    // setLoading(false)
+    setLoading(false)
     return arr
   }
 
@@ -93,12 +99,16 @@ const RssFeed = () => {
   }
 
   useEffect(() => {
-    loadParsedRss()
-  }, [rss])
+    if (prevLocation !== RSS_FEEDS_URLS) {
+      loadParsedRss()
+      return
+    }
+    setLoading(false)
+  }, [])
 
-  // if (loading) {
-  //   return null
-  // }
+  if (loading && prevLocation !== RSS_FEEDS_URLS) {
+    return <Spinner name="ball-pulse-rise" color="#ff5c5b" fadeIn="full" />
+  }
 
   return (
     <Wrapper
