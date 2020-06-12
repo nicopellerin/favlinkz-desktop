@@ -104,11 +104,7 @@ const RssFeed = () => {
       return
     }
     setLoading(false)
-  }, [])
-
-  if (loading && prevLocation !== RSS_FEEDS_URLS) {
-    return <Spinner name="ball-pulse-rise" color="#ff5c5b" fadeIn="full" />
-  }
+  }, [feeds])
 
   return (
     <Wrapper
@@ -119,6 +115,10 @@ const RssFeed = () => {
     >
       {feeds?.length > 0 &&
         rss?.map((feed: Feed) => <RssCard key={feed.title} feed={feed} />)}
+
+      {loading && prevLocation !== RSS_FEEDS_URLS && (
+        <Spinner name="ball-pulse-rise" color="#ff5c5b" fadeIn="full" />
+      )}
 
       {!loading && feeds?.length < 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>

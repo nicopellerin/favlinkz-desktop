@@ -3,14 +3,26 @@ import { ipcRenderer } from "electron"
 import styled from "styled-components"
 import { FaHeart, FaSignOutAlt, FaUser, FaLink, FaRss } from "react-icons/fa"
 import { NavLink, Link } from "react-router-dom"
+import { useSetRecoilState } from "recoil"
+
+import { favoritesState } from "../../state/favorites"
+import { latestState } from "../../state/latest"
 
 import { firebase } from "../../services/firebase"
+import { rssFeedsState } from "../../state/rss"
 
 const Sidebar = () => {
+  const resetLatest = useSetRecoilState(latestState)
+  const resetFavorites = useSetRecoilState(favoritesState)
+  const resetRssFeed = useSetRecoilState(rssFeedsState)
+
   const handleSignOut = () => {
     ipcRenderer.send("user-logged-out")
     firebase.auth().signOut()
     localStorage.removeItem("userFavLinkz")
+    resetFavorites([])
+    resetLatest([])
+    resetRssFeed([])
   }
 
   return (

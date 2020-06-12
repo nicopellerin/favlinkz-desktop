@@ -30,7 +30,7 @@ import { userState } from "../../state/user"
 
 import { db } from "../../services/firebase"
 
-import { maxLength, maxLengthUrl, spliceUrl } from "../../utils"
+import { maxLength, maxLengthUrl, spliceUrl, validURL } from "../../utils"
 
 interface Props {
   link: Link
@@ -162,10 +162,16 @@ const Card: React.FC<Props> = ({ link, showHeart }) => {
   }
 
   const ogImage = (image: string, url: string) => {
-    if (!image.startsWith("http")) {
-      return `${url}/${image}`
+    if (image.match(/\.(jpg|gif|png)$/) === null) {
+      return `https://i0.wp.com/www.littlebitesofbeauty.com/wp-content/uploads/2015/06/default-placeholder.png`
     }
-    return image
+    if (!image.startsWith("http")) {
+      return `https://images.weserv.nl/?url=${encodeURI(
+        `${url}/${image}`
+      )}&w=550`
+    }
+
+    return `https://images.weserv.nl/?url=${encodeURI(image)}&w=550`
   }
 
   return (
