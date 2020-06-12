@@ -11,6 +11,7 @@ import { rssState } from "../../state/rss"
 import { userState } from "../../state/user"
 
 import { maxLength } from "../../utils"
+import { motion } from "framer-motion"
 
 interface Props {
   feed: Feed
@@ -28,7 +29,7 @@ const RssCard: React.FC<Props> = ({ feed }) => {
   }
 
   return (
-    <Card>
+    <Card animate>
       <Heading>
         <div>
           <Title title={feed?.title}>
@@ -67,7 +68,7 @@ const RssCard: React.FC<Props> = ({ feed }) => {
 export default RssCard
 
 // Styles
-const Card = styled.div`
+const Card = styled(motion.div)`
   width: 80rem;
 
   &:not(:first-child) {

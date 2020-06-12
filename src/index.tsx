@@ -13,7 +13,6 @@ import LoginPage from "./containers/LoginPage"
 import { userState } from "./state/user"
 
 import { GlobalStyles } from "./styles/GlobalStyles"
-import PrivateRoute from "./components/PrivateRoute"
 
 const root = document.createElement("div")
 root.style.height = "100%"

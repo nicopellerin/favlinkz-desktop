@@ -73,7 +73,7 @@ const RssFeedUrls = () => {
                 backgroundColor="#5856d7"
                 border={true}
                 borderColor="#615de0"
-                delayShow={1000}
+                delayShow={500}
                 delayUpdate={0}
               />
             </FeedItem>

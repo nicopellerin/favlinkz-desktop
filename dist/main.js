@@ -114,7 +114,6 @@ class MainWindow extends electron__WEBPACK_IMPORTED_MODULE_0__["BrowserWindow"] 
       title: "favlinkz",
       resizable: userLoggedIn ? true : false,
       titleBarStyle: "hiddenInset",
-      icon: "src/assets/icon_144.png",
       show: false,
       backgroundColor: "#5856d7",
       webPreferences: {

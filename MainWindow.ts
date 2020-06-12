@@ -11,7 +11,6 @@ export default class MainWindow extends BrowserWindow {
       title: "favlinkz",
       resizable: userLoggedIn ? true : false,
       titleBarStyle: "hiddenInset",
-      icon: "src/assets/icon_144.png",
       show: false,
       backgroundColor: "#5856d7",
       webPreferences: {
@@ -26,7 +25,7 @@ export default class MainWindow extends BrowserWindow {
     } else {
       this.loadURL(
         url.format({
-          pathname: path.join(__dirname, "./src", "index.html"),
+          pathname: path.join(__dirname, "./dist", "index.html"),
           protocol: "file:",
           slashes: true,
         })

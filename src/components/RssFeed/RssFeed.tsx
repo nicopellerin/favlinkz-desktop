@@ -99,10 +99,12 @@ const RssFeed = () => {
   }
 
   useEffect(() => {
-    if (prevLocation !== RSS_FEEDS_URLS) {
-      loadParsedRss()
-      return
-    }
+    // if (prevLocation !== RSS_FEEDS_URLS) {
+    //   loadParsedRss()
+    //   return
+    // }
+    loadParsedRss()
+
     setLoading(false)
   }, [feeds])
 
