@@ -230,6 +230,7 @@ const PaginateControls = styled(motion.div)`
   bottom: 4rem;
   justify-content: space-around;
   width: 12rem;
+  z-index: 9999;
 `
 
 const PrevIcon = styled(motion.div)`

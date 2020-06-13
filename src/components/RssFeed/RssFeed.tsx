@@ -53,7 +53,10 @@ const RssFeed = () => {
     ipcRenderer.send("updateTrayIconNotifsSeen")
     setNewFeedSeen(true)
     rss.map((feed) => {
-      feedsLastBuild[feed.id] = { lastBuildDate: feed.lastBuildDate }
+      feedsLastBuild[feed.id] = {
+        lastBuildDate: feed.lastBuildDate,
+        id: feed.id,
+      }
     })
     localStorage.setItem("feeds", JSON.stringify(feedsLastBuild))
   }, [rss])

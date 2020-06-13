@@ -7,7 +7,7 @@ import { FaLink, FaRss } from "react-icons/fa"
 import { ParsedFeed } from "../../models/feed"
 import { db } from "../../services/firebase"
 
-import { rssState } from "../../state/rss"
+import { rssState, rssNewFeedIds } from "../../state/rss"
 import { userState } from "../../state/user"
 
 import { maxLength } from "../../utils"
@@ -19,6 +19,7 @@ interface Props {
 
 const RssCard: React.FC<Props> = ({ feed }) => {
   const [feeds, setFeeds] = useRecoilState(rssState)
+  const [newFeedIds, setNewFeedIds] = useRecoilState(rssNewFeedIds)
   const user = useRecoilValue(userState)
 
   const removeFeed = (id: string) => {
@@ -28,11 +29,21 @@ const RssCard: React.FC<Props> = ({ feed }) => {
     setFeeds(newFeeds)
   }
 
+  const toggleFeedToSeen = (id: string) => {
+    const rssNewFeedIdsArr = newFeedIds.filter((f) => f !== id)
+    console.log(rssNewFeedIdsArr)
+
+    setNewFeedIds(rssNewFeedIdsArr)
+  }
+
+  console.log("IDSSSSS", newFeedIds)
+
   return (
     <Card animate>
       <Heading>
         <div>
           <Title title={feed?.title}>
+            {newFeedIds.includes(feed?.id) && <NotifyRSS />}
             {maxLength(
               feed?.title ||
                 feed?.link?.split(".")[1][0].toUpperCase() +
@@ -52,7 +63,7 @@ const RssCard: React.FC<Props> = ({ feed }) => {
           <Link
             to={{ pathname: `/profile/rssfeed/${feed?.id}`, state: { feed } }}
           >
-            <ShowFeedButton>
+            <ShowFeedButton onClick={() => toggleFeedToSeen(feed?.id)}>
               Show feed <FaRss style={{ marginLeft: 5 }} />
             </ShowFeedButton>
           </Link>
@@ -89,6 +100,7 @@ const Title = styled.h3`
   margin-bottom: 1rem;
   font-size: 2.8rem;
   font-weight: 500;
+  position: relative;
 `
 
 const Desc = styled.h5`
@@ -105,6 +117,7 @@ const Url = styled.h5`
   align-items: center;
   transition: color 300ms ease-in-out;
   color: ${(props) => props.theme.textColor};
+  position: relative;
 
   a {
     transition: color 300ms ease-in-out;
@@ -139,4 +152,16 @@ const ShowFeedButton = styled(RemoveButton)`
   margin-right: 1rem;
   display: flex;
   align-items: center;
+`
+
+const NotifyRSS = styled.div`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: -20px;
+  background: #ff3636;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  z-index: 2;
 `

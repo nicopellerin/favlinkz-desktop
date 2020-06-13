@@ -14,3 +14,8 @@ export const rssNewFeedSeen = atom<boolean>({
   key: "rssNewFeedSeen",
   default: true,
 })
+
+export const rssNewFeedIds = atom<Array<any>>({
+  key: "rssNewFeedIds",
+  default: [],
+})

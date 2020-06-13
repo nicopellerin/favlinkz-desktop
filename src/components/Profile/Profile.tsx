@@ -17,7 +17,12 @@ import RssFeedUrls from "../RssFeed/RssFeedUrls"
 import { db } from "../../services/firebase"
 
 import { userState } from "../../state/user"
-import { rssState, rssFeedsState, rssNewFeedSeen } from "../../state/rss"
+import {
+  rssState,
+  rssFeedsState,
+  rssNewFeedSeen,
+  rssNewFeedIds,
+} from "../../state/rss"
 
 import Worker from "../RssFeed/parsing.worker"
 
@@ -27,6 +32,7 @@ const Profile = () => {
   const [feeds, setFeeds] = useRecoilState(rssState)
   const [rss, setRss] = useRecoilState(rssFeedsState)
   const [newFeedSeen, setNewFeedSeen] = useRecoilState(rssNewFeedSeen)
+  const [newFeedIds, setNewFeedIds] = useRecoilState(rssNewFeedIds)
 
   const user = useRecoilValue(userState)
 
@@ -55,9 +61,11 @@ const Profile = () => {
 
   useEffect(() => {
     worker.onmessage = (event) => {
-      if (event.data === "new RSS feed") {
+      console.log(event)
+      if (event.data.msg === "newRssFeed") {
         ipcRenderer.send("updateTrayIcon")
         setNewFeedSeen(false)
+        setNewFeedIds((prevState) => [...prevState, event.data.id])
       }
 
       setRss(event.data)
@@ -65,6 +73,7 @@ const Profile = () => {
   }, [])
 
   useEffect(() => {
+    console.log(newFeedIds)
     const data = localStorage.getItem("feeds")
     worker.postMessage({ type: "lastFeedsBuild", data })
   }, [rss])
