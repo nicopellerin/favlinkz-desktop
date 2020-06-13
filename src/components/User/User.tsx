@@ -1,9 +1,11 @@
 import * as React from "react"
+import { useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { useRecoilValue } from "recoil"
+import { useRecoilValue, useRecoilState } from "recoil"
 
-import { userState, totalLinks } from "../../state/user"
+import { userState } from "../../state/user"
+import { soundNotifsOnState } from "../../state/notifications"
 
 const userVariants = {
   hidden: {
@@ -31,7 +33,7 @@ const userVariants = {
 
 const User = () => {
   const { displayName, photoUrl, email } = useRecoilValue(userState)
-  const totalLinksLength = useRecoilValue(totalLinks)
+  const [soundNotifsOn, setSoundNotifsOn] = useRecoilState(soundNotifsOnState)
 
   return (
     <Wrapper
@@ -44,9 +46,21 @@ const User = () => {
         <UserImage src={photoUrl} alt="avatar" draggable="false" />
         <Name>{displayName}</Name>
         <Email>{email}</Email>
-        <TotalLinks>Total links: {totalLinksLength}</TotalLinks>
+        <SoundNotifsWrapper>
+          <SoundNotifsText>Sound notifications</SoundNotifsText>
+          <ToggleSwitch
+            onClick={() => setSoundNotifsOn((prevState) => !prevState)}
+          >
+            <ToggleSwitchCheckbox type="checkbox" name="status" id="status" />
+            <ToggleSwitchLabel>
+              <ToggleSwitchInner isPrivate={soundNotifsOn ? true : false} />
+              <ToggleSwitchSwitch
+                isPrivate={soundNotifsOn ? true : false}
+              ></ToggleSwitchSwitch>
+            </ToggleSwitchLabel>
+          </ToggleSwitch>
+        </SoundNotifsWrapper>
         <DeleteAccount
-          // initial={{ opacity: 0 }}
           animate={{ opacity: [0, 1] }}
           transition={{ delay: 0.2 }}
         >
@@ -96,12 +110,6 @@ const Email = styled.h5`
   user-select: none;
 `
 
-const TotalLinks = styled.h3`
-  font-size: 2rem;
-  color: var(--secondaryColor);
-  user-select: none;
-`
-
 const DeleteAccount = styled(motion.span)`
   position: fixed;
   bottom: 5rem;
@@ -110,4 +118,101 @@ const DeleteAccount = styled(motion.span)`
   font-size: 1.4rem;
   font-weight: 500;
   user-select: none;
+`
+
+const SoundNotifsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 2.5rem;
+`
+
+const SoundNotifsText = styled.span`
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: ${(props) => props.theme.textColor};
+  margin-right: 1rem;
+`
+
+const ToggleSwitch = styled.div`
+  position: relative;
+  width: 50px;
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  text-align: left;
+`
+
+const ToggleSwitchCheckbox = styled.input`
+  display: none;
+`
+
+const ToggleSwitchLabel = styled.label`
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  margin: 0;
+  box-shadow: inset rgba(0, 0, 0, 0.1) 0px 7px 15px;
+`
+
+const ToggleSwitchInner = styled.span`
+  display: block;
+  width: 100%;
+  margin-left: ${(props: { isPrivate: boolean }) =>
+    props.isPrivate ? 0 : "-100%"};
+  transition: margin 0.3s ease-in 0s;
+
+  &:before,
+  :after {
+    display: block;
+    float: left;
+    width: 50%;
+    height: 25px;
+    padding: 0;
+    line-height: 25px;
+    font-size: 1.4em;
+    color: white;
+    font-family: inherit;
+    font-weight: 500;
+    box-sizing: border-box;
+  }
+
+  &:before {
+    content: "On";
+    padding-left: 15px;
+    background-color: #fff;
+    color: #fff;
+  }
+
+  &:after {
+    content: "Off";
+    padding-right: 13px;
+    background-color: #fff;
+    color: #fff;
+    text-align: right;
+  }
+`
+
+const ToggleSwitchSwitch = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  margin: 0px;
+  background: ${(props: { isPrivate: boolean }) =>
+    props.isPrivate ? "#00c29f" : "crimson"};
+  position: absolute;
+  top: -1px;
+  bottom: 0;
+  right: ${(props: { isPrivate: boolean }) =>
+    props.isPrivate ? "0px" : "21px"};
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  transition: all 0.3s ease-in 0s;
+  color: #fff;
+  filter: drop-shadow(0 0 0.75rem rgba(89, 86, 213, 0.25));
 `

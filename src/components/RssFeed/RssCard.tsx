@@ -31,12 +31,8 @@ const RssCard: React.FC<Props> = ({ feed }) => {
 
   const toggleFeedToSeen = (id: string) => {
     const rssNewFeedIdsArr = newFeedIds.filter((f) => f !== id)
-    console.log(rssNewFeedIdsArr)
-
     setNewFeedIds(rssNewFeedIdsArr)
   }
-
-  console.log("IDSSSSS", newFeedIds)
 
   return (
     <Card animate>

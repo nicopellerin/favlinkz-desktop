@@ -57,7 +57,9 @@ const RssFeedUrls = () => {
             )}
           </Title>
           <Url>
-            <a href={feed?.link}>{feed?.link}</a>
+            <a href={feed?.link} target="_blank">
+              {feed?.link}
+            </a>
           </Url>
           <DotsWrapper>
             <Dots src={dots} alt="dots" draggable="false" />
