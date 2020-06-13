@@ -15,8 +15,6 @@ const getFeeds = async () => {
       parsedLastBuilds = JSON.parse(event.data.data)
     }
 
-    console.log("yo")
-
     const newFeeds = []
     const feeds = event.data
 

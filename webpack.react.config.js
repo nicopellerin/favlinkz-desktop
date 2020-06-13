@@ -1,6 +1,8 @@
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 
+const SRC = path.resolve(__dirname, "node_modules")
+
 module.exports = {
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
@@ -29,6 +31,10 @@ module.exports = {
       {
         test: /\.worker\.js$/,
         use: { loader: "worker-loader" },
+      },
+      {
+        test: /\.mp3$/,
+        loader: "file-loader",
       },
     ],
   },

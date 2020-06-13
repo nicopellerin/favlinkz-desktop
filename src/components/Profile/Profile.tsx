@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { HashRouter as Router, Switch, Route } from "react-router-dom"
 import { ipcRenderer } from "electron"
 import { useRecoilState, useRecoilValue } from "recoil"
+import UIfx from "uifx"
 
 import Navbar from "../Navbar/Navbar"
 import Sidebar from "../Sidebar"
@@ -59,13 +60,17 @@ const Profile = () => {
     })
   }, [])
 
+  const beep = new Audio(
+    "https://cdn.glitch.com/35252802-b02a-4d63-9536-c72e10d1998c%2Fbeep.mp3?1558053587340"
+  )
+
   useEffect(() => {
     worker.onmessage = (event) => {
-      console.log(event)
       if (event.data.msg === "newRssFeed") {
         ipcRenderer.send("updateTrayIcon")
         setNewFeedSeen(false)
         setNewFeedIds((prevState) => [...prevState, event.data.id])
+        beep.play()
       }
 
       setRss(event.data)
@@ -73,7 +78,6 @@ const Profile = () => {
   }, [])
 
   useEffect(() => {
-    console.log(newFeedIds)
     const data = localStorage.getItem("feeds")
     worker.postMessage({ type: "lastFeedsBuild", data })
   }, [rss])

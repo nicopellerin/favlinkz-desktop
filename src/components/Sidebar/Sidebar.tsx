@@ -36,7 +36,7 @@ const Sidebar = () => {
             color: "var(--primaryColor)",
           }}
         >
-          <IconLink title="Latest" size={21} />
+          <IconLink onClick={() => beep.play()} title="Latest" size={21} />
         </NavLink>
         <NavLink
           activeStyle={{
