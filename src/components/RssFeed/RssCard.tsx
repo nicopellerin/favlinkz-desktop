@@ -92,10 +92,11 @@ const Heading = styled.div`
 `
 
 const Title = styled.h3`
-  color: var(--primaryColor);
+  color: ${(props) => props.theme.rssCardTitle};
   margin-bottom: 1rem;
   font-size: 2.8rem;
   font-weight: 500;
+  transition: color 300ms ease-in-out;
   position: relative;
 `
 

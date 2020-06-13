@@ -11,4 +11,7 @@ export default {
   prevIcon: "rgba(0,0,0, 0.1)",
   nextIcon: "rgba(0,0,0, 0.1)",
   textColor: "#fafafa",
+  toggleWrapperBackground: "#222",
+  toggleWrapperText: "#fafafa",
+  rssCardTitle: "fafafa",
 }

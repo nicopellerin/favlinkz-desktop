@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState, useContext } from "react"
+import { useContext } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
@@ -109,6 +109,7 @@ const UserImage = styled.img`
   width: 100px;
   margin-bottom: 2rem;
   border-radius: 50%;
+  user-select: none;
 `
 
 const Name = styled.h3`
@@ -116,6 +117,7 @@ const Name = styled.h3`
   font-size: 3.2rem;
   margin-bottom: 1.6rem;
   user-select: none;
+  transition: color 300ms ease-in-out;
 `
 
 const Email = styled.h5`
@@ -139,17 +141,19 @@ const ToggleWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-top: 2rem;
-  background: #f8f8f8;
+  background: ${(props) => props.theme.toggleWrapperBackground};
   padding: 0.8rem 1.8rem;
   border-radius: 2rem;
-  box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.03);
+  transition: background 0.3s ease-in 0s;
 `
 
 const ToggleText = styled.span`
   font-size: 1.4rem;
   font-weight: 600;
-  color: #555;
+  color: ${(props) => props.theme.toggleWrapperText};
   margin-right: 1rem;
+  transition: color 0.3s ease-in 0s;
 `
 
 const ToggleSwitch = styled.div`
@@ -222,7 +226,7 @@ const ToggleSwitchSwitch = styled.span`
   height: 28px;
   margin: 0px;
   background: ${(props: { isPrivate: boolean }) =>
-    props.isPrivate ? "#00c29f" : "crimson"};
+    props.isPrivate ? "#00c29f" : "#f4f4f4"};
   position: absolute;
   top: -1px;
   bottom: 0;
