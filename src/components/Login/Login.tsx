@@ -70,12 +70,12 @@ const Login = () => {
         handleNavigation(url)
       })
 
-      // authWindow.webContents.on(
-      //   "did-get-redirect-request",
-      //   (event, oldUrl, newUrl) => {
-      //     handleNavigation(newUrl)
-      //   }
-      // )
+      authWindow.webContents.on(
+        "did-get-redirect-request",
+        (event, oldUrl, newUrl) => {
+          handleNavigation(newUrl)
+        }
+      )
 
       authWindow.loadURL(authUrl, {
         userAgent: "Chrome",
