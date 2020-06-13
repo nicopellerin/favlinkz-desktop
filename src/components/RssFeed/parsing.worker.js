@@ -14,9 +14,9 @@ const getFeeds = async () => {
     if (event.data.type === "lastFeedsBuild") {
       parsedLastBuilds = JSON.parse(event.data.data)
     }
+    const feeds = event.data
 
     const newFeeds = []
-    const feeds = event.data
 
     if (feeds.length) {
       for (let feed of feeds) {
