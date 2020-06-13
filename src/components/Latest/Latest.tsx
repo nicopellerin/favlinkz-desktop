@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
@@ -99,6 +99,10 @@ const Latest = () => {
     }
   }, [user])
 
+  const swoosh = new Audio(
+    "https://cdn.glitch.com/35252802-b02a-4d63-9536-c72e10d1998c%2Fbeep.mp3?1558053587340"
+  )
+
   if (loading) {
     return (
       <NoMatchingResults>
@@ -165,7 +169,10 @@ const Latest = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           disabled={page + 1 > totalPages || results?.length <= 6}
-          onClick={() => nextPage(page)}
+          onClick={() => {
+            nextPage(page)
+            swoosh.play()
+          }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18">
             <path
