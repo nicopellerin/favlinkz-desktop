@@ -100,7 +100,7 @@ const Latest = () => {
   }, [user])
 
   const swoosh = new Audio(
-    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/slide-metal.aif"
+    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/slide-metal.mp3"
   )
 
   if (loading) {
