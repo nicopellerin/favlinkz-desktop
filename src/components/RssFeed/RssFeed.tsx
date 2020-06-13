@@ -1,68 +1,62 @@
 import * as React from "react"
-import { ipcRenderer } from "electron"
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { useRecoilValue, useRecoilState } from "recoil"
+import { useRecoilState } from "recoil"
 import { FaRss } from "react-icons/fa"
-import Parser from "rss-parser"
 import Spinner from "react-spinkit"
-import { useHistory } from "react-router-dom"
+import { ipcRenderer } from "electron"
 
 import RssCard from "./RssCard"
 
-import { userState } from "../../state/user"
-import { rssState, rssFeedsState } from "../../state/rss"
+import { rssState, rssFeedsState, rssNewFeedSeen } from "../../state/rss"
 
-import { Feed, ParsedFeed } from "../../models/feed"
+import { ParsedFeed } from "../../models/feed"
 
-import Worker from "./parsing.worker.js"
-
-import { db } from "../../services/firebase"
-
-const userVariants = {
-  hidden: {
-    y: -40,
-  },
-  show: {
-    y: -50,
-    transition: {
-      type: "spring",
-      damping: 10,
-      stiffness: 80,
-      velocity: 2,
-      staggerChildren: 0.02,
-    },
-  },
-  exit: {
-    transition: {
-      type: "tween",
-      damping: 100,
-      stiffness: 80,
-      staggerChildren: 0.5,
-    },
-  },
+interface A {
+  lastBuildDate: Date
 }
 
-// const cache = {}
-
 const RssFeed = () => {
-  const history = useHistory()
-
   const [loading, setLoading] = useState(false)
 
   const [feeds, setFeeds] = useRecoilState(rssState)
+  const [newFeedSeen, setNewFeedSeen] = useRecoilState(rssNewFeedSeen)
   const [rss, setRss] = useRecoilState(rssFeedsState)
-  const user = useRecoilValue(userState)
 
-  // let feedsLastBuild = []
-  // useEffect(() => {
-  //   ipcRenderer.send("updateTrayIcon")
-  //   rss.map((feed) => {
-  //     feedsLastBuild.push({ id: feed.id, lastBuildDate: feed.lastBuildDate })
-  //   })
-  //   localStorage.setItem("feeds", JSON.stringify(feedsLastBuild))
-  // }, [rss])
+  const userVariants = {
+    hidden: {
+      y: -40,
+    },
+    show: {
+      y: -50,
+      transition: {
+        type: "spring",
+        damping: 10,
+        stiffness: 80,
+        velocity: 2,
+        staggerChildren: 0.02,
+      },
+    },
+    exit: {
+      transition: {
+        type: "tween",
+        damping: 100,
+        stiffness: 80,
+        staggerChildren: 0.5,
+      },
+    },
+  }
+
+  let feedsLastBuild = {}
+  useEffect(() => {
+    ipcRenderer.send("updateTrayIconNotifsSeen")
+    setNewFeedSeen(true)
+    rss.map((feed) => {
+      feedsLastBuild[feed.id] = { lastBuildDate: feed.lastBuildDate }
+    })
+    localStorage.setItem("feeds", JSON.stringify(feedsLastBuild))
+  }, [rss])
 
   return (
     <Wrapper
@@ -76,7 +70,7 @@ const RssFeed = () => {
           <RssCard key={feed.title} feed={feed} />
         ))}
 
-      {/* {loading && <Spinner name="ball-pulse-rise" color="#ff5c5b" />} */}
+      {loading && <Spinner name="ball-pulse-rise" color="#ff5c5b" />}
 
       {!loading && feeds?.length < 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>

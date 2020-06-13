@@ -3,6 +3,8 @@ import { useEffect } from "react"
 import styled, { keyframes } from "styled-components"
 import { motion } from "framer-motion"
 import { HashRouter as Router, Switch, Route } from "react-router-dom"
+import { ipcRenderer } from "electron"
+import { useRecoilState, useRecoilValue } from "recoil"
 
 import Navbar from "../Navbar/Navbar"
 import Sidebar from "../Sidebar"
@@ -12,17 +14,19 @@ import User from "../User"
 import RssFeed from "../RssFeed"
 import RssFeedUrls from "../RssFeed/RssFeedUrls"
 
-import Worker from "../RssFeed/parsing.worker"
 import { db } from "../../services/firebase"
+
 import { userState } from "../../state/user"
-import { rssState, rssFeedsState } from "../../state/rss"
-import { useRecoilState, useRecoilValue } from "recoil"
+import { rssState, rssFeedsState, rssNewFeedSeen } from "../../state/rss"
+
+import Worker from "../RssFeed/parsing.worker"
 
 const Profile = () => {
   const worker = new Worker()
 
   const [feeds, setFeeds] = useRecoilState(rssState)
   const [rss, setRss] = useRecoilState(rssFeedsState)
+  const [newFeedSeen, setNewFeedSeen] = useRecoilState(rssNewFeedSeen)
 
   const user = useRecoilValue(userState)
 
@@ -50,8 +54,18 @@ const Profile = () => {
   }, [])
 
   worker.onmessage = (event) => {
+    if (event.data === "new RSS feed") {
+      ipcRenderer.send("updateTrayIcon")
+      setNewFeedSeen(false)
+    }
+
     setRss(event.data)
   }
+
+  useEffect(() => {
+    const data = localStorage.getItem("feeds")
+    worker.postMessage({ type: "lastFeedsBuild", data })
+  }, [rss])
 
   return (
     <Router>

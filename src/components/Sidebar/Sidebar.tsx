@@ -3,18 +3,19 @@ import { ipcRenderer } from "electron"
 import styled from "styled-components"
 import { FaHeart, FaSignOutAlt, FaUser, FaLink, FaRss } from "react-icons/fa"
 import { NavLink, Link } from "react-router-dom"
-import { useSetRecoilState } from "recoil"
+import { useSetRecoilState, useRecoilValue } from "recoil"
 
 import { favoritesState } from "../../state/favorites"
 import { latestState } from "../../state/latest"
+import { rssFeedsState, rssNewFeedSeen } from "../../state/rss"
 
 import { firebase } from "../../services/firebase"
-import { rssFeedsState } from "../../state/rss"
 
 const Sidebar = () => {
   const resetLatest = useSetRecoilState(latestState)
   const resetFavorites = useSetRecoilState(favoritesState)
   const resetRssFeed = useSetRecoilState(rssFeedsState)
+  const newFeedSeen = useRecoilValue(rssNewFeedSeen)
 
   const handleSignOut = () => {
     ipcRenderer.send("user-logged-out")
@@ -53,7 +54,7 @@ const Sidebar = () => {
           style={{ position: "relative" }}
         >
           <IconRSS title="Rss Feed" size={22} />
-          <NotifyRSS />
+          {!newFeedSeen && <NotifyRSS />}
         </NavLink>
         <NavLink
           activeStyle={{

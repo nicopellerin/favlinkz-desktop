@@ -143,3 +143,7 @@ app.whenReady().then(() => {
 ipcMain.on("updateTrayIcon", () => {
   tray.setImage("./src/assets/tray-icon-notif.png")
 })
+
+ipcMain.on("updateTrayIconNotifsSeen", () => {
+  tray.setImage("./src/assets/tray-icon.png")
+})
