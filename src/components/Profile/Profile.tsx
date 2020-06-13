@@ -53,14 +53,16 @@ const Profile = () => {
     })
   }, [])
 
-  worker.onmessage = (event) => {
-    if (event.data === "new RSS feed") {
-      ipcRenderer.send("updateTrayIcon")
-      setNewFeedSeen(false)
-    }
+  useEffect(() => {
+    worker.onmessage = (event) => {
+      if (event.data === "new RSS feed") {
+        ipcRenderer.send("updateTrayIcon")
+        setNewFeedSeen(false)
+      }
 
-    setRss(event.data)
-  }
+      setRss(event.data)
+    }
+  }, [])
 
   useEffect(() => {
     const data = localStorage.getItem("feeds")

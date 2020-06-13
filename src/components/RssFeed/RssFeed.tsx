@@ -66,9 +66,7 @@ const RssFeed = () => {
       exit="exit"
     >
       {feeds?.length > 0 &&
-        rss?.map((feed: ParsedFeed) => (
-          <RssCard key={feed.title} feed={feed} />
-        ))}
+        rss?.map((feed: ParsedFeed) => <RssCard key={feed.id} feed={feed} />)}
 
       {loading && <Spinner name="ball-pulse-rise" color="#ff5c5b" />}
 

@@ -2,11 +2,9 @@ const Parser = require("rss-parser")
 const parser = new Parser()
 
 let parsedLastBuilds = {}
-const newFeeds = []
 
 ;(async () => {
   const checkIfNewFeeds = (a, b) => {
-    console.log(a, b)
     if (a !== b) {
       self.postMessage("new RSS feed")
     }
@@ -17,6 +15,9 @@ const newFeeds = []
       parsedLastBuilds = JSON.parse(event.data.data)
     }
 
+    console.log("Yo")
+
+    const newFeeds = []
     const feeds = event.data
     if (feeds.length) {
       for (let feed of feeds) {
@@ -32,9 +33,8 @@ const newFeeds = []
 
         newFeeds.push(res)
       }
+      console.log(newFeeds)
       self.postMessage(newFeeds)
     }
   })
 })()
-// checkFeeds()
-// intervalId = setInterval(() => checkFeeds(), 10000)
