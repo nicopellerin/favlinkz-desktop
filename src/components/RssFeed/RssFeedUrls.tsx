@@ -46,9 +46,10 @@ const RssFeedUrls = () => {
     >
       {feed?.items?.length && (
         <FeedList>
-          {feed?.image.match(/\.(jpg|gif|png)$/) !== null && (
-            <FeedImage src={feed?.image} alt="Og image" />
-          )}
+          {feed?.image !== null &&
+            feed?.image.match(/\.(jpg|gif|png)$/) !== null && (
+              <FeedImage src={feed?.image} alt="Og image" />
+            )}
           <Title>
             {maxLength(
               feed?.title ||
@@ -204,4 +205,5 @@ const FeedImage = styled.img`
   height: 7.5rem;
   object-fit: cover;
   margin-bottom: 1.6rem;
+  border-radius: 50%;
 `

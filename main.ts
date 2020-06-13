@@ -6,9 +6,17 @@ import {
   ipcMain,
   screen,
   MenuItemConstructorOptions,
+  nativeImage,
 } from "electron"
 
 import MainWindow from "./MainWindow"
+
+const trayIcon = nativeImage.createFromPath(
+  app.getAppPath() + "/icons/tray-icon.png"
+)
+const trayUpdateIcon = nativeImage.createFromPath(
+  app.getAppPath() + "/icons/tray-icon-notif.png"
+)
 
 let mainWindow: MainWindow | null
 
@@ -121,7 +129,7 @@ app.on("activate", () => {
 // System tray
 let tray = null
 app.whenReady().then(() => {
-  tray = new Tray("./src/assets/tray-icon.png")
+  tray = new Tray(trayIcon)
   tray.on("click", () => {
     switch (true) {
       case !mainWindow:
@@ -141,9 +149,9 @@ app.whenReady().then(() => {
 })
 
 ipcMain.on("updateTrayIcon", () => {
-  tray.setImage("./src/assets/tray-icon-notif.png")
+  tray.setImage(trayUpdateIcon)
 })
 
 ipcMain.on("updateTrayIconNotifsSeen", () => {
-  tray.setImage("./src/assets/tray-icon.png")
+  tray.setImage(trayIcon)
 })

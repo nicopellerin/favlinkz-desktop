@@ -1,8 +1,6 @@
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 
-const SRC = path.resolve(__dirname, "node_modules")
-
 module.exports = {
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
@@ -22,7 +20,15 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/,
-        use: [{ loader: "file-loader" }],
+        use: [
+          {
+            loader: "file-loader",
+            query: {
+              // Inline images smaller than 10kb as data URIs
+              limit: 10000,
+            },
+          },
+        ],
       },
       {
         test: /\.css$/i,
@@ -31,10 +37,6 @@ module.exports = {
       {
         test: /\.worker\.js$/,
         use: { loader: "worker-loader" },
-      },
-      {
-        test: /\.mp3$/,
-        loader: "file-loader",
       },
     ],
   },

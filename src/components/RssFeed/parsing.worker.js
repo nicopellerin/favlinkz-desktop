@@ -23,7 +23,7 @@ const getFeeds = async () => {
         let res = await parser.parseURL(feed.feed)
         res = { ...res, id: feed["id"], image: feed["image"] }
 
-        if (parsedLastBuilds[res.id]) {
+        if (parsedLastBuilds && parsedLastBuilds[res.id]) {
           checkIfNewFeeds(res.lastBuildDate, parsedLastBuilds[res.id])
         }
 

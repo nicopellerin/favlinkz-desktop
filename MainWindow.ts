@@ -8,7 +8,7 @@ export default class MainWindow extends BrowserWindow {
       width: 450,
       height: 650,
       center: true,
-      title: "favlinkz",
+      title: "Favlinkz",
       resizable: userLoggedIn ? true : false,
       titleBarStyle: "hiddenInset",
       show: false,
@@ -26,7 +26,7 @@ export default class MainWindow extends BrowserWindow {
     } else {
       this.loadURL(
         url.format({
-          pathname: path.join(__dirname, "./dist", "index.html"),
+          pathname: path.join(__dirname, "index.html"),
           protocol: "file:",
           slashes: true,
         })

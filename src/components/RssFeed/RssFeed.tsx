@@ -176,7 +176,7 @@ const NoMatchingResults = styled(motion.div)`
 const PaginateControls = styled(motion.div)`
   display: flex;
   position: fixed;
-  bottom: 2rem;
+  bottom: 1rem;
   justify-content: space-around;
   width: 12rem;
   z-index: 9999;
