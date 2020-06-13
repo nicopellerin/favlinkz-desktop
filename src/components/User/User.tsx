@@ -99,7 +99,7 @@ const UserImage = styled.img`
 const Name = styled.h3`
   color: ${(props) => props.theme.username};
   font-size: 3.2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.6rem;
   user-select: none;
 `
 
@@ -124,12 +124,16 @@ const SoundNotifsWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-top: 2.5rem;
+  background: #f8f8f8;
+  padding: 0.8rem 1.8rem;
+  border-radius: 2rem;
+  box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.05);
 `
 
 const SoundNotifsText = styled.span`
   font-size: 1.4rem;
   font-weight: 600;
-  color: ${(props) => props.theme.textColor};
+  color: #555;
   margin-right: 1rem;
 `
 
@@ -152,7 +156,7 @@ const ToggleSwitchLabel = styled.label`
   display: block;
   overflow: hidden;
   cursor: pointer;
-  border: 1px solid #ddd;
+  border: 1px solid #f1f1f1;
   border-radius: 20px;
   margin: 0;
   box-shadow: inset rgba(0, 0, 0, 0.1) 0px 7px 15px;
@@ -183,15 +187,15 @@ const ToggleSwitchInner = styled.span`
   &:before {
     content: "On";
     padding-left: 15px;
-    background-color: #fff;
-    color: #fff;
+    background-color: transparent;
+    color: transparent;
   }
 
   &:after {
     content: "Off";
     padding-right: 13px;
-    background-color: #fff;
-    color: #fff;
+    background-color: transparent;
+    color: transparent;
     text-align: right;
   }
 `
