@@ -1,11 +1,12 @@
 import * as React from "react"
-import { useState } from "react"
+import { useState, useContext } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
 
 import { userState } from "../../state/user"
 import { soundNotifsOnState } from "../../state/notifications"
+import { ThemeContext } from "../../context/ThemeProvider"
 
 const userVariants = {
   hidden: {
@@ -35,6 +36,8 @@ const User = () => {
   const { displayName, photoUrl, email } = useRecoilValue(userState)
   const [soundNotifsOn, setSoundNotifsOn] = useRecoilState(soundNotifsOnState)
 
+  const { dark, toggleDark } = useContext(ThemeContext)
+
   return (
     <Wrapper
       variants={userVariants}
@@ -46,8 +49,8 @@ const User = () => {
         <UserImage src={photoUrl} alt="avatar" draggable="false" />
         <Name>{displayName}</Name>
         <Email>{email}</Email>
-        <SoundNotifsWrapper>
-          <SoundNotifsText>Sound notifications</SoundNotifsText>
+        <ToggleWrapper>
+          <ToggleText>Sound notifications</ToggleText>
           <ToggleSwitch
             onClick={() => setSoundNotifsOn((prevState) => !prevState)}
           >
@@ -59,7 +62,19 @@ const User = () => {
               ></ToggleSwitchSwitch>
             </ToggleSwitchLabel>
           </ToggleSwitch>
-        </SoundNotifsWrapper>
+        </ToggleWrapper>
+        <ToggleWrapper>
+          <ToggleText>Dark mode</ToggleText>
+          <ToggleSwitch onClick={() => toggleDark((prevState) => !prevState)}>
+            <ToggleSwitchCheckbox type="checkbox" name="status" id="status" />
+            <ToggleSwitchLabel>
+              <ToggleSwitchInner isPrivate={dark ? true : false} />
+              <ToggleSwitchSwitch
+                isPrivate={dark ? true : false}
+              ></ToggleSwitchSwitch>
+            </ToggleSwitchLabel>
+          </ToggleSwitch>
+        </ToggleWrapper>
         <DeleteAccount
           animate={{ opacity: [0, 1] }}
           transition={{ delay: 0.2 }}
@@ -120,17 +135,17 @@ const DeleteAccount = styled(motion.span)`
   user-select: none;
 `
 
-const SoundNotifsWrapper = styled.div`
+const ToggleWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   background: #f8f8f8;
   padding: 0.8rem 1.8rem;
   border-radius: 2rem;
   box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.05);
 `
 
-const SoundNotifsText = styled.span`
+const ToggleText = styled.span`
   font-size: 1.4rem;
   font-weight: 600;
   color: #555;
@@ -156,7 +171,6 @@ const ToggleSwitchLabel = styled.label`
   display: block;
   overflow: hidden;
   cursor: pointer;
-  border: 1px solid #f1f1f1;
   border-radius: 20px;
   margin: 0;
   box-shadow: inset rgba(0, 0, 0, 0.1) 0px 7px 15px;
@@ -214,7 +228,7 @@ const ToggleSwitchSwitch = styled.span`
   bottom: 0;
   right: ${(props: { isPrivate: boolean }) =>
     props.isPrivate ? "0px" : "21px"};
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   border-radius: 50%;
   transition: all 0.3s ease-in 0s;
   color: #fff;
