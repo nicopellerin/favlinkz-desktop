@@ -5,7 +5,11 @@ import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
 
 import { userState } from "../../state/user"
-import { soundNotifsOnState } from "../../state/notifications"
+import {
+  soundNotifsOnState,
+  alertNotifsOnState,
+} from "../../state/notifications"
+
 import { ThemeContext } from "../../context/ThemeProvider"
 
 const userVariants = {
@@ -35,6 +39,7 @@ const userVariants = {
 const User = () => {
   const { displayName, photoUrl, email } = useRecoilValue(userState)
   const [soundNotifsOn, setSoundNotifsOn] = useRecoilState(soundNotifsOnState)
+  const [alertNotifsOn, setAlertNotifsOn] = useRecoilState(alertNotifsOnState)
 
   const { dark, toggleDark } = useContext(ThemeContext)
 
@@ -59,6 +64,20 @@ const User = () => {
               <ToggleSwitchInner isPrivate={soundNotifsOn ? true : false} />
               <ToggleSwitchSwitch
                 isPrivate={soundNotifsOn ? true : false}
+              ></ToggleSwitchSwitch>
+            </ToggleSwitchLabel>
+          </ToggleSwitch>
+        </ToggleWrapper>
+        <ToggleWrapper>
+          <ToggleText>Alert notifications</ToggleText>
+          <ToggleSwitch
+            onClick={() => setAlertNotifsOn((prevState) => !prevState)}
+          >
+            <ToggleSwitchCheckbox type="checkbox" name="status" id="status" />
+            <ToggleSwitchLabel>
+              <ToggleSwitchInner isPrivate={alertNotifsOn ? true : false} />
+              <ToggleSwitchSwitch
+                isPrivate={alertNotifsOn ? true : false}
               ></ToggleSwitchSwitch>
             </ToggleSwitchLabel>
           </ToggleSwitch>

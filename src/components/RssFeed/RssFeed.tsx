@@ -71,6 +71,7 @@ const RssFeed = () => {
       feedsLastBuild[feed.id] = {
         lastBuildDate: feed.lastBuildDate,
         id: feed.id,
+        title: feed.title,
       }
     })
     localStorage.setItem("feeds", JSON.stringify(feedsLastBuild))

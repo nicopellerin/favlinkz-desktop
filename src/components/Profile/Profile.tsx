@@ -3,9 +3,8 @@ import { useEffect } from "react"
 import styled, { keyframes } from "styled-components"
 import { motion } from "framer-motion"
 import { HashRouter as Router, Switch, Route } from "react-router-dom"
-import { ipcRenderer } from "electron"
+import { ipcRenderer, remote } from "electron"
 import { useRecoilState, useRecoilValue } from "recoil"
-import UIfx from "uifx"
 
 import Navbar from "../Navbar/Navbar"
 import Sidebar from "../Sidebar"
@@ -24,6 +23,7 @@ import {
   rssNewFeedSeen,
   rssNewFeedIds,
 } from "../../state/rss"
+import { alertNotifsOnState } from "../../state/notifications"
 
 import Worker from "../RssFeed/parsing.worker"
 
@@ -35,6 +35,7 @@ const Profile = () => {
   const [newFeedSeen, setNewFeedSeen] = useRecoilState(rssNewFeedSeen)
   const [newFeedIds, setNewFeedIds] = useRecoilState(rssNewFeedIds)
 
+  const alertNotifsOn = useRecoilValue(alertNotifsOnState)
   const user = useRecoilValue(userState)
 
   useEffect(() => {
@@ -70,7 +71,15 @@ const Profile = () => {
         ipcRenderer.send("updateTrayIcon")
         setNewFeedSeen(false)
         setNewFeedIds((prevState) => [...prevState, event.data.id])
+
         beep.play()
+
+        const newFeedsAlert = new remote.Notification({
+          title: "New RSS Feeds",
+          body: `from ${event.data.title}`,
+          icon: "../../assets/icon_144.png",
+        })
+        alertNotifsOn ? newFeedsAlert.show() : null
       }
 
       setRss(event.data)

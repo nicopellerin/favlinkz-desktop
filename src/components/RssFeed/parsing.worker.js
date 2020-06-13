@@ -6,7 +6,7 @@ let parsedLastBuilds = {}
 const getFeeds = async () => {
   const checkIfNewFeeds = (a, b) => {
     if (a !== b.lastBuildDate) {
-      self.postMessage({ msg: "newRssFeed", id: b.id })
+      self.postMessage({ msg: "newRssFeed", id: b.id, title: b.title })
     }
   }
 
@@ -21,7 +21,12 @@ const getFeeds = async () => {
     if (feeds.length) {
       for (let feed of feeds) {
         let res = await parser.parseURL(feed.feed)
-        res = { ...res, id: feed["id"], image: feed["image"] }
+
+        res = {
+          ...res,
+          id: feed["id"],
+          image: feed["image"],
+        }
 
         if (parsedLastBuilds && parsedLastBuilds[res.id]) {
           checkIfNewFeeds(res.lastBuildDate, parsedLastBuilds[res.id])
