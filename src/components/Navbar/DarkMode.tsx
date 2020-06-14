@@ -1,15 +1,28 @@
 import * as React from "react"
 import { useContext } from "react"
 import styled from "styled-components"
+import { useRecoilValue } from "recoil"
 
 import { ThemeContext } from "../../context/ThemeProvider"
+import { soundNotifsOnState } from "../../state/notifications"
 
 export const DarkMode = () => {
   const { toggleDark } = useContext(ThemeContext)
 
+  const soundNotifsOn = useRecoilValue(soundNotifsOnState)
+
+  const swoosh = new Audio(
+    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/tap-hollow.mp3"
+  )
+
   return (
     <Icon
-      onClick={toggleDark}
+      onClick={() => {
+        toggleDark()
+        if (soundNotifsOn) {
+          swoosh.play()
+        }
+      }}
       xmlns="http://www.w3.org/2000/svg"
       width="18"
       height="18"

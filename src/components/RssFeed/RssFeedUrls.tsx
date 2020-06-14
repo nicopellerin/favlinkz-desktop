@@ -3,13 +3,19 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useHistory, Link } from "react-router-dom"
 import ReactTooltip from "react-tooltip"
+import { useRecoilValue } from "recoil"
 
-import { Feed, ParsedFeed } from "../../models/feed"
+import { ParsedFeed } from "../../models/feed"
+
+import { soundNotifsOnState } from "../../state/notifications"
 
 import dots from "../../assets/dots.svg"
+
 import { maxLength } from "../../utils"
 
 const RssFeedUrls = () => {
+  const soundNotifsOn = useRecoilValue(soundNotifsOnState)
+
   const history = useHistory()
   const feed = history?.location?.state?.feed
 
@@ -36,6 +42,10 @@ const RssFeedUrls = () => {
       },
     },
   }
+
+  const swoosh = new Audio(
+    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/tap-hollow.mp3"
+  )
 
   return (
     <Wrapper
@@ -89,6 +99,11 @@ const RssFeedUrls = () => {
         to={{ pathname: "/profile/rssfeed", state: { from: "rssFeedsUrls" } }}
       >
         <PrevIcon
+          onClick={() => {
+            if (soundNotifsOn) {
+              swoosh.play()
+            }
+          }}
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{
