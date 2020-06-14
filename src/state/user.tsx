@@ -1,7 +1,4 @@
-import { atom, selector } from "recoil"
-
-import { latestState } from "./latest"
-import { favoritesState } from "./favorites"
+import { atom } from "recoil"
 
 import { User } from "../models/user"
 
@@ -12,16 +9,5 @@ export const userState = atom<User>({
     photoUrl: "",
     uid: "",
     email: "",
-  },
-})
-
-export const totalLinks = selector({
-  key: "totalLinks",
-  get: ({ get }) => {
-    const latest = get(latestState)
-    const favorites = get(favoritesState)
-
-    const total = latest.length + favorites.length
-    return total
   },
 })

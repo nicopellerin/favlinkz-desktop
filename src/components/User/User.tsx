@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useRecoilValue, useRecoilState } from "recoil"
@@ -46,6 +46,14 @@ const User = () => {
   const swoosh = new Audio(
     "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/slide-scissors.mp3"
   )
+
+  useEffect(() => {
+    localStorage.setItem("alertNotifsOn", JSON.stringify(alertNotifsOn))
+  }, [alertNotifsOn])
+
+  useEffect(() => {
+    localStorage.setItem("soundNotifsOn", JSON.stringify(soundNotifsOn))
+  }, [soundNotifsOn])
 
   return (
     <Wrapper
@@ -272,7 +280,6 @@ const ToggleSwitchSwitch = styled.span`
   bottom: 0;
   right: ${(props: { isPrivate: boolean }) =>
     props.isPrivate ? "0px" : "21px"};
-  /* border: 1px solid #ccc; */
   border-radius: 50%;
   transition: all 0.15s ease-in 0s;
   color: #fff;
