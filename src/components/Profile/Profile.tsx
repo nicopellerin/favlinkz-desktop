@@ -28,6 +28,8 @@ import { alertNotifsOnState } from "../../state/notifications"
 
 import Worker from "../../workers/parsing.worker"
 
+import logo from "../../assets/icon_144.png"
+
 const Profile = () => {
   const worker = new Worker()
 
@@ -48,7 +50,6 @@ const Profile = () => {
       .doc(user.uid)
       .collection("rss")
       .orderBy("created", "desc")
-    // .limit(itemsPerPage)
 
     rssData.onSnapshot((feeds) => {
       if (feeds.size) {
@@ -77,6 +78,7 @@ const Profile = () => {
     "https://cdn.glitch.com/35252802-b02a-4d63-9536-c72e10d1998c%2Fbeep.mp3?1558053587340"
   )
 
+  let count = 0
   useEffect(() => {
     worker.onmessage = (event) => {
       if (event.data.msg === "newRssFeed") {
@@ -84,12 +86,16 @@ const Profile = () => {
         setNewFeedSeen(false)
         setNewFeedIds((prevState) => [...prevState, event.data.id])
 
-        beep.play()
+        if (!count) {
+          beep.play()
+        }
+
+        count++
 
         const newFeedsAlert = new remote.Notification({
           title: "New RSS Feeds",
           body: `from ${event.data.title}`,
-          icon: "../../assets/icon_144.png",
+          // icon: logo,
         })
         alertNotifsOn ? newFeedsAlert.show() : null
       }

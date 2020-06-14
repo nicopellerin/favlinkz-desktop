@@ -19,6 +19,7 @@ import {
 import { soundNotifsOnState } from "../../state/notifications"
 
 import { ParsedFeed } from "../../models/feed"
+import { pageState } from "../../state/pagination"
 
 // interface A {
 //   lastBuildDate: Date
@@ -30,11 +31,12 @@ interface StyledProps {
 
 const RssFeed = () => {
   const [loading, setLoading] = useState(false)
-  const [page, setPage] = useState(1)
+  // const [page, setPage] = useState(1)
 
   const [feeds, setFeeds] = useRecoilState(rssState)
   const [newFeedSeen, setNewFeedSeen] = useRecoilState(rssNewFeedSeen)
   const [rss, setRss] = useRecoilState(rssFeedsState)
+  const [page, setPage] = useRecoilState(pageState)
 
   const soundNotifsOn = useRecoilValue(soundNotifsOnState)
   const rssFeedsLoading = useRecoilValue(rssFeedsLoadingState)
