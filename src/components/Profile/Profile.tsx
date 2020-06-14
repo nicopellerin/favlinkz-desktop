@@ -24,7 +24,10 @@ import {
   rssNewFeedIds,
   rssFeedsLoadingState,
 } from "../../state/rss"
-import { alertNotifsOnState } from "../../state/notifications"
+import {
+  alertNotifsOnState,
+  soundNotifsOnState,
+} from "../../state/notifications"
 
 import Worker from "../../workers/parsing.worker"
 
@@ -42,6 +45,7 @@ const Profile = () => {
   )
 
   const alertNotifsOn = useRecoilValue(alertNotifsOnState)
+  const soundNotifsOn = useRecoilValue(soundNotifsOnState)
   const user = useRecoilValue(userState)
 
   useEffect(() => {
@@ -86,7 +90,7 @@ const Profile = () => {
         setNewFeedSeen(false)
         setNewFeedIds((prevState) => [...prevState, event.data.id])
 
-        if (!count) {
+        if (!count && soundNotifsOn) {
           beep.play()
         }
 
