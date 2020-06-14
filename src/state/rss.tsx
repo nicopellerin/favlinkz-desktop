@@ -19,3 +19,8 @@ export const rssNewFeedIds = atom<Array<any>>({
   key: "rssNewFeedIds",
   default: [],
 })
+
+export const rssFeedsLoadingState = atom<boolean>({
+  key: "rssFeedsLoadingState",
+  default: false,
+})

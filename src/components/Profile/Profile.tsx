@@ -22,6 +22,7 @@ import {
   rssFeedsState,
   rssNewFeedSeen,
   rssNewFeedIds,
+  rssFeedsLoadingState,
 } from "../../state/rss"
 import { alertNotifsOnState } from "../../state/notifications"
 
@@ -34,6 +35,9 @@ const Profile = () => {
   const [rss, setRss] = useRecoilState(rssFeedsState)
   const [newFeedSeen, setNewFeedSeen] = useRecoilState(rssNewFeedSeen)
   const [newFeedIds, setNewFeedIds] = useRecoilState(rssNewFeedIds)
+  const [rssFeedsLoading, setRssFeedsLoading] = useRecoilState(
+    rssFeedsLoadingState
+  )
 
   const alertNotifsOn = useRecoilValue(alertNotifsOnState)
   const user = useRecoilValue(userState)
@@ -60,6 +64,14 @@ const Profile = () => {
       }
     })
   }, [])
+
+  useEffect(() => {
+    if (feeds.length > 0 && rss.length !== feeds.length) {
+      setRssFeedsLoading(true)
+    } else {
+      setRssFeedsLoading(false)
+    }
+  }, [rss])
 
   const beep = new Audio(
     "https://cdn.glitch.com/35252802-b02a-4d63-9536-c72e10d1998c%2Fbeep.mp3?1558053587340"
