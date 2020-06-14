@@ -14,6 +14,7 @@ import {
 } from "../../state/searchbar"
 import { favoritesState } from "../../state/favorites"
 import { userState } from "../../state/user"
+import { soundNotifsOnState } from "../../state/notifications"
 
 import { Link } from "../../models/link"
 
@@ -55,9 +56,11 @@ const Favorites = () => {
 
   const results = useRecoilValue(searchResultsState)
   const [favorites, setFavorites] = useRecoilState(favoritesState)
-  const user = useRecoilValue(userState)
   const [searchText] = useRecoilState(searchTextState)
   const [location, setLocation] = useRecoilState(locationState)
+
+  const user = useRecoilValue(userState)
+  const soundNotifsOn = useRecoilValue(soundNotifsOnState)
 
   let totalPages = Math.ceil(favorites.length / 6)
 
@@ -96,6 +99,10 @@ const Favorites = () => {
       })
     }
   }, [user])
+
+  const swoosh = new Audio(
+    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/tap-hollow.mp3"
+  )
 
   if (loading) {
     return (
@@ -149,7 +156,12 @@ const Favorites = () => {
         <PrevIcon
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => prevPage(page)}
+          onClick={() => {
+            prevPage(page)
+            if (soundNotifsOn) {
+              swoosh.play()
+            }
+          }}
           disabled={page === 1}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18">
@@ -163,7 +175,12 @@ const Favorites = () => {
         <NextIcon
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => nextPage(page)}
+          onClick={() => {
+            nextPage(page)
+            if (soundNotifsOn) {
+              swoosh.play()
+            }
+          }}
           disabled={page + 1 > totalPages || results?.length <= 6}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18">

@@ -43,6 +43,10 @@ const User = () => {
 
   const { dark, toggleDark } = useContext(ThemeContext)
 
+  const swoosh = new Audio(
+    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/tap-hollow.mp3"
+  )
+
   return (
     <Wrapper
       variants={userVariants}
@@ -57,7 +61,12 @@ const User = () => {
         <ToggleWrapper>
           <ToggleText>Sound notifications</ToggleText>
           <ToggleSwitch
-            onClick={() => setSoundNotifsOn((prevState) => !prevState)}
+            onClick={() => {
+              setSoundNotifsOn((prevState) => !prevState)
+              if (!soundNotifsOn) {
+                swoosh.play()
+              }
+            }}
           >
             <ToggleSwitchCheckbox type="checkbox" name="status" id="status" />
             <ToggleSwitchLabel>
@@ -71,7 +80,12 @@ const User = () => {
         <ToggleWrapper>
           <ToggleText>Alert notifications</ToggleText>
           <ToggleSwitch
-            onClick={() => setAlertNotifsOn((prevState) => !prevState)}
+            onClick={() => {
+              setAlertNotifsOn((prevState) => !prevState)
+              if (soundNotifsOn) {
+                swoosh.play()
+              }
+            }}
           >
             <ToggleSwitchCheckbox type="checkbox" name="status" id="status" />
             <ToggleSwitchLabel>
@@ -84,7 +98,14 @@ const User = () => {
         </ToggleWrapper>
         <ToggleWrapper>
           <ToggleText>Dark mode</ToggleText>
-          <ToggleSwitch onClick={() => toggleDark((prevState) => !prevState)}>
+          <ToggleSwitch
+            onClick={() => {
+              toggleDark((prevState) => !prevState)
+              if (soundNotifsOn) {
+                swoosh.play()
+              }
+            }}
+          >
             <ToggleSwitchCheckbox type="checkbox" name="status" id="status" />
             <ToggleSwitchLabel>
               <ToggleSwitchInner isPrivate={dark ? true : false} />

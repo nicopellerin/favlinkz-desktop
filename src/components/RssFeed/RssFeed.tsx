@@ -2,7 +2,7 @@ import * as React from "react"
 import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { useRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { FaRss } from "react-icons/fa"
 import Spinner from "react-spinkit"
 import { ipcRenderer } from "electron"
@@ -10,6 +10,7 @@ import { ipcRenderer } from "electron"
 import RssCard from "./RssCard"
 
 import { rssState, rssFeedsState, rssNewFeedSeen } from "../../state/rss"
+import { soundNotifsOnState } from "../../state/notifications"
 
 import { ParsedFeed } from "../../models/feed"
 
@@ -28,6 +29,8 @@ const RssFeed = () => {
   const [feeds, setFeeds] = useRecoilState(rssState)
   const [newFeedSeen, setNewFeedSeen] = useRecoilState(rssNewFeedSeen)
   const [rss, setRss] = useRecoilState(rssFeedsState)
+
+  const soundNotifsOn = useRecoilValue(soundNotifsOnState)
 
   const userVariants = {
     hidden: {
@@ -77,6 +80,10 @@ const RssFeed = () => {
     localStorage.setItem("feeds", JSON.stringify(feedsLastBuild))
   }, [rss])
 
+  const swoosh = new Audio(
+    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/tap-hollow.mp3"
+  )
+
   return (
     <Wrapper
       variants={userVariants}
@@ -121,7 +128,12 @@ const RssFeed = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           disabled={page === 1}
-          onClick={() => prevPage(page)}
+          onClick={() => {
+            prevPage(page)
+            if (soundNotifsOn) {
+              swoosh.play()
+            }
+          }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18">
             <path
@@ -135,7 +147,12 @@ const RssFeed = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           disabled={page + 1 > totalPages || rss?.length <= 4}
-          onClick={() => nextPage(page)}
+          onClick={() => {
+            nextPage(page)
+            if (soundNotifsOn) {
+              swoosh.play()
+            }
+          }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18">
             <path

@@ -15,6 +15,7 @@ import {
 
 import { userState } from "../../state/user"
 import { latestState } from "../../state/latest"
+import { soundNotifsOnState } from "../../state/notifications"
 
 import { Link } from "../../models/link"
 
@@ -57,8 +58,10 @@ const Latest = () => {
   const results = useRecoilValue(searchResultsState)
   const [searchText] = useRecoilState(searchTextState)
   const [latest, setLatest] = useRecoilState(latestState)
-  const user = useRecoilValue(userState)
   const [location, setLocation] = useRecoilState(locationState)
+
+  const user = useRecoilValue(userState)
+  const soundNotifsOn = useRecoilValue(soundNotifsOnState)
 
   let totalPages = Math.ceil(latest.length / 6)
 
@@ -100,7 +103,7 @@ const Latest = () => {
   }, [user])
 
   const swoosh = new Audio(
-    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/slide-metal.mp3"
+    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/tap-hollow.mp3"
   )
 
   if (loading) {
@@ -155,7 +158,12 @@ const Latest = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           disabled={page === 1}
-          onClick={() => prevPage(page)}
+          onClick={() => {
+            prevPage(page)
+            if (soundNotifsOn) {
+              swoosh.play()
+            }
+          }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18">
             <path
@@ -171,7 +179,9 @@ const Latest = () => {
           disabled={page + 1 > totalPages || results?.length <= 6}
           onClick={() => {
             nextPage(page)
-            swoosh.play()
+            if (soundNotifsOn) {
+              swoosh.play()
+            }
           }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18">
