@@ -6,6 +6,7 @@ import { useRecoilState, useRecoilValue } from "recoil"
 import { FaRss } from "react-icons/fa"
 import Spinner from "react-spinkit"
 import { ipcRenderer } from "electron"
+import hash from "object-hash"
 
 import RssCard from "./RssCard"
 
@@ -75,6 +76,7 @@ const RssFeed = () => {
         lastBuildDate: feed.lastBuildDate,
         id: feed.id,
         title: feed.title,
+        items: hash.sha1(feed.items),
       }
     })
     localStorage.setItem("feeds", JSON.stringify(feedsLastBuild))

@@ -72,5 +72,7 @@
     "websocket-extensions": "^0.1.4",
     "worker-loader": "^2.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "object-hash": "^2.0.3"
+  }
 }

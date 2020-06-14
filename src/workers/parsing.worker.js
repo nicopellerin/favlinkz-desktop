@@ -1,11 +1,12 @@
 const Parser = require("rss-parser")
 const parser = new Parser()
+const hash = require("object-hash")
 
 let parsedLastBuilds = {}
 
 const getFeeds = async () => {
   const checkIfNewFeeds = (a, b) => {
-    if (a !== b.lastBuildDate) {
+    if (hash.sha1(a) !== b.items) {
       self.postMessage({ msg: "newRssFeed", id: b.id, title: b.title })
     }
   }
@@ -29,7 +30,7 @@ const getFeeds = async () => {
         }
 
         if (parsedLastBuilds && parsedLastBuilds[res.id]) {
-          checkIfNewFeeds(res.lastBuildDate, parsedLastBuilds[res.id])
+          checkIfNewFeeds(res.items, parsedLastBuilds[res.id])
         }
 
         newFeeds.push(res)

@@ -25,7 +25,7 @@ import {
 } from "../../state/rss"
 import { alertNotifsOnState } from "../../state/notifications"
 
-import Worker from "../RssFeed/parsing.worker"
+import Worker from "../../workers/parsing.worker"
 
 const Profile = () => {
   const worker = new Worker()
