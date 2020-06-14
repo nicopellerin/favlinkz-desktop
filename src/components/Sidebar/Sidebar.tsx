@@ -69,11 +69,11 @@ const Sidebar = () => {
           <IconUser title="Profile" size={22} />
         </NavLink>
       </Container>
-      <LinkStyled>
+      <LinkStyled to="/">
         <FaSignOutAlt
           title="Log out"
           onClick={() => {
-            // handleSignOut()
+            handleSignOut()
             swoosh.play()
           }}
           size={22}

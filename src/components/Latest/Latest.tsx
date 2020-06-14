@@ -106,6 +106,10 @@ const Latest = () => {
     "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/tap-hollow.mp3"
   )
 
+  const errorSound = new Audio(
+    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/error-smooth.mp3"
+  )
+
   if (loading) {
     return (
       <NoMatchingResults>
@@ -162,6 +166,8 @@ const Latest = () => {
             prevPage(page)
             if (soundNotifsOn) {
               swoosh.play()
+            } else if (soundNotifsOn && page === 1) {
+              errorSound.play()
             }
           }}
         >
