@@ -44,7 +44,7 @@ const User = () => {
   const { dark, toggleDark } = useContext(ThemeContext)
 
   const swoosh = new Audio(
-    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/tap-hollow.mp3"
+    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/slide-scissors.mp3"
   )
 
   return (
@@ -225,7 +225,7 @@ const ToggleSwitchInner = styled.span`
   width: 100%;
   margin-left: ${(props: { isPrivate: boolean }) =>
     props.isPrivate ? 0 : "-100%"};
-  transition: margin 0.3s ease-in 0s;
+  transition: margin 0.1s ease-in 0s;
 
   &:before,
   :after {
@@ -274,7 +274,7 @@ const ToggleSwitchSwitch = styled.span`
     props.isPrivate ? "0px" : "21px"};
   /* border: 1px solid #ccc; */
   border-radius: 50%;
-  transition: all 0.3s ease-in 0s;
+  transition: all 0.15s ease-in 0s;
   color: #fff;
   filter: drop-shadow(0 0 0.75rem rgba(89, 86, 213, 0.25));
 `
