@@ -26,6 +26,10 @@ const Sidebar = () => {
     resetRssFeed([])
   }
 
+  const swoosh = new Audio(
+    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/quit-sound.mp3"
+  )
+
   return (
     <Wrapper>
       <Container>
@@ -65,10 +69,13 @@ const Sidebar = () => {
           <IconUser title="Profile" size={22} />
         </NavLink>
       </Container>
-      <LinkStyled to="/">
+      <LinkStyled>
         <FaSignOutAlt
           title="Log out"
-          onClick={handleSignOut}
+          onClick={() => {
+            // handleSignOut()
+            swoosh.play()
+          }}
           size={22}
           color="#ADA9BB"
         />
