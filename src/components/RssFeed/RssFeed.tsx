@@ -219,7 +219,6 @@ const PrevIcon = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: ${(props: StyledProps) => (props.disabled ? "none" : "all")};
   filter: drop-shadow(0 0 0.75rem rgba(89, 86, 213, 0.2));
 `
 
@@ -235,5 +234,4 @@ const NextIcon = styled(motion.div)`
   align-items: center;
   justify-content: center;
   filter: drop-shadow(0 0 0.75rem rgba(89, 86, 213, 0.2));
-  pointer-events: ${(props: StyledProps) => (props.disabled ? "none" : "all")};
 `
