@@ -34,9 +34,8 @@ const getFeeds = async () => {
         }
 
         newFeeds.push(res)
+        self.postMessage(newFeeds)
       }
-
-      self.postMessage(newFeeds)
     }
   })
 }
