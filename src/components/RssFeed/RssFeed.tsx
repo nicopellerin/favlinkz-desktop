@@ -84,6 +84,10 @@ const RssFeed = () => {
     "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/tap-hollow.mp3"
   )
 
+  const errorSound = new Audio(
+    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/error-smooth.mp3"
+  )
+
   return (
     <Wrapper
       variants={userVariants}
@@ -130,7 +134,9 @@ const RssFeed = () => {
           disabled={page === 1}
           onClick={() => {
             prevPage(page)
-            if (soundNotifsOn) {
+            if (soundNotifsOn && page === 1) {
+              errorSound.play()
+            } else if (soundNotifsOn) {
               swoosh.play()
             }
           }}
@@ -149,7 +155,9 @@ const RssFeed = () => {
           disabled={page + 1 > totalPages || rss?.length <= 4}
           onClick={() => {
             nextPage(page)
-            if (soundNotifsOn) {
+            if ((soundNotifsOn && page + 1 > totalPages) || rss?.length <= 4) {
+              errorSound.play()
+            } else if (soundNotifsOn) {
               swoosh.play()
             }
           }}

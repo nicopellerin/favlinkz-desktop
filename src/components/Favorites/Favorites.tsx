@@ -104,6 +104,10 @@ const Favorites = () => {
     "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/tap-hollow.mp3"
   )
 
+  const errorSound = new Audio(
+    "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/error-smooth.mp3"
+  )
+
   if (loading) {
     return (
       <NoMatchingResults>
@@ -158,7 +162,9 @@ const Favorites = () => {
           whileTap={{ scale: 0.95 }}
           onClick={() => {
             prevPage(page)
-            if (soundNotifsOn) {
+            if (soundNotifsOn && page === 1) {
+              errorSound.play()
+            } else if (soundNotifsOn) {
               swoosh.play()
             }
           }}
@@ -177,7 +183,12 @@ const Favorites = () => {
           whileTap={{ scale: 0.95 }}
           onClick={() => {
             nextPage(page)
-            if (soundNotifsOn) {
+            if (
+              (soundNotifsOn && page + 1 > totalPages) ||
+              results?.length <= 6
+            ) {
+              errorSound.play()
+            } else if (soundNotifsOn) {
               swoosh.play()
             }
           }}
@@ -261,7 +272,6 @@ const PrevIcon = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: ${(props: StyledProps) => (props.disabled ? "none" : "all")};
   filter: drop-shadow(0 0 0.75rem rgba(89, 86, 213, 0.2));
 `
 
@@ -277,5 +287,4 @@ const NextIcon = styled(motion.div)`
   align-items: center;
   justify-content: center;
   filter: drop-shadow(0 0 0.75rem rgba(89, 86, 213, 0.2));
-  pointer-events: ${(props: StyledProps) => (props.disabled ? "none" : "all")};
 `
