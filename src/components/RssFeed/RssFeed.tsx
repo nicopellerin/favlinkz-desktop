@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useState, useEffect } from "react"
 import styled from "styled-components"
-import { motion } from "framer-motion"
+import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { FaRss } from "react-icons/fa"
 import { ipcRenderer } from "electron"
@@ -23,30 +23,6 @@ import { ParsedFeed } from "../../models/feed"
 
 interface StyledProps {
   disabled: boolean
-}
-
-const userVariants = {
-  hidden: {
-    y: -40,
-  },
-  show: {
-    y: -50,
-    transition: {
-      type: "spring",
-      damping: 10,
-      stiffness: 80,
-      velocity: 2,
-      staggerChildren: 0.02,
-    },
-  },
-  exit: {
-    transition: {
-      type: "tween",
-      damping: 100,
-      stiffness: 80,
-      staggerChildren: 0.5,
-    },
-  },
 }
 
 const RssFeed = () => {
@@ -100,16 +76,15 @@ const RssFeed = () => {
   )
 
   return (
-    <Wrapper
-      variants={userVariants}
-      initial="hidden"
-      animate="show"
-      exit="exit"
-    >
-      {results?.length > 0 &&
-        results
-          ?.slice((page - 1) * 4, (page - 1) * 4 + 4)
-          .map((feed: ParsedFeed) => <RssCard key={feed.id} feed={feed} />)}
+    <Wrapper>
+      <AnimatePresence>
+        <motion.div initial={{ position: "absolute" }}>
+          {results?.length > 0 &&
+            results
+              ?.slice((page - 1) * 4, (page - 1) * 4 + 4)
+              .map((feed: ParsedFeed) => <RssCard key={feed.id} feed={feed} />)}
+        </motion.div>
+      </AnimatePresence>
       {results?.length < 1 && !rssFeedsLoading && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>
@@ -212,7 +187,7 @@ const NoMatchingResults = styled(motion.div)`
 const PaginateControls = styled(motion.div)`
   display: flex;
   position: fixed;
-  bottom: 1rem;
+  bottom: 5rem;
   justify-content: space-around;
   width: 12rem;
   z-index: 9999;

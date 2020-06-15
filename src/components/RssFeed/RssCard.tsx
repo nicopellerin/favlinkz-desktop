@@ -7,11 +7,39 @@ import { FaLink, FaRss } from "react-icons/fa"
 import { ParsedFeed } from "../../models/feed"
 import { db } from "../../services/firebase"
 
-import { rssNewFeedIds, rssFeedsState } from "../../state/rss"
+import {
+  rssNewFeedIds,
+  rssFeedsState,
+  rssSubscribedState,
+} from "../../state/rss"
 import { userState } from "../../state/user"
 
 import { maxLength } from "../../utils"
 import { motion } from "framer-motion"
+
+const userVariants = {
+  hidden: {
+    y: -40,
+  },
+  show: {
+    y: -50,
+    transition: {
+      type: "spring",
+      damping: 10,
+      stiffness: 80,
+      velocity: 2,
+      staggerChildren: 0.02,
+    },
+  },
+  exit: {
+    transition: {
+      type: "tween",
+      damping: 100,
+      stiffness: 80,
+      staggerChildren: 0.5,
+    },
+  },
+}
 
 interface Props {
   feed: ParsedFeed
@@ -20,6 +48,7 @@ interface Props {
 const RssCard: React.FC<Props> = ({ feed }) => {
   const [feeds, setFeeds] = useRecoilState(rssFeedsState)
   const [newFeedIds, setNewFeedIds] = useRecoilState(rssNewFeedIds)
+  const [rssSubscribed, setRssSubscribed] = useRecoilState(rssSubscribedState)
 
   const user = useRecoilValue(userState)
 
@@ -36,7 +65,7 @@ const RssCard: React.FC<Props> = ({ feed }) => {
   }
 
   return (
-    <Card animate>
+    <Card variants={userVariants} initial="hidden" animate="show" exit="exit">
       <Heading>
         <div>
           <Title title={feed?.title}>

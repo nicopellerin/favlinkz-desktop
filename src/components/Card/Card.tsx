@@ -52,7 +52,6 @@ const Card: React.FC<Props> = ({ link, showheart, isSubscribed }) => {
 
   const [latest, setLatest] = useRecoilState(latestState)
   const [favorites, setFavorites] = useRecoilState(favoritesState)
-  const [rssSubscribed, setRssSubscribed] = useRecoilState(rssSubscribedState)
 
   const user = useRecoilValue(userState)
 
@@ -112,12 +111,9 @@ const Card: React.FC<Props> = ({ link, showheart, isSubscribed }) => {
       image,
       description,
     })
-    // setRssSubscribed((prevState) => ({ ...prevState, {id: true} }))
     setAddedToRssFeed(true)
     setTimeout(() => setAddedToRssFeed(false), 1500)
   }
-
-  console.log(rssSubscribed)
 
   // Remove links
   const handleDelete = (id: string) => {
@@ -250,7 +246,7 @@ const Card: React.FC<Props> = ({ link, showheart, isSubscribed }) => {
             <RssIcon
               title="Subscribe to RSS feed"
               showheart={showheart}
-              subscribed={rssSubscribed[link.id] || isSubscribed}
+              subscribed={isSubscribed}
               onClick={() =>
                 subscribeToRssFeed(
                   link.rss,
