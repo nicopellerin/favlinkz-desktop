@@ -34,7 +34,6 @@ import { maxLength, maxLengthUrl, spliceUrl } from "../../utils"
 interface Props {
   link: Link
   showheart: boolean
-  isSubscribed: boolean
 }
 
 interface StyledProps {
@@ -42,7 +41,7 @@ interface StyledProps {
   subscribed: boolean
 }
 
-const Card: React.FC<Props> = ({ link, showheart, isSubscribed }) => {
+const Card: React.FC<Props> = ({ link, showheart }) => {
   const { pathname } = useLocation()
 
   const [showNote, setShowNote] = useState(false)
@@ -112,6 +111,25 @@ const Card: React.FC<Props> = ({ link, showheart, isSubscribed }) => {
       description,
     })
     setAddedToRssFeed(true)
+
+    if (pathname.includes("profile")) {
+      const latestLinks = db
+        .collection(`users`)
+        .doc(user.uid)
+        .collection("latest")
+
+      latestLinks.doc(id).set({ isRssSubscribed: true }, { merge: true })
+    }
+
+    if (pathname.includes("favorites")) {
+      const favoriteLinks = db
+        .collection(`users`)
+        .doc(user.uid)
+        .collection("favorites")
+
+      favoriteLinks.doc(id).set({ isRssSubscribed: true }, { merge: true })
+    }
+
     setTimeout(() => setAddedToRssFeed(false), 1500)
   }
 
@@ -246,7 +264,7 @@ const Card: React.FC<Props> = ({ link, showheart, isSubscribed }) => {
             <RssIcon
               title="Subscribe to RSS feed"
               showheart={showheart}
-              subscribed={isSubscribed}
+              subscribed={link.isRssSubscribed}
               onClick={() =>
                 subscribeToRssFeed(
                   link.rss,

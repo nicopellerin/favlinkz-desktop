@@ -108,13 +108,6 @@ const Favorites = () => {
     "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/error-smooth.mp3"
   )
 
-  const isSubscribed = (id: string) => {
-    if (JSON.parse(localStorage.getItem("feeds")!)) {
-      return JSON.parse(localStorage.getItem("feeds")!)[id]
-    }
-    return false
-  }
-
   if (loading) {
     return (
       <NoMatchingResults>
@@ -138,12 +131,7 @@ const Favorites = () => {
           {results
             .slice((page - 1) * 6, (page - 1) * 6 + 6)
             .map((link: Link) => (
-              <Card
-                key={link.id}
-                link={link}
-                showheart={false}
-                isSubscribed={isSubscribed(link.id)}
-              />
+              <Card key={link.id} link={link} showheart={false} />
             ))}
         </CardList>
       )}

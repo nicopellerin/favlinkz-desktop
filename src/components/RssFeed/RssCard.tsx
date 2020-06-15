@@ -57,6 +57,20 @@ const RssCard: React.FC<Props> = ({ feed }) => {
     const rssFeed = db.collection(`users`).doc(user.uid).collection("rss")
     rssFeed.doc(id).delete()
     setFeeds(newFeeds)
+
+    const latestLinks = db
+      .collection(`users`)
+      .doc(user.uid)
+      .collection("latest")
+
+    latestLinks.doc(id).set({ isRssSubscribed: false }, { merge: true })
+
+    const favoriteLinks = db
+      .collection(`users`)
+      .doc(user.uid)
+      .collection("favorites")
+
+    favoriteLinks.doc(id).set({ isRssSubscribed: false }, { merge: true })
   }
 
   const toggleFeedToSeen = (id: string) => {

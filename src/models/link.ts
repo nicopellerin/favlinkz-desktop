@@ -6,4 +6,5 @@ export interface Link {
   id: string
   rss: string
   description: string
+  isRssSubscribed: boolean
 }
