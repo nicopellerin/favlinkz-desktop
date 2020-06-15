@@ -30,7 +30,7 @@ import { userState } from "../../state/user"
 
 import { db } from "../../services/firebase"
 
-import { maxLength, maxLengthUrl, spliceUrl, validURL } from "../../utils"
+import { maxLength, maxLengthUrl, spliceUrl } from "../../utils"
 
 interface Props {
   link: Link
@@ -88,9 +88,9 @@ const Card: React.FC<Props> = ({ link, showheart }) => {
     id: string,
     title: string,
     url: string,
-    image: string
+    image: string,
+    description: string
   ) => {
-    // ipcRenderer.send("print-to-pdf", link.url)
     const newSubscription = db
       .collection(`users`)
       .doc(user.uid)
@@ -104,6 +104,7 @@ const Card: React.FC<Props> = ({ link, showheart }) => {
       id,
       created: Date.now(),
       image,
+      description,
     })
 
     setSubscribed((prevState) => !prevState)
@@ -249,7 +250,8 @@ const Card: React.FC<Props> = ({ link, showheart }) => {
                   link.id,
                   link.title,
                   link.url,
-                  link.image
+                  link.image,
+                  link.description
                 )
               }
             />

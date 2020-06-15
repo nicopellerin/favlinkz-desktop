@@ -1,13 +1,15 @@
 import * as React from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { useHistory, Link } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import ReactTooltip from "react-tooltip"
 import { useRecoilValue, useRecoilState } from "recoil"
+import Spinner from "react-spinkit"
 
 import { ParsedFeed } from "../../models/feed"
 
 import { soundNotifsOnState } from "../../state/notifications"
+import { rssFeedsUrlsState } from "../../state/rss"
 
 import dots from "../../assets/dots.svg"
 
@@ -15,9 +17,12 @@ import { maxLength } from "../../utils"
 
 const RssFeedUrls = () => {
   const soundNotifsOn = useRecoilValue(soundNotifsOnState)
+  const urls = useRecoilValue(rssFeedsUrlsState)
 
   const history = useHistory()
-  const feed = history?.location?.state?.feed
+  const id = history?.location?.state?.feed?.id
+
+  let feed = urls[id]
 
   const latestVariants = {
     hidden: {
@@ -94,6 +99,13 @@ const RssFeedUrls = () => {
             </FeedItem>
           ))}
         </FeedList>
+      )}
+      {feed?.items?.length === 0 && (
+        <Spinner
+          name="circle"
+          color="#ff5c5b"
+          style={{ width: 50, height: 50 }}
+        />
       )}
       <PrevIcon
         onClick={() => {

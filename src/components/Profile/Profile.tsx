@@ -18,7 +18,7 @@ import { db } from "../../services/firebase"
 
 import { userState } from "../../state/user"
 import {
-  rssState,
+  rssFeedsUrlsState,
   rssFeedsState,
   rssNewFeedSeen,
   rssNewFeedIds,
@@ -34,9 +34,9 @@ import Worker from "../../workers/parsing.worker"
 const Profile = () => {
   const worker = new Worker()
 
-  const [feeds, setFeeds] = useRecoilState(rssState)
+  const [feeds, setFeeds] = useRecoilState(rssFeedsState)
+  const [rss, setRss] = useRecoilState(rssFeedsUrlsState)
 
-  const [rss, setRss] = useRecoilState(rssFeedsState)
   const setNewFeedSeen = useSetRecoilState(rssNewFeedSeen)
   const setNewFeedIds = useSetRecoilState(rssNewFeedIds)
   const setRssFeedsLoading = useSetRecoilState(rssFeedsLoadingState)
@@ -100,6 +100,8 @@ const Profile = () => {
         })
         alertNotifsOn ? newFeedsAlert.show() : null
       }
+
+      console.log("WORKER", event.data)
 
       setRss(event.data)
     }

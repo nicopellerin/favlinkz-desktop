@@ -4,17 +4,16 @@ import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { FaRss } from "react-icons/fa"
-import Spinner from "react-spinkit"
 import { ipcRenderer } from "electron"
 import hash from "object-hash"
 
 import RssCard from "./RssCard"
 
 import {
-  rssState,
+  rssFeedsState,
   rssNewFeedSeen,
   rssFeedsLoadingState,
-  rssFeedsState,
+  rssFeedsUrlsState,
 } from "../../state/rss"
 import { soundNotifsOnState } from "../../state/notifications"
 import { searchResultsState, locationState } from "../../state/searchbar"
@@ -51,17 +50,17 @@ const userVariants = {
 }
 
 const RssFeed = () => {
-  const [feeds, setFeeds] = useRecoilState(rssState)
+  const [feeds, setFeeds] = useRecoilState(rssFeedsState)
+  const [rss, setRss] = useRecoilState(rssFeedsUrlsState)
   const [newFeedSeen, setNewFeedSeen] = useRecoilState(rssNewFeedSeen)
   const [location, setLocation] = useRecoilState(locationState)
   const [page, setPage] = useRecoilState(pageState)
 
-  const rss = useRecoilValue(rssFeedsState)
   const results = useRecoilValue(searchResultsState)
   const soundNotifsOn = useRecoilValue(soundNotifsOnState)
   const rssFeedsLoading = useRecoilValue(rssFeedsLoadingState)
 
-  let totalPages = Math.ceil(rss.length / 4)
+  let totalPages = Math.ceil(feeds.length / 4)
 
   const prevPage = (page: number) => {
     page - 1 > 0 ? setPage((prevState) => prevState - 1) : null
@@ -79,8 +78,8 @@ const RssFeed = () => {
   useEffect(() => {
     ipcRenderer.send("updateTrayIconNotifsSeen")
     setNewFeedSeen(true)
-    if (rss.length) {
-      rss.map((feed) => {
+    if (Object.keys(rss).length) {
+      Object.values(rss).map((feed) => {
         feedsLastBuild[feed.id] = {
           lastBuildDate: feed.lastBuildDate,
           id: feed.id,
@@ -90,7 +89,7 @@ const RssFeed = () => {
       })
       localStorage.setItem("feeds", JSON.stringify(feedsLastBuild))
     }
-  }, [rss])
+  }, [])
 
   const swoosh = new Audio(
     "https://raw.github.com/nicopellerin/favlinkz-desktop/master/sounds/tap-hollow.mp3"
@@ -111,7 +110,6 @@ const RssFeed = () => {
         results
           ?.slice((page - 1) * 4, (page - 1) * 4 + 4)
           .map((feed: ParsedFeed) => <RssCard key={feed.id} feed={feed} />)}
-
       {results?.length < 1 && !rssFeedsLoading && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>
@@ -127,76 +125,66 @@ const RssFeed = () => {
           </h4>
         </NoMatchingResults>
       )}
-      {rssFeedsLoading ? (
-        <PaginateControls>
-          <Spinner
-            name="circle"
-            color="#ff5c5b"
-            style={{ width: 50, height: 50 }}
-          />
-        </PaginateControls>
-      ) : (
-        <PaginateControls
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{
-            type: "spring",
-            damping: 10,
-            stiffness: 80,
-            delay: 0.3,
+      <PaginateControls
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{
+          type: "spring",
+          damping: 10,
+          stiffness: 80,
+          delay: 0.3,
+        }}
+      >
+        <PrevIcon
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          disabled={page === 1}
+          onClick={() => {
+            prevPage(page)
+            if (soundNotifsOn && page === 1) {
+              errorSound.play()
+            } else if (soundNotifsOn) {
+              swoosh.play()
+            }
           }}
         >
-          <PrevIcon
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            disabled={page === 1}
-            onClick={() => {
-              prevPage(page)
-              if (soundNotifsOn && page === 1) {
-                errorSound.play()
-              } else if (soundNotifsOn) {
-                swoosh.play()
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18">
+            <path
+              d="M 0.429 0.318 C 0.843 -0.106 1.525 -0.106 1.94 0.318 L 9.493 8.055 C 9.913 8.485 9.913 9.172 9.493 9.602 L 9.493 9.602 C 9.079 10.026 8.397 10.026 7.982 9.602 L 0.429 1.865 C 0.009 1.435 0.009 0.748 0.429 0.318 Z M 9.379 8.229 C 9.799 8.659 9.799 9.346 9.379 9.776 L 1.826 17.513 C 1.412 17.937 0.729 17.937 0.315 17.513 L 0.315 17.513 C -0.105 17.083 -0.105 16.396 0.315 15.966 L 7.869 8.229 C 8.283 7.805 8.965 7.805 9.379 8.229 Z"
+              transform="translate(0.016 0.085) rotate(-180 4.904 8.916)"
+              fill={page === 1 ? "#bbb" : "var(--primaryColor)"}
+            ></path>
+          </svg>
+        </PrevIcon>
+        <NextIcon
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          disabled={page + 1 > totalPages || feeds?.length <= 4}
+          onClick={() => {
+            nextPage(page)
+            if (
+              (soundNotifsOn && page + 1 > totalPages) ||
+              feeds?.length <= 4
+            ) {
+              errorSound.play()
+            } else if (soundNotifsOn) {
+              swoosh.play()
+            }
+          }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18">
+            <path
+              d="M 0.429 0.318 C 0.843 -0.106 1.525 -0.106 1.94 0.318 L 9.493 8.055 C 9.913 8.485 9.913 9.172 9.493 9.602 L 9.493 9.602 C 9.079 10.026 8.397 10.026 7.982 9.602 L 0.429 1.865 C 0.009 1.435 0.009 0.748 0.429 0.318 Z M 9.379 8.229 C 9.799 8.659 9.799 9.346 9.379 9.776 L 1.826 17.513 C 1.412 17.937 0.729 17.937 0.315 17.513 L 0.315 17.513 C -0.105 17.083 -0.105 16.396 0.315 15.966 L 7.869 8.229 C 8.283 7.805 8.965 7.805 9.379 8.229 Z"
+              transform="translate(0.016 0.085) rotate(-360 4.904 8.916)"
+              fill={
+                page + 1 > totalPages || feeds?.length <= 4
+                  ? "#bbb"
+                  : "var(--primaryColor)"
               }
-            }}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18">
-              <path
-                d="M 0.429 0.318 C 0.843 -0.106 1.525 -0.106 1.94 0.318 L 9.493 8.055 C 9.913 8.485 9.913 9.172 9.493 9.602 L 9.493 9.602 C 9.079 10.026 8.397 10.026 7.982 9.602 L 0.429 1.865 C 0.009 1.435 0.009 0.748 0.429 0.318 Z M 9.379 8.229 C 9.799 8.659 9.799 9.346 9.379 9.776 L 1.826 17.513 C 1.412 17.937 0.729 17.937 0.315 17.513 L 0.315 17.513 C -0.105 17.083 -0.105 16.396 0.315 15.966 L 7.869 8.229 C 8.283 7.805 8.965 7.805 9.379 8.229 Z"
-                transform="translate(0.016 0.085) rotate(-180 4.904 8.916)"
-                fill={page === 1 ? "#bbb" : "var(--primaryColor)"}
-              ></path>
-            </svg>
-          </PrevIcon>
-          <NextIcon
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            disabled={page + 1 > totalPages || rss?.length <= 4}
-            onClick={() => {
-              nextPage(page)
-              if (
-                (soundNotifsOn && page + 1 > totalPages) ||
-                rss?.length <= 4
-              ) {
-                errorSound.play()
-              } else if (soundNotifsOn) {
-                swoosh.play()
-              }
-            }}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18">
-              <path
-                d="M 0.429 0.318 C 0.843 -0.106 1.525 -0.106 1.94 0.318 L 9.493 8.055 C 9.913 8.485 9.913 9.172 9.493 9.602 L 9.493 9.602 C 9.079 10.026 8.397 10.026 7.982 9.602 L 0.429 1.865 C 0.009 1.435 0.009 0.748 0.429 0.318 Z M 9.379 8.229 C 9.799 8.659 9.799 9.346 9.379 9.776 L 1.826 17.513 C 1.412 17.937 0.729 17.937 0.315 17.513 L 0.315 17.513 C -0.105 17.083 -0.105 16.396 0.315 15.966 L 7.869 8.229 C 8.283 7.805 8.965 7.805 9.379 8.229 Z"
-                transform="translate(0.016 0.085) rotate(-360 4.904 8.916)"
-                fill={
-                  page + 1 > totalPages || rss?.length <= 4
-                    ? "#bbb"
-                    : "var(--primaryColor)"
-                }
-              ></path>
-            </svg>
-          </NextIcon>
-        </PaginateControls>
-      )}
+            ></path>
+          </svg>
+        </NextIcon>
+      </PaginateControls>
     </Wrapper>
   )
 }

@@ -5,4 +5,5 @@ export interface Link {
   note: string
   id: string
   rss: string
+  description: string
 }

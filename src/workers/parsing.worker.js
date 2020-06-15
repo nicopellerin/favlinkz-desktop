@@ -17,7 +17,7 @@ const getFeeds = async () => {
     }
 
     const feeds = event.data
-    const newFeeds = []
+    const newFeeds = {}
 
     if (feeds.length) {
       for (let feed of feeds) {
@@ -33,7 +33,7 @@ const getFeeds = async () => {
           checkIfNewFeeds(res.items, parsedLastBuilds[res.id])
         }
 
-        newFeeds.push(res)
+        newFeeds[res.id] = res
         self.postMessage(newFeeds)
       }
     }
