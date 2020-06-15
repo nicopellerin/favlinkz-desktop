@@ -7,11 +7,7 @@ import { FaLink, FaRss } from "react-icons/fa"
 import { ParsedFeed } from "../../models/feed"
 import { db } from "../../services/firebase"
 
-import {
-  rssFeedsUrlsState,
-  rssNewFeedIds,
-  rssFeedsState,
-} from "../../state/rss"
+import { rssNewFeedIds, rssFeedsState } from "../../state/rss"
 import { userState } from "../../state/user"
 
 import { maxLength } from "../../utils"

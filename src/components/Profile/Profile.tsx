@@ -101,8 +101,6 @@ const Profile = () => {
         alertNotifsOn ? newFeedsAlert.show() : null
       }
 
-      console.log("WORKER", event.data)
-
       setRss(event.data)
     }
   }, [])

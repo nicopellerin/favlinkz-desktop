@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { FaHeart, FaStickyNote, FaFilePdf, FaRss } from "react-icons/fa"
+import { FaHeart, FaStickyNote, FaRss } from "react-icons/fa"
 import styled from "styled-components"
 import {
   motion,
@@ -18,15 +18,14 @@ import {
   EmailIcon,
 } from "react-share"
 import ReactTooltip from "react-tooltip"
-
 import { useLocation } from "react-router-dom"
-// import { ipcRenderer } from "electron"
 
 import { latestState } from "../../state/latest"
 import { favoritesState } from "../../state/favorites"
 
 import { Link } from "../../models/link"
 import { userState } from "../../state/user"
+import { rssSubscribedState } from "../../state/rss"
 
 import { db } from "../../services/firebase"
 
@@ -35,19 +34,26 @@ import { maxLength, maxLengthUrl, spliceUrl } from "../../utils"
 interface Props {
   link: Link
   showheart: boolean
+  isSubscribed: boolean
 }
 
-const Card: React.FC<Props> = ({ link, showheart }) => {
+interface StyledProps {
+  showheart: boolean
+  subscribed: boolean
+}
+
+const Card: React.FC<Props> = ({ link, showheart, isSubscribed }) => {
   const { pathname } = useLocation()
 
   const [showNote, setShowNote] = useState(false)
   const [favorited, setFavorited] = useState(false)
   const [copied, setCopied] = useState(false)
-  const [subscribed, setSubscribed] = useState(false)
   const [addedToRssFeed, setAddedToRssFeed] = useState(false)
 
   const [latest, setLatest] = useRecoilState(latestState)
   const [favorites, setFavorites] = useRecoilState(favoritesState)
+  const [rssSubscribed, setRssSubscribed] = useRecoilState(rssSubscribedState)
+
   const user = useRecoilValue(userState)
 
   const y = useSpring(0, { stiffness: 300, damping: 20 })
@@ -106,11 +112,12 @@ const Card: React.FC<Props> = ({ link, showheart }) => {
       image,
       description,
     })
-
-    setSubscribed((prevState) => !prevState)
+    // setRssSubscribed((prevState) => ({ ...prevState, {id: true} }))
     setAddedToRssFeed(true)
     setTimeout(() => setAddedToRssFeed(false), 1500)
   }
+
+  console.log(rssSubscribed)
 
   // Remove links
   const handleDelete = (id: string) => {
@@ -132,7 +139,6 @@ const Card: React.FC<Props> = ({ link, showheart }) => {
     if (pathname.includes("favorites")) {
       setTimeout(() => {
         const newData = favorites.filter((item) => item.id !== id)
-        console.log(user)
         const favoriteLinks = db
           .collection(`users`)
           .doc(user.uid)
@@ -244,6 +250,7 @@ const Card: React.FC<Props> = ({ link, showheart }) => {
             <RssIcon
               title="Subscribe to RSS feed"
               showheart={showheart}
+              subscribed={rssSubscribed[link.id] || isSubscribed}
               onClick={() =>
                 subscribeToRssFeed(
                   link.rss,
@@ -533,12 +540,11 @@ const PullCard = styled.div`
 
 const RssIcon = styled(FaRss)`
   position: absolute;
-  right: ${(props: { showheart: boolean }) =>
-    props.showheart ? "45px" : "10px"};
+  right: ${(props: StyledProps) => (props.showheart ? "45px" : "10px")};
   bottom: 10px;
   font-size: 3rem;
   background: black;
-  color: #f4f4f4;
+  color: ${(props: StyledProps) => (props.subscribed ? "#00c29f" : " #f4f4f4")};
   padding: 6px;
   border-radius: 50%;
   cursor: pointer;
@@ -546,27 +552,8 @@ const RssIcon = styled(FaRss)`
   z-index: 100;
   border-radius: 50%;
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.05);
-
-  &:hover {
-    color: var(--secondaryColor);
-  }
-`
-
-const PdfPrint = styled(FaFilePdf)`
-  position: absolute;
-  right: ${(props: { showheart: boolean }) =>
-    props.showheart ? "45px" : "10px"};
-  bottom: 10px;
-  font-size: 3rem;
-  background: black;
-  color: #f4f4f4;
-  padding: 6px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: color 100ms ease-in;
-  z-index: 100;
-  border-radius: 50%;
-  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.05);
+  pointer-events: ${(props: StyledProps) =>
+    props.subscribed ? "none" : "all"};
 
   &:hover {
     color: var(--secondaryColor);

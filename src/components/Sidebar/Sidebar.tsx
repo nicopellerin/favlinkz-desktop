@@ -10,11 +10,14 @@ import { latestState } from "../../state/latest"
 import { rssFeedsState, rssNewFeedSeen } from "../../state/rss"
 
 import { firebase } from "../../services/firebase"
+import { pageState } from "../../state/pagination"
 
 const Sidebar = () => {
   const resetLatest = useSetRecoilState(latestState)
   const resetFavorites = useSetRecoilState(favoritesState)
   const resetRssFeed = useSetRecoilState(rssFeedsState)
+  const setPage = useSetRecoilState(pageState)
+
   const newFeedSeen = useRecoilValue(rssNewFeedSeen)
 
   const handleSignOut = () => {
@@ -56,6 +59,7 @@ const Sidebar = () => {
           }}
           to="/profile/rssfeed"
           style={{ position: "relative" }}
+          onClick={() => setPage(1)}
         >
           <IconRSS title="Rss Feed" size={22} />
           {!newFeedSeen && <NotifyRSS />}

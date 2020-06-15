@@ -24,3 +24,11 @@ export const rssFeedsLoadingState = atom<boolean>({
   key: "rssFeedsLoadingState",
   default: false,
 })
+
+export const rssSubscribedState = atom<any>({
+  key: "rssSubscribedState",
+  default:
+    JSON.parse(localStorage.getItem("feeds")) !== null
+      ? JSON.parse(localStorage.getItem("feeds"))
+      : {},
+})
