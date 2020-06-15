@@ -12,58 +12,54 @@ import RssCard from "./RssCard"
 
 import {
   rssState,
-  rssFeedsState,
   rssNewFeedSeen,
   rssFeedsLoadingState,
+  rssFeedsState,
 } from "../../state/rss"
 import { soundNotifsOnState } from "../../state/notifications"
-
-import { ParsedFeed } from "../../models/feed"
+import { searchResultsState, locationState } from "../../state/searchbar"
 import { pageState } from "../../state/pagination"
 
-// interface A {
-//   lastBuildDate: Date
-// }
+import { ParsedFeed } from "../../models/feed"
 
 interface StyledProps {
   disabled: boolean
 }
 
-const RssFeed = () => {
-  const [loading, setLoading] = useState(false)
-  // const [page, setPage] = useState(1)
+const userVariants = {
+  hidden: {
+    y: -40,
+  },
+  show: {
+    y: -50,
+    transition: {
+      type: "spring",
+      damping: 10,
+      stiffness: 80,
+      velocity: 2,
+      staggerChildren: 0.02,
+    },
+  },
+  exit: {
+    transition: {
+      type: "tween",
+      damping: 100,
+      stiffness: 80,
+      staggerChildren: 0.5,
+    },
+  },
+}
 
+const RssFeed = () => {
   const [feeds, setFeeds] = useRecoilState(rssState)
   const [newFeedSeen, setNewFeedSeen] = useRecoilState(rssNewFeedSeen)
-  const [rss, setRss] = useRecoilState(rssFeedsState)
+  const [location, setLocation] = useRecoilState(locationState)
   const [page, setPage] = useRecoilState(pageState)
 
+  const rss = useRecoilValue(rssFeedsState)
+  const results = useRecoilValue(searchResultsState)
   const soundNotifsOn = useRecoilValue(soundNotifsOnState)
   const rssFeedsLoading = useRecoilValue(rssFeedsLoadingState)
-
-  const userVariants = {
-    hidden: {
-      y: -40,
-    },
-    show: {
-      y: -50,
-      transition: {
-        type: "spring",
-        damping: 10,
-        stiffness: 80,
-        velocity: 2,
-        staggerChildren: 0.02,
-      },
-    },
-    exit: {
-      transition: {
-        type: "tween",
-        damping: 100,
-        stiffness: 80,
-        staggerChildren: 0.5,
-      },
-    },
-  }
 
   let totalPages = Math.ceil(rss.length / 4)
 
@@ -75,19 +71,25 @@ const RssFeed = () => {
     page + 1 <= totalPages ? setPage((prevState) => prevState + 1) : null
   }
 
+  useEffect(() => {
+    setLocation("rssfeeds")
+  }, [])
+
   let feedsLastBuild = {}
   useEffect(() => {
     ipcRenderer.send("updateTrayIconNotifsSeen")
     setNewFeedSeen(true)
-    rss.map((feed) => {
-      feedsLastBuild[feed.id] = {
-        lastBuildDate: feed.lastBuildDate,
-        id: feed.id,
-        title: feed.title,
-        items: hash.sha1(feed.items),
-      }
-    })
-    localStorage.setItem("feeds", JSON.stringify(feedsLastBuild))
+    if (rss.length) {
+      rss.map((feed) => {
+        feedsLastBuild[feed.id] = {
+          lastBuildDate: feed.lastBuildDate,
+          id: feed.id,
+          title: feed.title,
+          items: hash.sha1(feed.items),
+        }
+      })
+      localStorage.setItem("feeds", JSON.stringify(feedsLastBuild))
+    }
   }, [rss])
 
   const swoosh = new Audio(
@@ -105,12 +107,12 @@ const RssFeed = () => {
       animate="show"
       exit="exit"
     >
-      {feeds?.length > 0 &&
-        rss
+      {results?.length > 0 &&
+        results
           ?.slice((page - 1) * 4, (page - 1) * 4 + 4)
           .map((feed: ParsedFeed) => <RssCard key={feed.id} feed={feed} />)}
 
-      {!loading && feeds?.length < 1 && (
+      {results?.length < 1 && !rssFeedsLoading && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>
             Found <span style={{ color: "var(--primaryColor)" }}>0</span> RSS

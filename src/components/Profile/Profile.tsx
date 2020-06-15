@@ -4,7 +4,7 @@ import styled, { keyframes } from "styled-components"
 import { motion } from "framer-motion"
 import { HashRouter as Router, Switch, Route } from "react-router-dom"
 import { ipcRenderer, remote } from "electron"
-import { useRecoilState, useRecoilValue } from "recoil"
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 
 import Navbar from "../Navbar/Navbar"
 import Sidebar from "../Sidebar"
@@ -31,18 +31,15 @@ import {
 
 import Worker from "../../workers/parsing.worker"
 
-import logo from "../../assets/icon_144.png"
-
 const Profile = () => {
   const worker = new Worker()
 
   const [feeds, setFeeds] = useRecoilState(rssState)
+
   const [rss, setRss] = useRecoilState(rssFeedsState)
-  const [newFeedSeen, setNewFeedSeen] = useRecoilState(rssNewFeedSeen)
-  const [newFeedIds, setNewFeedIds] = useRecoilState(rssNewFeedIds)
-  const [rssFeedsLoading, setRssFeedsLoading] = useRecoilState(
-    rssFeedsLoadingState
-  )
+  const setNewFeedSeen = useSetRecoilState(rssNewFeedSeen)
+  const setNewFeedIds = useSetRecoilState(rssNewFeedIds)
+  const setRssFeedsLoading = useSetRecoilState(rssFeedsLoadingState)
 
   const alertNotifsOn = useRecoilValue(alertNotifsOnState)
   const soundNotifsOn = useRecoilValue(soundNotifsOnState)
@@ -98,8 +95,8 @@ const Profile = () => {
 
         const newFeedsAlert = new remote.Notification({
           title: "New RSS Feeds",
-          body: `from ${event.data.title}`,
-          // icon: logo,
+          body: `${event.data.title}`,
+          // icon: "../../assets/icon_144.png",
         })
         alertNotifsOn ? newFeedsAlert.show() : null
       }
