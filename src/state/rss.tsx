@@ -24,8 +24,3 @@ export const rssFeedsLoadingState = atom<boolean>({
   key: "rssFeedsLoadingState",
   default: false,
 })
-
-export const rssSubscribedState = atom<any>({
-  key: "rssSubscribedState",
-  default: [],
-})

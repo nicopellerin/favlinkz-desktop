@@ -7,6 +7,7 @@ import {
   screen,
   MenuItemConstructorOptions,
   nativeImage,
+  shell,
 } from "electron"
 
 import MainWindow from "./MainWindow"
@@ -18,7 +19,12 @@ const trayUpdateIcon = nativeImage.createFromPath(
   app.getAppPath() + "/icons/tray-icon-notif.png"
 )
 
+const icon = nativeImage.createFromPath(
+  app.getAppPath() + "/icons/icon_144.png"
+)
+
 let mainWindow: MainWindow | null
+let aboutWindow: BrowserWindow | null
 
 const isDev = process.env.NODE_ENV !== "production" ? true : false
 const isMac = process.platform === "darwin" ? true : false
@@ -32,6 +38,19 @@ function createWindow() {
   mainWindow.on("closed", () => {
     mainWindow = null
   })
+}
+
+function createAboutWindow() {
+  aboutWindow = new BrowserWindow({
+    width: 300,
+    height: 300,
+    title: "About Favlinkz",
+    icon,
+    resizable: false,
+    backgroundColor: "#5856d7",
+  })
+
+  aboutWindow.loadFile(`./src/about.html`)
 }
 
 ipcMain.on("user-logged-in", (e) => {
@@ -67,7 +86,7 @@ const menu: MenuItemConstructorOptions[] = [
           submenu: [
             {
               label: "About",
-              click: null,
+              click: createAboutWindow,
             },
           ],
         },
@@ -76,6 +95,17 @@ const menu: MenuItemConstructorOptions[] = [
   {
     role: "fileMenu",
   },
+
+  {
+    label: "Help",
+    submenu: [
+      {
+        label: "Download Chrome extension",
+        click: () => shell.openExternal("https://favlinkz.app"),
+      },
+    ],
+  },
+
   ...(isDev
     ? [
         {

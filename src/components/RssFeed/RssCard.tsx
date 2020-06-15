@@ -7,11 +7,7 @@ import { FaLink, FaRss } from "react-icons/fa"
 import { ParsedFeed } from "../../models/feed"
 import { db } from "../../services/firebase"
 
-import {
-  rssNewFeedIds,
-  rssFeedsState,
-  rssSubscribedState,
-} from "../../state/rss"
+import { rssNewFeedIds, rssFeedsState } from "../../state/rss"
 import { userState } from "../../state/user"
 
 import { maxLength } from "../../utils"
@@ -48,7 +44,6 @@ interface Props {
 const RssCard: React.FC<Props> = ({ feed }) => {
   const [feeds, setFeeds] = useRecoilState(rssFeedsState)
   const [newFeedIds, setNewFeedIds] = useRecoilState(rssNewFeedIds)
-  const [rssSubscribed, setRssSubscribed] = useRecoilState(rssSubscribedState)
 
   const user = useRecoilValue(userState)
 

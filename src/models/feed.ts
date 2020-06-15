@@ -14,4 +14,5 @@ export interface ParsedFeed {
   description: string
   items: any
   contentSnippet: string
+  url: string
 }
