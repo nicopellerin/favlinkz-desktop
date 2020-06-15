@@ -78,14 +78,14 @@ const RssFeed = () => {
   return (
     <Wrapper>
       <AnimatePresence>
-        <motion.div initial={{ position: "absolute" }}>
+        <RssCardList>
           {results?.length > 0 &&
             results
               ?.slice((page - 1) * 4, (page - 1) * 4 + 4)
               .map((feed: ParsedFeed) => <RssCard key={feed.id} feed={feed} />)}
-        </motion.div>
+        </RssCardList>
       </AnimatePresence>
-      {results?.length < 1 && !rssFeedsLoading && (
+      {results?.length < 1 && (
         <NoMatchingResults animate={{ y: [10, 0], opacity: [0, 1] }}>
           <h2>
             Found <span style={{ color: "var(--primaryColor)" }}>0</span> RSS
@@ -173,6 +173,11 @@ const Wrapper = styled(motion.div)`
   align-items: center;
   justify-content: center;
   min-height: calc(100% - 100px);
+`
+
+const RssCardList = styled(motion.div)`
+  position: absolute;
+  margin-top: 0.2rem;
 `
 
 const NoMatchingResults = styled(motion.div)`
