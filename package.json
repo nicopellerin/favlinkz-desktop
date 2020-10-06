@@ -46,7 +46,7 @@
     "better-react-spinkit": "^2.0.4",
     "cross-env": "^7.0.2",
     "css-loader": "^3.5.3",
-    "electron": "^9.0.0",
+    "electron": "^9.3.0",
     "electron-packager": "^14.2.1",
     "file-loader": "^6.0.0",
     "firebase": "^7.15.1",
