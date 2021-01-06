@@ -40,7 +40,7 @@
     "@types/react-spinkit": "^3.0.6",
     "@types/recoil": "^0.0.1",
     "@types/styled-components": "^5.1.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-loader": "^8.1.0",
     "babili-webpack-plugin": "^0.1.2",
     "better-react-spinkit": "^2.0.4",
